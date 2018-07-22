@@ -15,12 +15,12 @@ var StorageHelper = {
   }
 }
 function Volontario() {
-  this.email:"",
-  this.nome: "",
-  this.cognome:"",
-  this.cellulare:"",
-  this.password:"",
-  this.admin:false
+  this.email="";
+  this.nome= "";
+  this.cognome="";
+  this.cellulare="";
+  this.password="";
+  this.admin;false;
 }
 Volontario.prototype.setPassword = function(value) {
   this.password= value;
