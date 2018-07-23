@@ -3,14 +3,14 @@ window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndex
 var db;
 var requestDB = window.indexedDB.open("paniniDB", 1);
 var StorageHelper = {
-  initUser : function(user) {
-    var request = db.transaction("global").objectStore("global").get("user");
-    request.onsuccess = function(event) {
-      user =  event.target.result.name;
-    };
-    request.onerror = function(event) {
-      alert("ObjectStore:"+event);
-    }
+  initUser : function() {
+    var req = db.transaction("paniniweb").objectStore("paniniweb").get("user");
+    req.onsuccess = function(event) {
+        user =  event.target.result.name;
+      };
+    req.onerror = function(event) {
+      // register user
+      };
   }
 }
 requestDB.onerror = function(event) {
@@ -18,7 +18,12 @@ requestDB.onerror = function(event) {
 };
 requestDB.onsuccess = function(event) {
   db = event.target.result;
-  StorageHelper.initUser(user);
+  StorageHelper.initUser();
+};
+requestDB.onupgradeneeded = function(event) {
+  var db = event.target.result;
+  var objectStore = db.createObjectStore("paniniweb", { keyPath: "pweb" });
+  StorageHelper.initUser();
 };
 function Volontario() {
   this.email="";
