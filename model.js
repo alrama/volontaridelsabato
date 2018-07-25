@@ -1,12 +1,12 @@
 var user;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
-var requestDB = window.indexedDB.open("paniniDB", 1);
+var requestDB = window.indexedDB.open("paniniDB", 2);
 var StorageHelper = {
-  initUser : function() {
-    var req = db.transaction("paniniweb").objectStore("paniniweb").get("user");
+  getUser : function() {
+    var req = db.transaction("user").objectStore("user").get("user");
     req.onsuccess = function(event) {
-        user =  event.target.result.name;
+        user =  event.target.result;
       };
     req.onerror = function(event) {
       // register user
@@ -18,12 +18,19 @@ requestDB.onerror = function(event) {
 };
 requestDB.onsuccess = function(event) {
   db = event.target.result;
-  StorageHelper.initUser();
+  StorageHelper.getUser();
 };
 requestDB.onupgradeneeded = function(event) {
   var db = event.target.result;
-  var objectStore = db.createObjectStore("paniniweb", { keyPath: "pweb" });
-  StorageHelper.initUser();
+  var objectStore = db.createObjectStore("user");
+  var objectStore = db.createObjectStore("evento");
+  var objectStore = db.createObjectStore("volontari", { keyPath: "email" });
+  objectStore.createIndex("nome", "nome", { unique: false });
+  objectStore.createIndex("cognome", "cognome", { unique: false });
+  objectStore.createIndex("email", "email", { unique: true });
+  objectStore.transaction.oncomplete = function(event) {
+    StorageHelper.getUser();
+  };
 };
 function Volontario() {
   this.email="";
