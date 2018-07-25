@@ -7,3 +7,7 @@ function openNav() {
 function closeNav() {
     $("#mySidenav").width("0px");
 }
+var postInit = function(){
+  alert("user:"+user);
+};
+initModel(postInit);
