@@ -7,11 +7,11 @@ var StorageHelper = {
     var req = db.transaction("user").objectStore("user").get("user");
     req.onsuccess = function(event) {
         user =  event.target.result;
-        funcret();
+        if (funcret) funcret();
       };
     req.onerror = function(event) {
       // register user
-      funcret();
+      if (funcret) funcret();
       };
   }
 }
