@@ -47,3 +47,37 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
 }
+body {
+  background-color: lightgreen;
+  color: grey;
+  font-family: : Verdana, "Times New Roman", sans-serif;
+}
+h2 {
+  font-size: 2em;
+  text-align: center;
+  color: black;
+}
+.main {
+  text-align: center;
+}
+.main label{
+  font-size: 1.5em;
+  font-style: italic;
+  color: grey;
+}
+label {
+  text-align: left;
+}
+.login {
+  width: 200px;
+  height: 40px;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  font-style: italic;
+  border-radius: 12px;
+}
+button {
+}
+.textsmall {
+  font-size:1em;
+}
