@@ -51,6 +51,7 @@ body {
   background-color: lightgreen;
   color: grey;
   font-family: : Verdana, "Times New Roman", sans-serif;
+  font-size: 1.5em;
 }
 h2 {
   font-size: 2em;
@@ -61,7 +62,6 @@ h2 {
   text-align: center;
 }
 .main label{
-  font-size: 1.5em;
   font-style: italic;
   color: grey;
 }
@@ -72,11 +72,8 @@ label {
   width: 200px;
   height: 40px;
   margin-bottom: 10px;
-  font-size: 1.5em;
-  font-style: italic;
   border-radius: 12px;
-}
-button {
+  font-size: 0.75em;
 }
 .textsmall {
   font-size:1em;
