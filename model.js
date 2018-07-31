@@ -2,6 +2,11 @@ var user;
 var funcret;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
+var serviceResponse = {
+  "response_code":0,
+  "error_description":"",
+  "response":null
+};
 var StorageHelper = {
   getUser : function() {
     var req = db.transaction("user").objectStore("user").get("user");
