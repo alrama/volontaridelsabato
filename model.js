@@ -19,6 +19,17 @@ var StorageHelper = {
       if (funcret) funcret();
       };
   }
+  saveUser : function(func) {
+    var req = db.transaction("user","readwrite").objectStore("user").put(user);
+    req.onsuccess = function(event) {
+        user =  event.target.result;
+        if (funcret) funcret();
+      };
+    req.onerror = function(event) {
+      // register user
+      if (funcret) funcret();
+      };
+  }
 }
 initModel = function(func) {
   funcret = func;
