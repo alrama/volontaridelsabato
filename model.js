@@ -8,21 +8,19 @@ var serviceResponse = {
 };
 var StorageHelper = {
   getUser : function(funcret) {
-    var objectStore = db.transaction("user").objectStore("user");
-    objectStore.openCursor().onsuccess = function(event) {
-      var cursor = event.target.result;
-      if (cursor) {
-        user = cursor.value;
-        if (funcret) funcret();
-      }
-      else {
-        if (funcret) funcret();
-      }
+    var req = db.transaction("user").objectStore("user").get(1);
+    req.onsuccess = function(event) {
+      user = event.target.result;
+      if (funcret) funcret();
     };
+    req.onerror = function(event) {
+      if (func) funcret();
+    }
   },
   saveUser : function(func) {
     var objStr = db.transaction("user","readwrite").objectStore("user");
     var insUser = function(event) {
+      user.id = 1;
       reqIns = objStr.put(user);
       reqIns.onsuccess = function(event) {
         if (func) funcret();
@@ -38,7 +36,7 @@ var StorageHelper = {
 }
 initModel = function(func) {
   funcret = func;
-  var requestDB = window.indexedDB.open("paniniDB", 2);
+  var requestDB = window.indexedDB.open("paniniDB", 1);
   requestDB.onerror = function(event) {
     alert("Attenzione, il database locale di paniniweb non può essere aperto.\nDatabase error: " + event.target.errorCode);
   };
@@ -48,8 +46,8 @@ initModel = function(func) {
   };
   requestDB.onupgradeneeded = function(event) {
     var db = event.target.result;
-    var objectStore = db.createObjectStore("user");
-    var objectStore = db.createObjectStore("evento");
+    var objectStore = db.createObjectStore("user",{ keyPath: "id" });
+    var objectStore = db.createObjectStore("evento", { keyPath: "id" });
     var objectStore = db.createObjectStore("volontari", { keyPath: "email" });
     objectStore.createIndex("nome", "nome", { unique: false });
     objectStore.createIndex("cognome", "cognome", { unique: false });
