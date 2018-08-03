@@ -1,5 +1,4 @@
 var user;
-var funcret;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
 var serviceResponse = {
@@ -8,27 +7,33 @@ var serviceResponse = {
   "response":null
 };
 var StorageHelper = {
-  getUser : function() {
-    var req = db.transaction("user").objectStore("user").get("user");
-    req.onsuccess = function(event) {
-        user =  event.target.result;
+  getUser : function(funcret) {
+    var objectStore = db.transaction("user").objectStore("user");
+    objectStore.openCursor().onsuccess = function(event) {
+      var cursor = event.target.result;
+      if (cursor) {
+        user = cursor.value;
         if (funcret) funcret();
-      };
-    req.onerror = function(event) {
-      // register user
-      if (funcret) funcret();
-      };
+      }
+      else {
+        if (funcret) funcret();
+      }
+    };
   },
   saveUser : function(func) {
-    var req = db.transaction("user","readwrite").objectStore("user").put(user);
-    req.onsuccess = function(event) {
-        user =  event.target.result;
+    var objStr = db.transaction("user","readwrite").objectStore("user");
+    var insUser = function(event) {
+      reqIns = objStr.put(user);
+      reqIns.onsuccess = function(event) {
         if (func) funcret();
-      };
-    req.onerror = function(event) {
-      // register user
-      if (func) funcret();
-      };
+      }
+      reqIns.onerror = function(event) {
+        if (func) funcret();
+      }
+    };
+    var reqClear = objStr.clear();
+    reqClear.onsuccess = insUser(event);
+    reqClear.onerror = insUser(event);
   }
 }
 initModel = function(func) {
@@ -39,7 +44,7 @@ initModel = function(func) {
   };
   requestDB.onsuccess = function(event) {
     db = event.target.result;
-    StorageHelper.getUser();
+    StorageHelper.getUser(func);
   };
   requestDB.onupgradeneeded = function(event) {
     var db = event.target.result;
@@ -50,7 +55,7 @@ initModel = function(func) {
     objectStore.createIndex("cognome", "cognome", { unique: false });
     objectStore.createIndex("email", "email", { unique: true });
     objectStore.transaction.oncomplete = function(event) {
-      StorageHelper.getUser();
+      StorageHelper.getUser(func);
     };
   };
 }
