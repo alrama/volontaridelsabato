@@ -37,7 +37,7 @@ function login() {
     if (serviceResponse.response_code==200) {
       user = serviceResponse.response;
       StorageHelper.saveUser(function() {
-        location.href = "evento.html";
+        location.href = "./evento.html";
       });
     }
     else {
