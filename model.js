@@ -32,6 +32,12 @@ var StorageHelper = {
     var reqClear = objStr.clear();
     reqClear.onsuccess = insUser(event);
     reqClear.onerror = insUser(event);
+  },
+  clearUser : function(func) {
+    var objStr = db.transaction("user","readwrite").objectStore("user");
+    var reqClear = objStr.clear();
+    reqClear.onsuccess = function(event) {if (func) func();};
+    reqClear.onerror = function(event) {if (func) func();};
   }
 }
 initModel = function(func) {
