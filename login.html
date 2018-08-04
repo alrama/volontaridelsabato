@@ -23,20 +23,20 @@ initModel(function() {
       else $("#message").text(serviceResponse.error_description);
     });
   }
-  function login() {
-    $("#message").text('Attendere ... connessione in corso');
-    $.get("login.php?user="+user.email+"&pw="+user.password,function(data,status) {
-      serviceResponse = data;
-      if (serviceResponse.response_code==200) {
-        user = serviceResponse.response;
-        StorageHelper.saveUser(function() {
-          location.href = "evento.html";
-        });
-      }
-      else $("#message").text(serviceResponse.error_description);
-    });
-  }
 });
+function login() {
+  $("#message").text('Attendere ... connessione in corso');
+  $.get("login.php?user="+user.email+"&pw="+user.password,function(data,status) {
+    serviceResponse = data;
+    if (serviceResponse.response_code==200) {
+      user = serviceResponse.response;
+      StorageHelper.saveUser(function() {
+        location.href = "evento.html";
+      });
+    }
+    else $("#message").text(serviceResponse.error_description);
+  });
+}
 </script>
 <title>Volontari del sabato</title>
 </head>
