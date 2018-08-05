@@ -71,8 +71,9 @@ h2 {
   width: 200px;
   height: 40px;
   margin-bottom: 10px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-size: 0.75em;
+  color: darkolivegreen;
 }
 .textsmall {
   font-size:1em;

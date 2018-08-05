@@ -14,34 +14,33 @@ var StorageHelper = {
       if (funcret) funcret();
     };
     req.onerror = function(event) {
-      if (func) funcret();
+      if (funcret) funcret();
     }
   },
-  saveUser : function(func) {
+  saveUser : function(funcret) {
     var objStr = db.transaction("user","readwrite").objectStore("user");
     var insUser = function(event) {
       user.id = 1;
-      reqIns = objStr.put(user);
+      var reqIns = objStr.put(user);
       reqIns.onsuccess = function(event) {
-        if (func) funcret();
+        if (funcret) funcret();
       }
       reqIns.onerror = function(event) {
-        if (func) funcret();
+        if (funcret) funcret();
       }
     };
     var reqClear = objStr.clear();
     reqClear.onsuccess = insUser(event);
     reqClear.onerror = insUser(event);
   },
-  clearUser : function(func) {
+  clearUser : function(funcret) {
     var objStr = db.transaction("user","readwrite").objectStore("user");
     var reqClear = objStr.clear();
-    reqClear.onsuccess = function(event) {if (func) func();};
-    reqClear.onerror = function(event) {if (func) func();};
+    reqClear.onsuccess = function(event) {if (funcret) func();};
+    reqClear.onerror = function(event) {if (funcret) func();};
   }
 }
 initModel = function(func) {
-  funcret = func;
   var requestDB = window.indexedDB.open("paniniDB", 1);
   requestDB.onerror = function(event) {
     alert("Attenzione, il database locale di paniniweb non può essere aperto.\nDatabase error: " + event.target.errorCode);
@@ -70,9 +69,6 @@ function Volontario() {
   this.cellulare="";
   this.password="";
   this.admin;false;
-}
-Volontario.prototype.setPassword = function(value) {
-  this.password= value;
 }
 function evento() {
   ;

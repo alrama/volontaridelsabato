@@ -30,15 +30,16 @@ function interactiveLogin() {
   user.password = $("#pwd").val();
   login();
 }
+var gotoHome = function() {
+  location.href = "./evento.html";
+}
 function login() {
   $("#message").text('Attendere ... connessione in corso');
   $.get("login.php?user="+user.email+"&pw="+user.password,function(data,status) {
     serviceResponse = data;
     if (serviceResponse.response_code==200) {
       user = serviceResponse.response;
-      StorageHelper.saveUser(function() {
-        location.href = "./evento.html";
-      });
+      StorageHelper.saveUser(gotoHome);
     }
     else {
       $("#message").text(serviceResponse.error_description);
