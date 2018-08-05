@@ -8,16 +8,37 @@
 <script src="jquery-3.3.1.min.js"></script>
 <script src="model.js"></script>
 <script src="paniniweb.js"></script>
+<script>
+function loadEvento() {
+  $("#message").text('Attendere. Caricamento dati in corso');
+  StorageHelper.getEvento(function() {
+    if (evento==undefined) {
+      $("#message").text('Attendere. Richiesta dati remoti');
+      NetworkHelper.getEvento(function() {
+        if (evento) {
+          displayEvento();
+          loadVolontari();
+        } else $("#message").html("Nessun evento programmato. <span class='collegamento' onclick='creaEvento();'>Premi qui per crearlo</span>");
+      });
+    }
+  });
+}
+initModel(function(){
+  if (user==undefined)
+    location.replace("./login.html");
+  else loadEvento();
+};);
+</script>
 <title>Volontari del sabato</title>
 </head>
 
 <body>
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">Prossima distribuzione</a>
-    <a href="#">Volontari</a>
-    <a href="#">Login</a>
-    <a href="#">Registrazione</a>
+    <a href="evento.html">Prossima distribuzione</a>
+    <a href="volontari.html">Volontari</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Registrazione</a>
   </div>
 
   <!-- Use any element to open the sidenav -->

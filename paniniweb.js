@@ -7,9 +7,3 @@ function openNav() {
 function closeNav() {
     $("#mySidenav").width("0px");
 }
-var loadevent = function(){
-  if (user==undefined)
-    location.replace("./login.html");
-  else ;
-};
-initModel(loadevent);
