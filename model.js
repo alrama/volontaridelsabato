@@ -1,5 +1,9 @@
 var user;
-var evento;
+var evento = {
+  data_evento: null,
+  fasi: null,
+  partecipanti:null
+};
 var volontari;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
@@ -16,7 +20,7 @@ var NetworkHelper = {
         evento = serviceResponse.response;
         StorageHelper.saveEvento();
       }
-      else $("#message").text(serviceResponse.error_description);
+      if (funcret) funcret();
     });
   }
 };
@@ -109,8 +113,4 @@ function Volontario() {
   this.cellulare="";
   this.password="";
   this.admin;false;
-}
-var EventoTemplate = {
-  data_evento,
-  fasi:[],
 }

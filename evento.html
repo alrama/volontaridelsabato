@@ -15,10 +15,12 @@ function loadEvento() {
     if (evento==undefined) {
       $("#message").text('Attendere. Richiesta dati remoti');
       NetworkHelper.getEvento(function() {
-        if (evento) {
-          displayEvento();
-          loadVolontari();
-        } else $("#message").html("Nessun evento programmato. <span class='collegamento' onclick='creaEvento();'>Premi qui per crearlo</span>");
+        if (evento.fasi) {
+          if (evento.data_evento) {
+            displayEvento();
+            loadVolontari();
+          } else $("#message").html("Nessun evento programmato. <span class='collegamento' onclick='creaEvento();'>Premi qui per crearlo</span>");
+        } else $("#message").text('Errore. Nessun template disponibile');
       });
     }
   });
