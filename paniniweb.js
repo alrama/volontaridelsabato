@@ -7,9 +7,9 @@ function openNav() {
 function closeNav() {
     $("#mySidenav").width("0px");
 }
-var postInit = function(){
+var loadevent = function(){
   if (user==undefined)
     location.replace("./login.html");
-  else location.replace("./evento.html");
+  else ;
 };
-initModel(postInit);
+initModel(loadevent);
