@@ -13,7 +13,7 @@ initModel(function() {
     var hash = window.location.hash.substring(1);
     $("#login_button").enabled = false;
     $("#message").text('Attendere ... connessione in corso');
-    $.get("endregister.php?token="+hash,function(data,status) {
+    $.get("server/endregister.php?token="+hash,function(data,status) {
       serviceResponse = data;
       if (serviceResponse.response_code==200) {
         $("#message").html('Registrazione completata');
@@ -35,7 +35,7 @@ var gotoHome = function() {
 }
 function login() {
   $("#message").text('Attendere ... connessione in corso');
-  $.get("login.php?user="+user.email+"&pw="+user.password,function(data,status) {
+  $.get("server/login.php?user="+user.email+"&pw="+user.password,function(data,status) {
     serviceResponse = data;
     if (serviceResponse.response_code==200) {
       user = serviceResponse.response;

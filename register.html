@@ -11,7 +11,7 @@
 initModel();
 function startRegister() {
   $("#message").text('Attendere ... connessione in corso');
-  $.get("register.php?email="+$("#user").val()+"&pwd="+$("#pwd").val(),function(data,status) {
+  $.get("server/register.php?email="+$("#user").val()+"&pwd="+$("#pwd").val(),function(data,status) {
     serviceResponse = data;
     if (serviceResponse.response_code==200) {
       $("#message").html('OK. Adesso, per concludere la registrazione<br/>seguire il collegamento inviato nella mail (controllare se presente nello spam)');
