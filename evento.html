@@ -16,14 +16,14 @@ function loadVolontari() {}
 function loadEvento() {
   $("#message").text('Attendere. Caricamento dati in corso');
   StorageHelper.getEvento(function() {
-    if (evento==undefined) {
+    if (evento.data_evento==null) {
       $("#message").text('Attendere. Richiesta dati remoti');
       NetworkHelper.loadEvento(function() {
         if (evento.fasi) {
           if (evento.data_evento) {
             displayEvento();
             loadVolontari();
-          } else $("#message").html("Nessun evento programmato. <span class='collegamento' onclick='creaEvento();'>Premi qui per crearlo</span>");
+          } else $("#message").html("Nessun evento programmato.<br/><span class='collegamento' onclick='creaEvento();'>Premi qui per crearlo</span>");
         } else $("#message").text('Errore. Nessun template disponibile');
       });
     }
