@@ -34,34 +34,50 @@ if ($conn->connect_error) {
 } 
 else if (!isset($_GET["token"])) {
     $result->response_code = 300;
-    $result->error_description = "Token assente";
+    $result->error_description = "Accesso non autorizzato";
 }
 else {
   mysql_query("SET character_set_results=utf8", $dbLink);
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT gruppi_id,data_evento FROM paniniweb_evento where gruppi_id = (" .
-  	"SELECT gruppi_id from paniniweb_users where hash = '" . $_GET["token"] . "')";
+  $sql = "SELECT gruppi_id from paniniweb_users where hash = '" . $_GET["token"] . "'";
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
-      $flagid = 0;
-      $sql = "delete from paniniweb_temprec where email = '".$nodo["email"]."'";
-      $rc = $conn->query($sql);
-      if (TRUE===$rc) {
-        $sql = "update paniniweb_users set hash='".$_GET["token"]."' WHERE email = '".$nodo["email"]."'";
-        $rc = $conn->query($sql);
-      	if (TRUE===$rc) {
-          $result->response_code = 200;
-          $result->response = $_GET["token"];
-        } else {
-          $result->response_code = 302;
-          $result->error_description = "Attenzione, registrazione non completata";
+  	$gruppiID = $nodo["gruppi_id"];
+    $evento = new Evento();
+  	$sql = "SELECT data_evento,id from paniniweb_evento where gruppi_id = '" . $gruppiID . "'";
+    $resultSQL = $conn->query($sql);
+    if ($nodo = $resultSQL->fetch_assoc()) {
+      $evento->data_evento = $nodo["data_evento"];
+      $evento_id = $nodo["id"];
+      $sql = "SELECT email,fase_id from paniniweb_partecipazioni where evento_id = '" . $evento_id . "'";
+      $resultSQL = $conn->query($sql);
+      $i = 0;
+      if ($resultSQL->num_rows > 0) {
+          while($row = $resultSQL->fetch_assoc()) {
+              $evento->partecipazioni[$i] = new Partecipazione();
+              $evento->partecipazioni[$i]->fase_id = $row["fase_id"];
+              $evento->partecipazioni[$i++]->email = $row["email"];
+          }
+      } 
+    }
+    $sql = "SELECT id,fase,sequenza from paniniweb_fasi where gruppi_id = '" . $gruppiID . "' ORDER BY sequenza ASC";
+    $resultSQL = $conn->query($sql);
+    $i = 0;
+    if ($resultSQL->num_rows > 0) {
+        while($row = $resultSQL->fetch_assoc()) {
+            $evento->fasi[$i] = new Fase();
+            $evento->fasi[$i]->id = $row["id"];
+            $evento->fasi[$i]->fase = $row["fase"];
+            $evento->fasi[$i++]->sequenza = $row["sequenza"];
         }
-      } else {
-        $result->response_code = 301;
-        $result->error_description = "Attenzione, registrazione non riconosciuta.";
-      }
+    } 
+    $result->response_code = 200;
+    $result->response = $evento;
+  } else {
+        $result->response_code = 300;
+        $result->error_description = "Accesso non autorizzato";
   }
   $conn->close();
 }

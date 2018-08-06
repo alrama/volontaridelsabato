@@ -14,7 +14,7 @@ var serviceResponse = {
 };
 var NetworkHelper = {
   loadEvento : function(funcret) {
-    $.get("server/get_evento.php?token="+hash,function(data,status) {
+    $.get("server/get_evento.php?token="+user.hash,function(data,status) {
       serviceResponse = data;
       if (serviceResponse.response_code==200) {
         evento = serviceResponse.response;
