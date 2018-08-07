@@ -85,7 +85,7 @@ var StorageHelper = {
   }
 }
 initModel = function(func) {
-  var requestDB = window.indexedDB.open("paniniDB", 1);
+  var requestDB = window.indexedDB.open("paniniDB", 2);
   requestDB.onerror = function(event) {
     alert("Attenzione, il database locale di paniniweb non può essere aperto.\nDatabase error: " + event.target.errorCode);
   };
@@ -95,15 +95,20 @@ initModel = function(func) {
   };
   requestDB.onupgradeneeded = function(event) {
     var db = event.target.result;
-    var objectStore = db.createObjectStore("user",{ keyPath: "id" });
-    var objectStore = db.createObjectStore("evento", { keyPath: "id" });
-    var objectStore = db.createObjectStore("volontari", { keyPath: "email" });
-    objectStore.createIndex("nome", "nome", { unique: false });
-    objectStore.createIndex("cognome", "cognome", { unique: false });
-    objectStore.createIndex("email", "email", { unique: true });
-    objectStore.transaction.oncomplete = function(event) {
-      StorageHelper.getUser(func);
-    };
+    if (event.oldVersion < 1) {
+      var objectStore = db.createObjectStore("user",{ keyPath: "id" });
+      objectStore = db.createObjectStore("evento", { keyPath: "id" });
+      objectStore = db.createObjectStore("volontari", { keyPath: "email" });
+      objectStore.createIndex("nome", "nome", { unique: false });
+      objectStore.createIndex("cognome", "cognome", { unique: false });
+      objectStore.createIndex("email", "email", { unique: true });
+      objectStore.transaction.oncomplete = function(event) {
+        StorageHelper.getUser(func);
+      };
+    }
+    if (event.oldVersion < 1) {
+      var objectStore = db.createObjectStore("backlog", { autoIncrement : true });
+    }
   };
 }
 function Volontario() {

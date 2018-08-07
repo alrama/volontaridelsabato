@@ -10,6 +10,12 @@
 <script src="paniniweb.js"></script>
 <script>
 function creaEvento() {
+  evento.data_evento = $("#evento_picker").val();
+  StorageHelper.saveEvento();
+  displayEvento();
+}
+function scegliData() {
+  $("#message").html("");
   $("#evento_picker").css('display','block');
 }
 function displayEvento() {
@@ -28,7 +34,7 @@ function loadEvento() {
             loadVolontari();
           } else {
             var text = "Nessun evento programmato.";
-            if (user.admin) text += "<br/><span class='collegamento' onclick='creaEvento();'>Premi per scegliere la prossima data</span>";
+            if (user.admin) text += "<br/><span class='collegamento' onclick='scegliData();'>Premi per scegliere la prossima data</span>";
             $("#message").html(text);
           }
         } else $("#message").text('Errore. Nessun template disponibile');
@@ -57,8 +63,10 @@ initModel(function(){
   <!-- Use any element to open the sidenav -->
   <img onclick="openNav()" src="img/menu.png">
   <h2>Volontari del sabato</h2>
+  <div class="main">
   <div class="message" id="message"></div>
-    <input type="date" style="display:none" id="evento_picker" class='login'>
+    <input type="date" style="display:none" id="evento_picker" class='login' onchange="creaEvento();">
+  </div>
 </body>
 
 </html>
