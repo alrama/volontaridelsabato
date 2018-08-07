@@ -19,7 +19,7 @@ function loadVolontari() {}
 function loadEvento() {
   $("#message").text('Attendere. Caricamento dati in corso');
   StorageHelper.getEvento(function() {
-    if (evento.data_evento==null) {
+    if (evento==undefined || evento.data_evento==null) {
       $("#message").text('Attendere. Richiesta dati remoti');
       NetworkHelper.loadEvento(function() {
         if (evento.fasi) {

@@ -32,12 +32,9 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
       $flagid = 0;
       $hash_value = hash("sha256", $_GET["email"] . $_GET["pwd"]);
-      $sql = "insert into paniniweb_temprec (email,hash) VALUES ('".$_GET["email"]."','".$hash_value."')";
+      $sql = "insert into paniniweb_temprec (email,hash,password) VALUES ('".$_GET["email"]."','".$hash_value."','".$_GET["pwd"]."')";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
-        $sql = "update paniniweb_users set password='".$_GET["pwd"]."' WHERE email = '".$_GET["email"]."'";
-        $rc = $conn->query($sql);
-      	if (TRUE===$rc) {
           mail(
             $_GET["email"],
             'Completamento della Registrazione',
@@ -46,13 +43,9 @@ else {
             'From: "Volontari del Sabato" <no-reply@volontaridelsabato.org>'
           );
           $result->response_code = 200;
-        } else {
-          $result->response_code = 302;
-          $result->error_description = "Attenzione, password non memorizzata. Ripetere";
-        }
       } else {
         $result->response_code = 301;
-        $result->error_description = "Attenzione, processo di registrazione già richiesto.\n Completare dalla mail ricevuta.";
+        $result->error_description = "Attenzione, processo di registrazione non disponibile.";
       }
   }
   $conn->close();

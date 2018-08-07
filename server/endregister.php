@@ -27,14 +27,14 @@ else {
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT email FROM paniniweb_temprec where hash = '" . $_GET["token"] . "'";
+  $sql = "SELECT email,password FROM paniniweb_temprec where hash = '" . $_GET["token"] . "'";
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
       $flagid = 0;
       $sql = "delete from paniniweb_temprec where email = '".$nodo["email"]."'";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
-        $sql = "update paniniweb_users set hash='".$_GET["token"]."' WHERE email = '".$nodo["email"]."'";
+        $sql = "update paniniweb_users set hash='".$_GET["token"]."',password='".$nodo["password"]."' WHERE email = '".$nodo["email"]."'";
         $rc = $conn->query($sql);
       	if (TRUE===$rc) {
           $result->response_code = 200;

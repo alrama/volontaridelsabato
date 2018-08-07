@@ -28,7 +28,7 @@ if ($conn->connect_error) {
 } 
 else if (!isset($_GET["user"]) || !isset($_GET["pw"])) {
     $result->response_code = 300;
-    $result->error_description = "Token assente";
+    $result->error_description = "Attenzione, email o password non corretti.";
 }
 else {
   mysql_query("SET character_set_results=utf8", $dbLink);
@@ -38,6 +38,10 @@ else {
   $sql = "SELECT nome,cognome,admin,hash FROM paniniweb_users where email = '" . $_GET["user"] . "' AND password='" . $_GET["pw"] . "'" ;
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
+  	if (NULL===$nodo["hash"]) {
+       $result->response_code = 302;
+       $result->error_description = "Attenzione, utente non registrato.";
+    } else {
       $userRet = new User();
       $userRet->email = $_GET["user"];
       $userRet->password = $_GET["pw"];
@@ -47,6 +51,7 @@ else {
       $userRet->hash = $nodo["hash"];
       $result->response_code = 200;
       $result->response = $userRet;
+    }
   } else {
         $result->response_code = 301;
         $result->error_description = "Attenzione, email o password non corretti.";
