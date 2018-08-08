@@ -47,10 +47,11 @@ var NetworkHelper = {
   }
 };
 var StorageHelper = {
-  getBacklog : function() {
+  getBacklog : function(funcret) {
     var req = db.transaction("backlog").objectStore("backlog").get(1);
     req.onsuccess = function(event) {
       backlog = event.target.result;
+      if (funcret) funcret();
     };
   },
   saveBacklog : function() {

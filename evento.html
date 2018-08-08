@@ -47,6 +47,7 @@ function loadEvento() {
       NetworkHelper.loadEvento(function() {
         if (evento.fasi) {
           if (evento.data_evento) {
+            StorageHelper.saveEvento();
             displayEvento();
             loadVolontari();
           } else {
@@ -56,7 +57,13 @@ function loadEvento() {
           }
         } else $("#message").text('Errore. Nessun template disponibile');
       });
-    } else StorageHelper.getBacklog();
+    } else {
+      StorageHelper.getBacklog(function() {
+        if (backlog) {
+          $("#message").html("Senza sincronizzazione non sono consentite altre modifiche<br/><span class='collegamento' onclick='sincronizza();'>Ritenta la sincronizzazione</span>")
+        } else $("#message").html("");
+      });
+    }
   });
 }
 initModel(function(){

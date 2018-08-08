@@ -61,7 +61,7 @@ h2 {
   margin-bottom: 5px;
 }
 .main {
-  margin: auto;
+  text-align: center;
 }
 .main label{
   font-style: italic;
