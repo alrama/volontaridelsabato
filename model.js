@@ -21,11 +21,28 @@ var NetworkHelper = {
   loadEvento : function(funcret) {
     $.get("server/get_evento.php?token="+user.hash,function(data,status) {
       serviceResponse = data;
-      if (serviceResponse.response_code==200) {
-        evento = serviceResponse.response;
-        StorageHelper.saveEvento();
-      }
+      if (serviceResponse.response_code) {
+        if (serviceResponse.response_code==200) {
+          evento = serviceResponse.response;
+          StorageHelper.saveEvento();
+        }
+      } /* else network error */
       if (funcret) funcret();
+    });
+  },
+  sendEvento : function(callback) {
+    var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento;
+    $.get(urlserver,function(data,status) {
+      serviceResponse = data;
+      if (serviceResponse.response_code) {
+        if (serviceResponse.response_code==200) {
+          if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+        } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+      } else {
+        backlog.command = urlserver;
+        StorageHelper.saveBacklog();
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+      }
     });
   }
 };
@@ -56,16 +73,16 @@ var StorageHelper = {
       if (funcret) funcret();
     }
   },
-  saveEvento : function(funcret) {
+  saveEvento : function(callback) {
     var objStr = db.transaction("evento","readwrite").objectStore("evento");
     var insEvento = function(event) {
       evento.id = 1;
       var reqIns = objStr.put(evento);
       reqIns.onsuccess = function(event) {
-        if (funcret) funcret();
+        if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
       }
       reqIns.onerror = function(event) {
-        if (funcret) funcret();
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
       }
     };
     var reqClear = objStr.clear();

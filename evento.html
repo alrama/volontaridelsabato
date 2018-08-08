@@ -10,9 +10,26 @@
 <script src="paniniweb.js"></script>
 <script>
 function creaEvento() {
+  $('#message').text('Attendere, salvataggio e sincronizzazione in corso.')
   evento.data_evento = $("#evento_picker").val();
-  StorageHelper.saveEvento();
-  displayEvento();
+  var req = {};
+  req.onsuccess = function() {
+    displayEvento();
+    var netreq = {};
+    netreq.onsuccess = function() {
+      $('#message').text('OK. Salvato e sincronizzato');
+    };
+    netreq.onerror = function(serviceResponse) {
+      if (serviceResponse.response_code==undefined)
+        $('#message').html("Server non raggiungibile. Senza sincronizzazione non sono consentite altre modifiche<br/><span class='collegamento' onclick='sincronizza();'>Ritenta la sincronizzazione</span>");
+      else $('#message').html("Sincronizzazione non possibile. Il server ha dati più aggiornati<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+    };
+    NetworkHelper.sendEvento(netreq);
+  };
+  req.onerror = function() {
+
+  }
+  StorageHelper.saveEvento(req);
 }
 function scegliData() {
   $("#message").html("");
