@@ -19,7 +19,7 @@ var serviceResponse = {
 };
 var NetworkHelper = {
   loadEvento : function(funcret) {
-    $.ajax(
+    $.ajax({
       url: "server/get_evento.php?token="+user.hash,
       type: 'GET',
       success: function(data) {
@@ -31,18 +31,28 @@ var NetworkHelper = {
           }
         } /* else network error */
         if (funcret) funcret();
-      }),
+      },
       error: function(data) {if (funcret) funcret();}
+    })
   },
   sendEvento : function(callback) {
     var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento;
-    $.get(urlserver,function(data,status) {
-      serviceResponse = data;
-      if (serviceResponse.response_code) {
-        if (serviceResponse.response_code==200) {
-          if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
-        } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
-      } else {
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+        } else {
+          backlog.command = urlserver;
+          StorageHelper.saveBacklog();
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+        }
+      },
+      error : function(data) {
         backlog.command = urlserver;
         StorageHelper.saveBacklog();
         if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
