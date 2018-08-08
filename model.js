@@ -4,6 +4,11 @@ var evento = {
   fasi: null,
   partecipanti:null
 };
+var backlog = {
+  command:null,
+  method:"GET",
+  post_parmas:null
+}
 var volontari;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
@@ -25,6 +30,22 @@ var NetworkHelper = {
   }
 };
 var StorageHelper = {
+  getBacklog : function() {
+    var req = db.transaction("backlog").objectStore("backlog").get(1);
+    req.onsuccess = function(event) {
+      backlog = event.target.result;
+    };
+  },
+  saveBacklog : function() {
+    var objStr = db.transaction("backlog","readwrite").objectStore("backlog");
+    var insBacklog = function(event) {
+      backlog.id = 1;
+      var reqIns = objStr.put(backlog);
+    };
+    var reqClear = objStr.clear();
+    reqClear.onsuccess = insBacklog(event);
+    reqClear.onerror = insBacklog(event);
+  },
   getEvento : function(funcret) {
     var req = db.transaction("evento").objectStore("evento").get(1);
     req.onsuccess = function(event) {
@@ -107,7 +128,7 @@ initModel = function(func) {
       };
     }
     if (event.oldVersion < 1) {
-      var objectStore = db.createObjectStore("backlog", { autoIncrement : true });
+      var objectStore = db.createObjectStore("backlog",{ keyPath: "id" });
     }
   };
 }

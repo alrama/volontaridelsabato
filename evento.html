@@ -39,7 +39,7 @@ function loadEvento() {
           }
         } else $("#message").text('Errore. Nessun template disponibile');
       });
-    }
+    } else StorageHelper.getBacklog();
   });
 }
 initModel(function(){
