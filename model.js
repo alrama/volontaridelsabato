@@ -4,21 +4,18 @@ var evento = {
   fasi: null,
   partecipanti:null
 };
-var backlog = {
-  command:null,
-  method:"GET",
-  post_parmas:null
-}
 var volontari;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
 var serviceResponse = {
-  "response_code":0,
-  "error_description":"",
-  "response":null
+  response_code:0,
+  error_description:"",
+  response:null,
+  init : function() {this.response_code=0;this.error_description="";this.response=null;}
 };
 var NetworkHelper = {
   loadEvento : function(funcret) {
+    serviceResponse.init();
     $.ajax({
       url: "server/get_evento.php?token="+user.hash,
       type: 'GET',
@@ -36,6 +33,7 @@ var NetworkHelper = {
     })
   },
   sendEvento : function(callback) {
+    serviceResponse.init();
     var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento;
     $.ajax({
       url : urlserver,
@@ -45,39 +43,18 @@ var NetworkHelper = {
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
             if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
-          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
         } else {
-          backlog.command = urlserver;
-          StorageHelper.saveBacklog();
-          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
         }
       },
       error : function(data) {
-        backlog.command = urlserver;
-        StorageHelper.saveBacklog();
-        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse);
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
       }
     });
   }
 };
 var StorageHelper = {
-  getBacklog : function(funcret) {
-    var req = db.transaction("backlog").objectStore("backlog").get(1);
-    req.onsuccess = function(event) {
-      backlog = event.target.result;
-      if (funcret) funcret();
-    };
-  },
-  saveBacklog : function() {
-    var objStr = db.transaction("backlog","readwrite").objectStore("backlog");
-    var insBacklog = function(event) {
-      backlog.id = 1;
-      var reqIns = objStr.put(backlog);
-    };
-    var reqClear = objStr.clear();
-    reqClear.onsuccess = insBacklog(event);
-    reqClear.onerror = insBacklog(event);
-  },
   getEvento : function(funcret) {
     var req = db.transaction("evento").objectStore("evento").get(1);
     req.onsuccess = function(event) {
@@ -158,9 +135,6 @@ initModel = function(func) {
       objectStore.transaction.oncomplete = function(event) {
         StorageHelper.getUser(func);
       };
-    }
-    if (event.oldVersion < 1) {
-      var objectStore = db.createObjectStore("backlog",{ keyPath: "id" });
     }
   };
 }

@@ -10,26 +10,27 @@
 <script src="paniniweb.js"></script>
 <script>
 function creaEvento() {
-  $('#message').text('Attendere, salvataggio e sincronizzazione in corso.')
+  $('#message').text('Attendere, invio in corso.')
   evento.data_evento = $("#evento_picker").val();
-  var req = {};
-  req.onsuccess = function() {
-    displayEvento();
-    var netreq = {};
-    netreq.onsuccess = function() {
-      $('#message').text('OK. Salvato e sincronizzato');
+  var netreq = {};
+  netreq.onsuccess = function() {
+    var req = {};
+    req.onsuccess = function() {
+      StorageHelper.saveEvento(req);
+      $('#message').text('OK. Evento inviato e salvato in locale');
+      displayEvento();
     };
-    netreq.onerror = function(serviceResponse) {
-      if (serviceResponse.response_code==undefined)
-        $('#message').html("Server non raggiungibile. Senza sincronizzazione non sono consentite altre modifiche<br/><span class='collegamento' onclick='sincronizza();'>Ritenta la sincronizzazione</span>");
-      else $('#message').html("Sincronizzazione non possibile. Il server ha dati più aggiornati<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
-    };
-    NetworkHelper.sendEvento(netreq);
+    req.onerror = function() {
+      $('#message').text('OK. Evento inviato');
+      displayEvento();
+    }
   };
-  req.onerror = function() {
-
-  }
-  StorageHelper.saveEvento(req);
+  netreq.onerror = function(serviceResponse) {
+    if (serviceResponse.response_code==undefined)
+      $('#message').html("Server non raggiungibile. evento non registrato.<br/><span class='collegamento' onclick='creaEvento();'>Ritenta l'invio</span>");
+    else $('#message').html("Invio evento rifiutato<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+  };
+  NetworkHelper.sendEvento(netreq);
 }
 function scegliData() {
   $("#message").html("");
@@ -49,7 +50,6 @@ function loadEvento() {
           if (evento.data_evento) {
             StorageHelper.saveEvento();
             displayEvento();
-            loadVolontari();
           } else {
             var text = "Nessun evento programmato.";
             if (user.admin) text += "<br/><span class='collegamento' onclick='scegliData();'>Premi per scegliere la prossima data</span>";
@@ -58,11 +58,8 @@ function loadEvento() {
         } else $("#message").text('Errore. Nessun template disponibile');
       });
     } else {
-      StorageHelper.getBacklog(function() {
-        if (backlog) {
-          $("#message").html("Senza sincronizzazione non sono consentite altre modifiche<br/><span class='collegamento' onclick='sincronizza();'>Ritenta la sincronizzazione</span>")
-        } else $("#message").html("");
-      });
+      $("#message").html("");
+      displayEvento();
     }
   });
 }
