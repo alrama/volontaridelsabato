@@ -9,6 +9,15 @@
 <script src="model.js"></script>
 <script src="paniniweb.js"></script>
 <script>
+function displayEvento() {
+  var html = "";
+  for (i = 0; i < evento.fasi.length ; i++) {
+    html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
+    html+= evento.fasi[i].sequenza + ". " + evento.fasi[i].fase;
+    html+= "</div>";
+  }
+  $("#content").html(html);
+}
 function creaEvento() {
   $('#message').text('Attendere, invio in corso.')
   evento.data_evento = $("#evento_picker").val();
@@ -29,15 +38,14 @@ function creaEvento() {
     if (serviceResponse===undefined || serviceResponse.response_code===undefined)
       $('#message').html("Server non raggiungibile. evento non registrato.<br/><span class='collegamento' onclick='creaEvento();'>Ritenta l'invio</span>");
     else $('#message').html("Invio evento rifiutato<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+    // da togliere
+    displayEvento();
   };
   NetworkHelper.sendEvento(netreq);
 }
 function scegliData() {
   $("#message").html("");
   $("#evento_picker").css('display','block');
-}
-function displayEvento() {
-
 }
 function loadVolontari() {}
 function loadEvento() {
@@ -87,7 +95,9 @@ initModel(function(){
   <div class="main">
   <div class="message" id="message"></div>
     <input type="date" style="display:none" id="evento_picker" class='login' onchange="creaEvento();">
+    <div id="content"></div>
   </div>
+
 </body>
 
 </html>

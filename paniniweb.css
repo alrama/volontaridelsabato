@@ -76,6 +76,19 @@ h2 {
   font-size: 0.75em;
   color: darkolivegreen;
 }
+#content {
+  text-align: left;
+}
+.subtitle {
+  margin: auto;
+  vertical-align: middle;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+  font-size: 0.75em;
+  color: darkolivegreen;
+}
+
 .textsmall {
   font-size:1em;
 }
@@ -91,4 +104,9 @@ h2 {
   text-decoration: underline;
   cursor: pointer;
   font-size: 2em;
+}
+.img_title {
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: middle;
 }
