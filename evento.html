@@ -26,7 +26,7 @@ function creaEvento() {
     }
   };
   netreq.onerror = function(serviceResponse) {
-    if (serviceResponse.response_code==undefined)
+    if (serviceResponse===undefined || serviceResponse.response_code===undefined)
       $('#message').html("Server non raggiungibile. evento non registrato.<br/><span class='collegamento' onclick='creaEvento();'>Ritenta l'invio</span>");
     else $('#message').html("Invio evento rifiutato<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
   };

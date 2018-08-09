@@ -10,12 +10,10 @@ var db;
 var serviceResponse = {
   response_code:0,
   error_description:"",
-  response:null,
-  init : function() {this.response_code=0;this.error_description="";this.response=null;}
+  response:null
 };
 var NetworkHelper = {
   loadEvento : function(funcret) {
-    serviceResponse.init();
     $.ajax({
       url: "server/get_evento.php?token="+user.hash,
       type: 'GET',
@@ -33,7 +31,6 @@ var NetworkHelper = {
     })
   },
   sendEvento : function(callback) {
-    serviceResponse.init();
     var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento;
     $.ajax({
       url : urlserver,
