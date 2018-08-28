@@ -35,7 +35,14 @@ function startRegister() {
     <input type="email" class="login" id="user"><br/>
     <label for="pwd">scegli una password</label><br/>
     <input type="password" class="login" id="pwd"><br/>
-    <input type="button" class="login" onclick='startRegister()' value="Registrami">
+    <label for="nome">nome</label><br/>
+    <input type="text" class="login" id="nome"><br/>
+    <label for="cognome">cognome</label><br/>
+    <input type="text" class="login" id="cognome"><br/>
+    <label for="telefono">telefono</label><br/>
+    <input type="password" class="login" id="telefono"><br/>
+    <input type="checkbox" id="autoriz" onclick="checkAuth()"> Letto e autorizzato l'uso di dati personali<br/>
+    <input type="button" class="login" onclick='startRegister()' value="Registrami" disabled="true">
   </div>
 </body>
 
