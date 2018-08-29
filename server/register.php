@@ -18,9 +18,9 @@ if ($conn->connect_error) {
     $result->response_code = 500;
     $result->error_description = $conn->connect_error;
 } 
-else if (!isset($_GET["email"]) or !isset($_GET["pwd"])) {
+else if (!isset($_GET["email"]) or !isset($_GET["pwd"]) or !isset($_GET["nome"]) or !isset($_GET["cognome"])) {
     $result->response_code = 300;
-    $result->error_description = "Assenti email o password";
+    $result->error_description = "Assenti informazioni obbligatorie";
 }
 else {
   mysql_query("SET character_set_results=utf8", $dbLink);
@@ -32,7 +32,7 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
       $flagid = 0;
       $hash_value = hash("sha256", $_GET["email"] . $_GET["pwd"]);
-      $sql = "insert into paniniweb_temprec (email,hash,password) VALUES ('".$_GET["email"]."','".$hash_value."','".$_GET["pwd"]."')";
+      $sql = "insert into paniniweb_temprec (email,hash,password,nome,cognome,telefono) VALUES ('".$_GET["email"]."','".$hash_value."','".$_GET["pwd"]."','".$_GET["nome"]."','".$_GET["cognome"]."','".$_GET["telefono"]."')";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
           mail(

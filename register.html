@@ -10,18 +10,28 @@
 <script>
 initModel();
 function startRegister() {
-  $("#message").text('Attendere ... connessione in corso');
-  $.get("server/register.php?email="+$("#user").val()+"&pwd="+$("#pwd").val(),function(data,status) {
-    serviceResponse = data;
-    if (serviceResponse.response_code==200) {
-      $("#message").html('OK. Adesso, per concludere la registrazione<br/>seguire il collegamento inviato nella mail (controllare se presente nello spam)');
-      user = new Volontario();
-      user.email = $("#user").val();
-      user.password = $("#pwd").val();
-      StorageHelper.saveUser();
-    }
-    else $("#message").text(serviceResponse.error_description);
-  });
+  if ($("#user").val()=="" || $("#pwd").val()==""
+    || $("#nome").val() =="" || $("#cognome").val()=="") {
+      $("#message").text('email, password, nome e cognome sono obbligatori');
+      window.scrollTo(0,0);
+  } else if (!$('#autoriz').is(':checked')) {
+    $("#message").text("L'autorizzazione all'uso dei dati personali è obbligatoria");
+    window.scrollTo(0,0);
+  } else {
+    $("#message").text('Attendere ... connessione in corso');
+    $.get("server/register.php?email="+$("#user").val()+"&pwd="+$("#pwd").val()+"&nome="+$("#nome").val()+"&cognome="+$("#cognome").val()+"&telefono="+$("#telefono").val(),function(data,status) {
+      serviceResponse = data;
+      if (serviceResponse.response_code==200) {
+        $("#message").html('OK. Adesso, per concludere la registrazione<br/>seguire il collegamento inviato nella mail (controllare se presente nello spam)');
+        user = new Volontario();
+        user.email = $("#user").val();
+        user.password = $("#pwd").val();
+        StorageHelper.saveUser();
+      }
+      else $("#message").text(serviceResponse.error_description);
+      window.scrollTo(0,0);
+    });
+  }
 }
 </script>
 <title>Volontari del sabato</title>
@@ -41,8 +51,8 @@ function startRegister() {
     <input type="text" class="login" id="cognome"><br/>
     <label for="telefono">telefono</label><br/>
     <input type="password" class="login" id="telefono"><br/>
-    <input type="checkbox" id="autoriz" onclick="checkAuth()"> Letto e autorizzato l'uso di dati personali<br/>
-    <input type="button" class="login" onclick='startRegister()' value="Registrami" disabled="true">
+    <input type="checkbox" id="autoriz"><span class="textsmall"> Autorizzo l'uso di dati personali</span><br/>
+    <input type="button" class="login" onclick='startRegister()' value="Registrami">
   </div>
 </body>
 
