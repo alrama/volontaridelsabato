@@ -13,6 +13,23 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  loadVolontari : function(funcret) {
+    $.ajax({
+      url: "server/get_volontari.php?token="+user.hash,
+      type: 'GET',
+      success: function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            volontari = serviceResponse.response;
+            StorageHelper.saveVolontari();
+          }
+        } /* else network error */
+        if (funcret) funcret();
+      },
+      error: function(data) {if (funcret) funcret();}
+    })
+  },
   loadEvento : function(funcret) {
     $.ajax({
       url: "server/get_evento.php?token="+user.hash,
@@ -52,6 +69,34 @@ var NetworkHelper = {
   }
 };
 var StorageHelper = {
+  getVolontari : function(funcret) {
+    var req = db.transaction("volontari").objectStore("volontari").openCursor();
+    volontari = [];
+    req.onsuccess = function(event) {
+      var cursor = event.target.result;
+      if (cursor) {
+        volontari.push(cursor.value);
+        cursor.continue();
+      }
+      else if (funcret) funcret();
+    };
+    req.onerror = function(event) {
+      if (funcret) funcret();
+    }
+  },
+  saveVolontari : function(callback) {
+    var trx = db.transaction("volontari","readwrite");
+    var objStr = trx.objectStore("volontari");
+    var insVolontari = function(event) {
+      if (typeof callback === 'object' && typeof callback.onsuccess === 'function')
+        trx.oncomplete = callback.onsuccess;
+      for (i=0; i<volontari.length; i++)
+        objStr.put(volontari[i]);
+    };
+    var reqClear = objStr.clear();
+    reqClear.onsuccess = insVolontari(event);
+    reqClear.onerror = insVolontari(event);
+  },
   getEvento : function(funcret) {
     var req = db.transaction("evento").objectStore("evento").get(1);
     req.onsuccess = function(event) {

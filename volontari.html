@@ -43,37 +43,10 @@ function creaEvento() {
   };
   NetworkHelper.sendEvento(netreq);
 }
-function scegliData() {
-  $("#message").html("");
-  $("#evento_picker").css('display','block');
-}
-function loadVolontari() {}
-function loadEvento() {
-  $("#message").text('Attendere. Caricamento dati in corso');
-  StorageHelper.getEvento(function() {
-    if (evento==undefined || evento.data_evento==null) {
-      $("#message").text('Attendere. Richiesta dati remoti');
-      NetworkHelper.loadEvento(function() {
-        if (evento.fasi) {
-          if (evento.data_evento) {
-            displayEvento();
-          } else {
-            var text = "Nessun evento programmato.";
-            if (user.admin) text += "<br/><span class='collegamento' onclick='scegliData();'>Premi per scegliere la prossima data</span>";
-            $("#message").html(text);
-          }
-        } else $("#message").text('Errore. Nessun template disponibile');
-      });
-    } else {
-      $("#message").html("");
-      displayEvento();
-    }
-  });
-}
 initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
-  else loadEvento();
+  else loadVolontari();
 });
 </script>
 <title>Volontari del sabato</title>
@@ -93,8 +66,7 @@ initModel(function(){
   <h2>Volontari del sabato</h2>
   <div class="main">
   <div class="message" id="message"></div>
-    <input type="date" style="display:none" id="evento_picker" class='login' onchange="creaEvento();">
-    <div id="content"></div>
+    <div id="volontari_content"></div>
   </div>
 
 </body>
