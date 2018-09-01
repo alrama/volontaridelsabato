@@ -62,7 +62,7 @@ h2 {
 }
 .main {
   text-align: center;
-  width: 400px;
+  width: 350px;
   margin:0 auto;
 }
 .main label{
@@ -118,7 +118,7 @@ h2 {
 .subheader {
   margin: 0 auto;
   text-align: center;
-  margin-right: 100px;
+  margin-right: 80px;
 }
 .icon_header {
   margin-right: 10px;
