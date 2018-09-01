@@ -34,7 +34,7 @@ else {
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT gruppi_id from paniniweb_users where hash = '" . $_GET["token"] . "'";
+  $sql = "SELECT gruppi_id,admin from paniniweb_users where hash = '" . $_GET["token"] . "'";
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
   	$gruppiID = $nodo["gruppi_id"];
@@ -45,8 +45,13 @@ else {
           while($row = $resultSQL->fetch_assoc()) {
               $result->response[$i] = new Volontario();
               $result->response[$i]->email = $row["email"];
-              $result->response[$i]->nome = $row["nome"];
-              $result->response[$i]->cognome = $row["cognome"];
+              if ($nodo["admin"]) {
+               	$result->response[$i]->nome = $row["nome"];
+                $result->response[$i]->cognome = $row["cognome"];
+              } else {
+            	$result->response[$i]->nome = substr($row["nome"],0,1) . ".";
+                $result->response[$i]->cognome = substr($row["cognome"],0,1) . ".";
+              }
               if (strlen($row["password"])>0) $result->response[$i]->registrato = 1;
               else $result->response[$i]->registrato = 0;
               $result->response[$i++]->cellulare = $row["cellulare"];
