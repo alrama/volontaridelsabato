@@ -4,6 +4,14 @@ var evento = {
   fasi: null,
   partecipanti:null
 };
+function Volontario() {
+  this.email="";
+  this.nome= "";
+  this.cognome="";
+  this.cellulare="";
+  this.password="";
+  this.admin;false;
+}
 var volontari;
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
@@ -179,12 +187,4 @@ initModel = function(func) {
       };
     }
   };
-}
-function Volontario() {
-  this.email="";
-  this.nome= "";
-  this.cognome="";
-  this.cellulare="";
-  this.password="";
-  this.admin;false;
 }
