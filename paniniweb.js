@@ -15,7 +15,7 @@ function displayVolontari() {
   showMessage("");
   var htmlcontant = "";
   for (volontario of volontari) {
-    htmlcontant += "<div class='riga'><div class='textsmall dettaglio_riga'>";
+    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div class='textsmall dettaglio_riga'>";
     if (volontario.nome.length+volontario.cognome.length<5) {
       htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
       htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.email+"</div>";

@@ -17,6 +17,11 @@ initModel(function(){
     if (user.admin) $("#account_plus").css('visiblity','visible');
   }
 });
+function dettaglio_riga(elem,left,email) {
+  $("#detail").css("display","block");
+  $("#detail").css("top",elem.offsetTop+elem.height);
+  $("#detail").css("left",elem.offsetLeft);
+}
 </script>
 <title>Volontari del sabato</title>
 </head>
@@ -39,6 +44,19 @@ initModel(function(){
       <img id="account_plus" onclick="addaccount();" src="img/account-plus.png" style="visibility:invisible" class="icon_header">
     <img onclick="aggiornaVolontari();" src="img/sync.png" class="icon_header"></div>
     <div id="volontari_content"></div>
+  </div>
+  <div id="detail" class="detail" style="display: none;">
+    <label for="user" class="textsmall">e-mail di contatto</label><br/>
+    <input type="email" class="smallfield" id="user" disabled><br/>
+    <label for="nome" class="textsmall">nome</label><br/>
+    <input type="text" class="smallfield" id="nome" disabled><br/>
+    <label for="cognome" class="textsmall">cognome</label><br/>
+    <input type="text" class="smallfield" id="cognome" disabled><br/>
+    <label for="telefono" class="textsmall">telefono</label><br/>
+    <input type="text" class="smallfield" id="telefono" disabled><br/>
+    <input type="checkbox" id="admin" disabled><span class="textsmall"> Amministratore</span><br/>
+    <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" onclick='$("#detail").css("display","none");'>
+    <input type="button" class="login compat_button" value="Elimina" onclick='rimuoviVolontario($("#user").value());'>
   </div>
 
 </body>
