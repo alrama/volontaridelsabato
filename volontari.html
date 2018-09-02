@@ -17,10 +17,67 @@ initModel(function(){
     if (user.admin) $("#account_plus").css('visiblity','visible');
   }
 });
-function dettaglio_riga(elem,left,email) {
+function dettaglio_riga(elem,email) {
   $("#detail").css("display","block");
+  $("#chiudi").css("display","inline");
+  if (user.admin) $("#elimina").css("display","inline");
   $("#detail").css("top",elem.offsetTop+elem.height);
   $("#detail").css("left",elem.offsetLeft);
+  volont = findVolontario(email);
+  $('#user').val(volont.email);
+  $('#nome').val(volont.nome);
+  $('#cognome').val(volont.cognome);
+  $('#telefono').val(volont.cellulare);
+  $('#admin').prop('checked',volont.admin);
+}
+function addaccount(elem) {
+  $("#detail").css("display","block");
+  $("#annulla").css("display","inline");
+  $("#aggiungi").css("display","inline");
+  $("#detail").css("top",elem.offsetTop+elem.height);
+  $("#detail").css("left",elem.offsetLeft-$("#detail").width);
+  $("#telefono_label").css("display","none");
+  $("#telefono").css("display","none");
+  $("#user").prop('disabled',false);
+  $("#nome").prop('disabled',false);
+  $("#cognome").prop('disabled',false);
+  $("#admin").prop('disabled',false);
+}
+function sendVolontario() {
+  if ($('#nome').val()=="" || $('#cognome').val()=="")
+    showMessage("Nome e Cognome sono obbligatori");
+  else {
+    var vol = new Volontario();
+    vol.email = $('#user').val();
+    vol.nome = $('#nome').val();
+    vol.cognome = $('#cognome').val();
+    vol.admin = $('#admin').is(':checked');
+    var req = {};
+    req.onsuccess = function() {
+      closeDetail();
+      aggiornaVolontari();
+    };
+    req.onerror = function() {showMessage("Impossibile aggiungere il volontario");};
+    NetworkHelper.sendVolontario(vol,req);
+  }
+}
+function closeDetail() {
+  $("#detail").css("display","none");
+  $('#chiudi').css("display","none")
+  $('#elimina').css("display","none")
+  $('#annulla').css("display","none")
+  $('#aggiungi').css("display","none")
+  $('#user').val('');
+  $('#nome').val('');
+  $('#cognome').val('');
+  $('#telefono').val('');
+  $("#telefono_label").css("display","inline");
+  $("#telefono").css("display","inline");
+  $('#admin').prop('checked',false);
+  $("#user").prop('disabled',true);
+  $("#nome").prop('disabled',true);
+  $("#cognome").prop('disabled',true);
+  $("#admin").prop('disabled',true);
 }
 </script>
 <title>Volontari del sabato</title>
@@ -41,7 +98,7 @@ function dettaglio_riga(elem,left,email) {
   <div class="message" id="message"></div>
   <div class="main">
     <div class="header_content"><span class="subheader">Riferimenti</span>
-      <img id="account_plus" onclick="addaccount();" src="img/account-plus.png" style="visibility:invisible" class="icon_header">
+      <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:invisible" class="icon_header">
     <img onclick="aggiornaVolontari();" src="img/sync.png" class="icon_header"></div>
     <div id="volontari_content"></div>
   </div>
@@ -52,11 +109,13 @@ function dettaglio_riga(elem,left,email) {
     <input type="text" class="smallfield" id="nome" disabled><br/>
     <label for="cognome" class="textsmall">cognome</label><br/>
     <input type="text" class="smallfield" id="cognome" disabled><br/>
-    <label for="telefono" class="textsmall">telefono</label><br/>
+    <label for="telefono" class="textsmall" id="telefono_label">telefono</label><br/>
     <input type="text" class="smallfield" id="telefono" disabled><br/>
     <input type="checkbox" id="admin" disabled><span class="textsmall"> Amministratore</span><br/>
-    <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" onclick='$("#detail").css("display","none");'>
-    <input type="button" class="login compat_button" value="Elimina" onclick='rimuoviVolontario($("#user").value());'>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Elimina" id="elimina" onclick='rimuoviVolontario($("#user").val());'>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Annulla" id="annulla" onclick='closeDetail();'>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Aggiungi" id="aggiungi" onclick='sendVolontario();'>
   </div>
 
 </body>

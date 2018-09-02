@@ -13,6 +13,13 @@ function Volontario() {
   this.admin;false;
 }
 var volontari;
+function findVolontario(email) {
+  for (i=0;i<volontari.length;i++) {
+    if (volontari[i].email==email)
+      return volontari[i];
+  }
+  return null;
+}
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
 var serviceResponse = {
@@ -37,6 +44,28 @@ var NetworkHelper = {
       },
       error: function(data) {if (funcret) funcret();}
     })
+  },
+  sendVolontario : function(volontario,callback) {
+    var urlserver = "server/put_volontario.php?token="+user.hash+"&email="+
+      volontario.email+"&nome="+volontario.nome+"&cognome="+volontario.cognome+
+      "&admin="+volontario.admin;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
   },
   loadEvento : function(funcret) {
     $.ajax({
