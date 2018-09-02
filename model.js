@@ -67,6 +67,26 @@ var NetworkHelper = {
       }
     });
   },
+  deleteVolontario : function(email,callback) {
+    var urlserver = "server/remove_volontario.php?token="+user.hash+"&email="+email;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   loadEvento : function(funcret) {
     $.ajax({
       url: "server/get_evento.php?token="+user.hash,
@@ -127,8 +147,10 @@ var StorageHelper = {
     var insVolontari = function(event) {
       if (typeof callback === 'object' && typeof callback.onsuccess === 'function')
         trx.oncomplete = callback.onsuccess;
-      for (i=0; i<volontari.length; i++)
+      for (i=0; i<volontari.length; i++) {
+        volontari[i].id = i;
         objStr.put(volontari[i]);
+      }
     };
     var reqClear = objStr.clear();
     reqClear.onsuccess = insVolontari(event);
@@ -207,7 +229,7 @@ initModel = function(func) {
     if (event.oldVersion < 1) {
       var objectStore = db.createObjectStore("user",{ keyPath: "id" });
       objectStore = db.createObjectStore("evento", { keyPath: "id" });
-      objectStore = db.createObjectStore("volontari", { keyPath: "email" });
+      objectStore = db.createObjectStore("volontari", { keyPath: "id" });
       objectStore.createIndex("nome", "nome", { unique: false });
       objectStore.createIndex("cognome", "cognome", { unique: false });
       objectStore.createIndex("email", "email", { unique: true });
