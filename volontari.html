@@ -13,7 +13,7 @@ initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
   else {
-    loadVolontari();
+    loadVolontari(displayVolontari);
     if (user.admin) $("#account_plus").css('visiblity','visible');
   }
 });

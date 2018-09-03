@@ -27,22 +27,22 @@ function displayVolontari() {
   }
   $("#volontari_content").html(htmlcontant);
 }
-function aggiornaVolontari() {
+function aggiornaVolontari(callback) {
   $("#message").text('Attendere. Richiesta dati remoti');
   NetworkHelper.loadVolontari(function() {
     if (volontari) {
-      displayVolontari();
+      if (typeof callback === 'function' ) callback();
     } else showMessage('Errore. Impossibile ricevere la lista di volontari');
   });
 }
-function loadVolontari() {
+function loadVolontari(callback) {
   showMessage('Attendere. Caricamento dati in corso');
   StorageHelper.getVolontari(function() {
     if (volontari==undefined || volontari.length==0) {
-      aggiornaVolontari();
+      aggiornaVolontari(callback);
     } else {
       showMessage("");
-      displayVolontari();
+      if (typeof callback === 'function' ) callback();
     }
   });
 }

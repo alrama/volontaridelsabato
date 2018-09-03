@@ -96,7 +96,7 @@ var NetworkHelper = {
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
             evento = serviceResponse.response;
-            StorageHelper.saveEvento();
+            if (evento.data) StorageHelper.saveEvento();
           }
         } /* else network error */
         if (funcret) funcret();
