@@ -10,6 +10,7 @@
 <script src="paniniweb.js"></script>
 <script>
 function displayEvento() {
+  $('#message').html('');
   var html = "";
   for (i = 0; i < evento.fasi.length ; i++) {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
@@ -24,23 +25,13 @@ function creaEvento() {
   $('#evento_picker').css('display','none');
   var netreq = {};
   netreq.onsuccess = function() {
-    var req = {};
-    req.onsuccess = function() {
-      StorageHelper.saveEvento(req);
-      $('#message').text('OK. Evento inviato e salvato in locale');
-      displayEvento();
-    };
-    req.onerror = function() {
-      $('#message').text('OK. Evento inviato');
-      displayEvento();
-    }
+    loadEvento();
   };
   netreq.onerror = function(serviceResponse) {
     if (serviceResponse===undefined || serviceResponse.response_code===undefined)
       $('#message').html("Server non raggiungibile. evento non registrato.<br/><span class='collegamento' onclick='creaEvento();'>Ritenta l'invio</span>");
     else $('#message').html("Invio evento rifiutato<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
     // da togliere
-    displayEvento();
   };
   NetworkHelper.sendEvento(netreq);
 }
@@ -52,6 +43,7 @@ function loadEvento() {
       NetworkHelper.loadEvento(function() {
         if (evento.fasi) {
           if (evento.data_evento) {
+            StorageHelper.saveEvento();
             displayEvento();
           } else {
             var text = "Nessun evento programmato.";

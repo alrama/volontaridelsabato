@@ -105,7 +105,7 @@ var NetworkHelper = {
     })
   },
   sendEvento : function(callback) {
-    var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento;
+    var urlserver = "server/put_evento.php?token="+user.hash+"&evento="+evento.data_evento;
     $.ajax({
       url : urlserver,
       type : 'GET',

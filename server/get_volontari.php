@@ -15,6 +15,7 @@ class Volontario {
     public $cognome;
     public $cellulare;
     public $registrato;
+    public $admin;
 }
 $result = new Result();
 // Create connection
@@ -38,7 +39,7 @@ else {
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
   	$gruppiID = $nodo["gruppi_id"];
-  	$sql = "SELECT email,nome,cognome,password,cellulare from paniniweb_users where gruppi_id = '" . $gruppiID . "' order by nome";
+  	$sql = "SELECT email,nome,cognome,password,cellulare,admin from paniniweb_users where gruppi_id = '" . $gruppiID . "' order by upper(nome)";
     $resultSQL = $conn->query($sql);
      if ($resultSQL->num_rows > 0) {
      	$i = 0;
@@ -54,6 +55,7 @@ else {
               }
               if (strlen($row["password"])>0) $result->response[$i]->registrato = 1;
               else $result->response[$i]->registrato = 0;
+              $result->response[$i]->admin = $row["admin"];
               $result->response[$i++]->cellulare = $row["cellulare"];
           }
       } 

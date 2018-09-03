@@ -10,6 +10,7 @@ class Result {
     public $response;
 }
 class Evento {
+	public $evento_id;
 	public $data_evento;
     public $fasi;
     public $partecipazioni;
@@ -22,6 +23,7 @@ class Fase {
 class Partecipazione {
 	public $email;
     public $fase_id;
+    public $evento_id;
 }
 $result = new Result();
 // Create connection
@@ -50,8 +52,8 @@ else {
     $resultSQL = $conn->query($sql);
     if ($nodo = $resultSQL->fetch_assoc()) {
       $evento->data_evento = $nodo["data_evento"];
-      $evento_id = $nodo["id"];
-      $sql = "SELECT email,fase_id from paniniweb_partecipazioni where evento_id = '" . $evento_id . "'";
+      $evento->evento_id = $nodo["id"];
+      $sql = "SELECT email,fase_id from paniniweb_partecipazioni where evento_id = '" . $evento->evento_id . "'";
       $resultSQL = $conn->query($sql);
       $i = 0;
       if ($resultSQL->num_rows > 0) {
