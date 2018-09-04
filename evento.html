@@ -9,12 +9,27 @@
 <script src="model.js"></script>
 <script src="paniniweb.js"></script>
 <script>
+function displayPartecipanti(i,html) {
+  for (j=0; j<evento.partecipanti.length;j++) {
+    if (evento.partecipanti[j].fase_id==i) {
+      html+="<div class='smalltext>'" ;
+      vol = findVolontario(evento.partecipanti[j].email);
+      if (vol) html+=vol.nome+" "+vol.cognome;
+      else html+=evento.partecipanti[j].email;
+      html+="</div>"
+    }
+  }
+  return html;
+}
 function displayEvento() {
+  //$('#title').text('Distribuzione del '+ evento.data_evento);
   $('#message').html('');
   var html = "";
   for (i = 0; i < evento.fasi.length ; i++) {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
-    html+= evento.fasi[i].sequenza + ". " + evento.fasi[i].fase;
+    html+= "<span>"+evento.fasi[i].sequenza + ". " + evento.fasi[i].fase+"</span>";
+    html+= "<img src ='img/account-plus.png' onclick='addPartecipante("+i+")'>";
+    if (evento.partecipanti) html += displayPartecipanti(evento.fasi[i].id,html);
     html+= "</div>";
   }
   $("#content").html(html);
@@ -81,7 +96,7 @@ initModel(function(){
 
   <!-- Use any element to open the sidenav -->
   <img onclick="openNav()" src="img/menu.png">
-  <h2>Volontari del sabato</h2>
+  <h2 id ="title">Volontari del sabato</h2>
   <div class="main">
   <div class="message" id="message"></div>
     <input type="date" style="display:none;margin-top:50px" id="evento_picker" class='login' onchange="creaEvento();">

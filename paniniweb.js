@@ -32,6 +32,7 @@ function aggiornaVolontari(callback) {
   NetworkHelper.loadVolontari(function() {
     if (volontari) {
       if (typeof callback === 'function' ) callback();
+      else showMessage('Errore. Impossibile ricevere la lista di volontari');
     } else showMessage('Errore. Impossibile ricevere la lista di volontari');
   });
 }
