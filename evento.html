@@ -9,6 +9,44 @@
 <script src="model.js"></script>
 <script src="paniniweb.js"></script>
 <script>
+function listVolontari(elem) {
+  showMessage("");
+  var htmlcontant = "";
+  for (volontario of volontari) {
+    htmlcontant += "<div class='riga' onclick='aggiungiPartecipante(\""+volontario.email+"\")'><div class='textsmall dettaglio_riga'>";
+    if (volontario.nome.length+volontario.cognome.length<5) {
+      htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
+      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.email+"</div>";
+    } else {
+      htmlcontant+=volontario.nome + "</div>";
+      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
+    }
+    htmlcontant+="</div>"
+  }
+  $("#volontari_content").html(htmlcontant);
+  $("#volontari_content").css("display","block");
+  $("#volontari_content").css("top",elem.offsetTop+elem.offsetHeight);
+  $("#volontari_content").css("left",elem.offsetLeft-$("#volontari_content").width());
+}
+function addToFase(fase_id,elem) {
+  if (user.admin) {
+      listVolontari(elem);
+  }
+  else {
+    showMessage("Attendere. Invio partecipazione in corso");
+    var netreq = {};
+    netreq.onsuccess = function() {
+      StorageHelper.savePartecipante(loadEvento);
+    };
+    netreq.onerror = function(serviceResponse) {
+      if (serviceResponse===undefined || serviceResponse.response_code===undefined)
+        $('#message').html("Server non raggiungibile, partecipante non registrato. Riprovare in seguito");
+      else $('#message').html("Partecipazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+      // da togliere
+    };
+    NetworkHelper.sendPartecipante(fase_id,user.email,netreq);
+  }
+}
 function displayPartecipanti(i,html) {
   for (j=0; j<evento.partecipanti.length;j++) {
     if (evento.partecipanti[j].fase_id==i) {
@@ -28,7 +66,7 @@ function displayEvento() {
   for (i = 0; i < evento.fasi.length ; i++) {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
     html+= "<span>"+evento.fasi[i].sequenza + ". " + evento.fasi[i].fase+"</span>";
-    html+= "<img src ='img/account-plus.png' onclick='addPartecipante("+i+")'>";
+    html+= "<img src ='img/account-plus.png' onclick='addToFase("+evento.fasi[i].id+",this)'>";
     if (evento.partecipanti) html += displayPartecipanti(evento.fasi[i].id,html);
     html+= "</div>";
   }
@@ -101,6 +139,7 @@ initModel(function(){
   <div class="message" id="message"></div>
     <input type="date" style="display:none;margin-top:50px" id="evento_picker" class='login' onchange="creaEvento();">
     <div id="content"></div>
+    <div id="volontari_content"  class="detail" style="display: none;"></div>
   </div>
 
 </body>
