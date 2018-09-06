@@ -34,7 +34,7 @@ function sendPartecipante(fase_id , email) {
   netreq.onsuccess = function() {
     showMessage("");
     aggiungiPartecipante(fase_id,email);
-    StorageHelper.savePartecipante(loadEvento);
+    StorageHelper.saveEvento(loadEvento);
   };
   netreq.onerror = function(serviceResponse) {
     if (serviceResponse===undefined || serviceResponse.response_code===undefined)
