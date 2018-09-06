@@ -2,8 +2,20 @@ var user;
 var evento = {
   data_evento: null,
   fasi: null,
-  partecipanti:null
+  partecipazioni:null
 };
+var partecipazione = {
+	email: null,
+  fase_id: null,
+  evento_id: null
+}
+function aggiungiPartecipante(fase_id,email) {
+  partecipazione.fase_id = fase_id;
+  partecipazione.email = email;
+  partecipazione.evento_id = evento.evento_id;
+  if (evento.partecipazioni==null) evento.partecipazioni = []
+  evento.partecipazioni.push(partecipazione);
+}
 function Volontario() {
   this.email="";
   this.nome= "";
@@ -28,6 +40,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  sendPartecipante : function(fase_id,email,callback) {
+    var urlserver = "server/add_partecipante.php?token="+user.hash+"&email="+email+"&fase_id="+fase_id;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   loadVolontari : function(funcret) {
     $.ajax({
       url: "server/get_volontari.php?token="+user.hash,
