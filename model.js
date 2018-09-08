@@ -32,6 +32,16 @@ function findVolontario(email) {
   }
   return null;
 }
+function isPartecipante(fase_id,email) {
+  var ret = false;
+  for (var i = 0; i< evento.partecipazioni.length;i++) {
+    if (evento.partecipazioni[i].fase_id==fase_id && evento.partecipazioni[i].email==email) {
+      ret=true;
+      break;
+    }
+  }
+  return ret;
+}
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 var db;
 var serviceResponse = {
