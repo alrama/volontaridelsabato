@@ -30,22 +30,23 @@ function listVolontari(fase_id,elem) {
 }
 function sendPartecipante(fase_id , email) {
   showMessage("Attendere. Invio partecipazione in corso");
+  $('#volontari_content').css('display','none');
   var netreq = {};
   netreq.onsuccess = function() {
     showMessage("");
     aggiungiPartecipante(fase_id,email);
-    StorageHelper.saveEvento(loadEvento);
+    var netreq = {};
+    netreq.onsuccess = loadEvento;
+    StorageHelper.saveEvento(netreq);
   };
   netreq.onerror = function(serviceResponse) {
     if (serviceResponse===undefined || serviceResponse.response_code===undefined)
       $('#message').html("Server non raggiungibile, partecipante non registrato. Riprovare in seguito");
-    else $('#message').html("Partecipazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
     // da togliere
   };
-  NetworkHelper.sendPartecipante(fase_id,user.email,netreq);
+  NetworkHelper.sendPartecipante(fase_id,email,netreq);
 }
 function addToFase(fase_id,elem) {
-  $('#volontari_content').css('display','none');
   if (user.admin) {
       listVolontari(fase_id,elem);
   }
@@ -64,10 +65,34 @@ function displayPartecipanti(i) {
         if (vol.cognome) html +=" "+vol.cognome;
       }
       else html+=evento.partecipazioni[j].email;
+      if (user.admin || user.email==evento.partecipazioni[j].email)
+        html+="<img src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+vol.email+"\")'>";
       html+="</div>";
     }
   }
   return html;
+}
+function rimuoviPartecipante(fase_id,email) {
+  showMessage("Attendere. Invio aggiornamento in corso");
+  var netreq = {};
+  netreq.onsuccess = function() {
+    for (var i = 0; i< evento.partecipazioni.length; i++) {
+      if (evento.partecipazioni[i].fase_id==fase_id && evento.partecipazioni[i].email==email) {
+          evento.partecipazioni.splice(i,1);
+          break;
+      }
+    }
+    var req = {};
+    req.onsuccess = loadEvento;
+    StorageHelper.saveEvento(req);
+  };
+  netreq.onerror = function(serviceResponse) {
+    if (serviceResponse===undefined || serviceResponse.response_code===undefined)
+      $('#message').html("Server non raggiungibile, partecipante non registrato. Riprovare in seguito");
+    else $('#message').html("Partecipazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+    // da togliere
+  };
+  NetworkHelper.removePartecipante(fase_id,email,netreq);
 }
 function displayEvento() {
   $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ evento.data_evento+'</span>');

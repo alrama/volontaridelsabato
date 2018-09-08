@@ -40,6 +40,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  removePartecipante : function(fase_id,email,callback) {
+    var urlserver = "server/remove_partecipante.php?token="+user.hash+"&email="+email+"&fase_id="+fase_id;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   sendPartecipante : function(fase_id,email,callback) {
     var urlserver = "server/add_partecipante.php?token="+user.hash+"&email="+email+"&fase_id="+fase_id;
     $.ajax({
