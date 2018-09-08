@@ -26,7 +26,7 @@ function Volontario() {
 }
 var volontari;
 function findVolontario(email) {
-  for (i=0;i<volontari.length;i++) {
+  for (var i=0;i<volontari.length;i++) {
     if (volontari[i].email==email)
       return volontari[i];
   }
@@ -179,7 +179,7 @@ var StorageHelper = {
     var insVolontari = function(event) {
       if (typeof callback === 'object' && typeof callback.onsuccess === 'function')
         trx.oncomplete = callback.onsuccess;
-      for (i=0; i<volontari.length; i++) {
+      for (var i=0; i<volontari.length; i++) {
         volontari[i].id = i;
         objStr.put(volontari[i]);
       }

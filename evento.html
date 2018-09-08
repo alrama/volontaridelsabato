@@ -53,14 +53,18 @@ function addToFase(fase_id,elem) {
     sendPartecipante(fase_id,user.email);
   }
 }
-function displayPartecipanti(i,html) {
-  for (j=0; j<evento.partecipazioni.length;j++) {
+function displayPartecipanti(i) {
+  var html = "";
+  for (var j=0; j<evento.partecipazioni.length;j++) {
     if (evento.partecipazioni[j].fase_id==i) {
-      html+="<div class='smalltext>'" ;
+      html+="<div class='smalltext'>" ;
       vol = findVolontario(evento.partecipazioni[j].email);
-      if (vol) html+=vol.nome+" "+vol.cognome;
+      if (vol) {
+        if (vol.nome) html+=vol.nome
+        if (vol.cognome) html +=" "+vol.cognome;
+      }
       else html+=evento.partecipazioni[j].email;
-      html+="</div>"
+      html+="</div>";
     }
   }
   return html;
@@ -69,11 +73,11 @@ function displayEvento() {
   $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ evento.data_evento+'</span>');
   $('#message').html('');
   var html = "";
-  for (i = 0; i < evento.fasi.length ; i++) {
+  for (var i = 0; i < evento.fasi.length ; i++) {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
     html+= "<span>"+evento.fasi[i].sequenza + ". " + evento.fasi[i].fase+"</span>";
     html+= "<img src ='img/account-plus.png' onclick='addToFase("+evento.fasi[i].id+",this)'>";
-    if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id,html);
+    if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id);
     html+= "</div>";
   }
   $("#content").html(html);
