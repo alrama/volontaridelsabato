@@ -99,8 +99,28 @@ function rimuoviPartecipante(fase_id,email) {
   };
   NetworkHelper.removePartecipante(fase_id,email,netreq);
 }
+function rimuoviEvento() {
+  if (confirm("Cancellare la distribuzione del "+formatDataEvento()+"?\nTutte le partecipazioni inserite saranno cancellate.")) {
+    showMessage("Attendere. Invio aggiornamento in corso");
+    var netreq = {};
+    netreq.onsuccess = function() {
+      var req = {};
+      req.onsuccess = loadEvento;
+      $("#title").html("Volontari del sabato");
+      $("#content").html("");
+      StorageHelper.clearEvento(req);
+    };
+    netreq.onerror = function(serviceResponse) {
+      if (serviceResponse===undefined || serviceResponse.response_code===undefined)
+        $('#message').html("Server non raggiungibile. Riprovare in seguito");
+      else $('#message').html("Cancellazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+      // da togliere
+    };
+    NetworkHelper.removeEvento(netreq);
+  }
+}
 function displayEvento() {
-  $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ evento.data_evento+'</span>');
+  $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>');
   $('#message').html('');
   var html = "";
   for (var i = 0; i < evento.fasi.length ; i++) {

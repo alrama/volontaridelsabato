@@ -9,6 +9,11 @@ var partecipazione = {
   fase_id: null,
   evento_id: null
 }
+function formatDataEvento() {
+  var giorno = evento.data_evento.substring(8,10);
+  var mese = evento.data_evento.substring(5,7);
+  return giorno + "/" + mese;
+};
 function aggiungiPartecipante(fase_id,email) {
   partecipazione.fase_id = fase_id;
   partecipazione.email = email;
@@ -33,6 +38,7 @@ function findVolontario(email) {
   return null;
 }
 function isPartecipante(fase_id,email) {
+  if (!evento.partecipazioni) return false;
   var ret = false;
   for (var i = 0; i< evento.partecipazioni.length;i++) {
     if (evento.partecipazioni[i].fase_id==fase_id && evento.partecipazioni[i].email==email) {
@@ -50,6 +56,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  removeEvento : function(callback) {
+    var urlserver = "server/clear_evento.php?token="+user.hash;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   removePartecipante : function(fase_id,email,callback) {
     var urlserver = "server/remove_partecipante.php?token="+user.hash+"&email="+email+"&fase_id="+fase_id;
     $.ajax({
@@ -226,6 +252,16 @@ var StorageHelper = {
     };
     req.onerror = function(event) {
       if (funcret) funcret();
+    }
+  },
+  clearEvento : function(callback) {
+    var objStr = db.transaction("evento","readwrite").objectStore("evento");
+    var reqClear = objStr.clear();
+    reqClear.onsuccess = function(event) {
+      if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+    }
+    reqClear.onerror = function(event) {
+      if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
     }
   },
   saveEvento : function(callback) {
