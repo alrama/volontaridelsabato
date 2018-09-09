@@ -61,9 +61,10 @@ function addToFase(fase_id,elem) {
 }
 function displayPartecipanti(i) {
   var html = "";
+  var count = 1;
   for (var j=0; j<evento.partecipazioni.length;j++) {
     if (evento.partecipazioni[j].fase_id==i) {
-      html+="<div class='smalltext'>" ;
+      html+="<div class='textsmall'><span>" + count++ +") " ;
       vol = findVolontario(evento.partecipazioni[j].email);
       if (vol) {
         if (vol.nome) html+=vol.nome
@@ -71,7 +72,7 @@ function displayPartecipanti(i) {
       }
       else html+=evento.partecipazioni[j].email;
       if (user.admin || user.email==evento.partecipazioni[j].email)
-        html+="<img src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+vol.email+"\")'>";
+        html+="</span><img class='img_title icon_header' style='width:30px;height:30px' src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+vol.email+"\")'>";
       html+="</div>";
     }
   }
@@ -121,12 +122,13 @@ function rimuoviEvento() {
 }
 function displayEvento() {
   $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>');
+  $('header_content').css('display','none');
   $('#message').html('');
   var html = "";
   for (var i = 0; i < evento.fasi.length ; i++) {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
-    html+= "<span>"+evento.fasi[i].sequenza + ". " + evento.fasi[i].fase+"</span>";
-    html+= "<img src ='img/account-plus.png' onclick='addToFase("+evento.fasi[i].id+",this)'>";
+    html+= "<span>"+evento.fasi[i].fase+"</span>";
+    html+= "<img src='img/account-plus.png' class='img_title icon_header' onclick='addToFase("+evento.fasi[i].id+",this)'>";
     if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id);
     html+= "</div>";
   }
@@ -148,26 +150,30 @@ function creaEvento() {
   };
   NetworkHelper.sendEvento(netreq);
 }
+function aggiornaEvento() {
+  $("#message").text('Attendere. Richiesta dati remoti');
+  NetworkHelper.loadEvento(function() {
+    if (evento.fasi) {
+      if (evento.data_evento) {
+        StorageHelper.saveEvento();
+        displayEvento();
+      } else {
+        var text = "Nessun evento programmato.";
+        if (user.admin) {
+          text += "<br/><span class='textnormal'>Scegli la data della prossima distribuzione</span>";
+          $("#evento_picker").css('display','block');
+          $('#header_content').css('display','none');
+        }
+        $("#message").html(text);
+      }
+    } else $("#message").text('Errore. Nessun template disponibile');
+  });
+}
 function loadEvento() {
   $("#message").text('Attendere. Caricamento dati in corso');
   StorageHelper.getEvento(function() {
     if (evento==undefined || evento.data_evento==null) {
-      $("#message").text('Attendere. Richiesta dati remoti');
-      NetworkHelper.loadEvento(function() {
-        if (evento.fasi) {
-          if (evento.data_evento) {
-            StorageHelper.saveEvento();
-            displayEvento();
-          } else {
-            var text = "Nessun evento programmato.";
-            if (user.admin) {
-              text += "<br/><span class='textnormal'>Scegli la data della prossima distribuzione</span>";
-              $("#evento_picker").css('display','block');
-            }
-            $("#message").html(text);
-          }
-        } else $("#message").text('Errore. Nessun template disponibile');
-      });
+      aggiornaEvento();
     } else {
       $("#message").html("");
       displayEvento();
@@ -198,6 +204,8 @@ initModel(function(){
   <div class="main">
   <div class="message" id="message"></div>
     <input type="date" style="display:none;margin-top:50px" id="evento_picker" class='login' onchange="creaEvento();">
+    <div class="header_content" id="header_content">
+    <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header"></div>
     <div id="content"></div>
     <div id="volontari_content"  class="detail" style="display: none;"></div>
   </div>

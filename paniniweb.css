@@ -36,14 +36,13 @@
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-#main {
-    transition: margin-left .5s;
-    padding: 20px;
-}
-
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
+@media only screen and (max-width: 450px) {
+    h2 { font-size: 1em;display: inline;  }
+    .subtitle {font-size: 0.75em;}
+    .textsmall {font-size: 0.5em;}
+}
+@media screen and (max-height: 600px) {
     .sidenav {padding-top: 15px; }
     .sidenav a {font-size: 18px;}
 }
@@ -51,7 +50,7 @@ body {
   background-color: lightgreen;
   color: grey;
   font-family: : Verdana, "Times New Roman", sans-serif;
-  font-size: 1.5em;
+  font-size: 14px;
 }
 h2 {
   font-size: 2em;
@@ -65,35 +64,40 @@ h2 {
   width: 350px;
   margin:0 auto;
 }
-.main label{
-  font-style: italic;
-  color: grey;
-}
 .login {
+  font-style: italic;
   width: 200px;
   height: 40px;
   margin: auto;
   margin-bottom: 10px;
   border-radius: 10px;
-  font-size: 0.75em;
+  font-size: 1.5em;
   color: darkolivegreen;
 }
 #content {
   text-align: left;
 }
+.header_content {
+  text-align: right;
+}
 .subtitle {
   margin: auto;
-  vertical-align: middle;
   margin-top: 10px;
   margin-bottom: 5px;
-  border-radius: 10px;
-  font-size: 0.75em;
+  font-size: 1.5em;
   color: darkolivegreen;
-  width: 300px;
+}
+.subtitle span {
+  width:230px;
+  display: inline-block;
+  vertical-align: text-top;
 }
 
 .textsmall {
-  font-size:0.75em;
+  font-size:1em;
+}
+.textsmall span{
+  margin-left: 50px;
 }
 .message {
   color: red;
@@ -102,35 +106,25 @@ h2 {
   text-align: center;
   margin-bottom: 5px;
 }
-.textnormal {
-  font-size: 2em;
-}
 .img_title {
-  margin-left: 10px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
   vertical-align: middle;
 }
-.header_content {
-  text-align: right;
-}
-.subheader {
-  margin: 0 auto;
-  text-align: center;
-  margin-right: 80px;
-}
 .icon_header {
-  margin-right: 10px;
   cursor: pointer;
 }
 .riga {
   margin:0 auto;
-  margin-top: 3px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-align: left;
   border-top: 1px solid grey;
   cursor: pointer;
 }
 .dettaglio_riga {
-  margin-left: 30px;
+  margin-left: 10px;
 }
 .detail {
   position: absolute;
@@ -138,14 +132,11 @@ h2 {
   padding: 5px;
   margin: 0 auto;
   border: 2px solid;
-  align-self: center;
+  border-radius: 5px;
 }
 .smallfield {
   width: 200px;
 }
 .compat_button {
   width:100px;
-}
-@media only screen and (max-width: 600px) {
-    h2 { font-size: 1em;display: inline;  }
 }
