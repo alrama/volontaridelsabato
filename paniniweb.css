@@ -36,16 +36,6 @@
     margin-left: 50px;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media only screen and (max-width: 450px) {
-    h2 { font-size: 1em;display: inline;  }
-    .subtitle {font-size: 0.75em;}
-    .textsmall {font-size: 0.5em;}
-}
-@media screen and (max-height: 600px) {
-    .sidenav {padding-top: 15px; }
-    .sidenav a {font-size: 18px;}
-}
 body {
   background-color: lightgreen;
   color: grey;
@@ -97,6 +87,7 @@ h2 {
   font-size:1em;
 }
 .textsmall span{
+  color: grey;
   margin-left: 50px;
 }
 .message {
@@ -127,6 +118,7 @@ h2 {
   margin-left: 10px;
 }
 .detail {
+  width:250px;
   position: absolute;
   background: sandybrown;
   padding: 5px;
@@ -139,4 +131,14 @@ h2 {
 }
 .compat_button {
   width:100px;
+}
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media only screen and (max-width: 450px) {
+    h2 { font-size: 1.75em;display: inline;  }
+    .subtitle {font-size: 1.25em;}
+    .textsmall {font-size: 1em;}
+}
+@media screen and (max-height: 600px) {
+    .sidenav {padding-top: 15px; }
+    .sidenav a {font-size: 18px;}
 }
