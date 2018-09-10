@@ -16,7 +16,7 @@
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 30px;
     color: #818181;
     display: block;
     transition: 0.3s;
@@ -116,6 +116,7 @@ h2 {
 }
 .dettaglio_riga {
   margin-left: 10px;
+  font-size: 1.5em;
 }
 .detail {
   width:250px;
@@ -137,8 +138,4 @@ h2 {
     h2 { font-size: 1.75em;display: inline;  }
     .subtitle {font-size: 1.25em;}
     .textsmall {font-size: 1em;}
-}
-@media screen and (max-height: 600px) {
-    .sidenav {padding-top: 15px; }
-    .sidenav a {font-size: 18px;}
 }

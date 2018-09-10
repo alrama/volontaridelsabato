@@ -72,7 +72,7 @@ function displayPartecipanti(i) {
       }
       else html+=evento.partecipazioni[j].email;
       if (user.admin || user.email==evento.partecipazioni[j].email)
-        html+="</span><img class='img_title icon_header' style='width:30px;height:30px' src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+vol.email+"\")'>";
+        html+="</span><img class='img_title icon_header' style='width:30px;height:30px' src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'>";
       html+="</div>";
     }
   }
