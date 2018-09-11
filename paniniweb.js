@@ -15,10 +15,10 @@ function displayVolontari() {
   showMessage("");
   var htmlcontant = "";
   for (volontario of volontari) {
-    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div class='textsmall dettaglio_riga'>";
+    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div class='textsmall'>";
     if (volontario.nome.length+volontario.cognome.length<5) {
       htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
-      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.email+"</div>";
+      htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
     } else {
       htmlcontant+=volontario.nome + "</div>";
       htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
@@ -32,8 +32,9 @@ function aggiornaVolontari(callback) {
   NetworkHelper.loadVolontari(function() {
     if (volontari) {
       if (typeof callback === 'function' ) callback();
-      else if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+      else loadVolontari(displayVolontari);
     } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+
   });
 }
 function loadVolontari(callback) {

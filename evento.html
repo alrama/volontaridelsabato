@@ -14,10 +14,10 @@ function listVolontari(fase_id,elem) {
   var htmlcontant = "";
   for (volontario of volontari) {
     if (!isPartecipante(fase_id,volontario.email)) {
-      htmlcontant += "<div class='riga' onclick='sendPartecipante("+fase_id+",\""+volontario.email+"\");'><div class='textsmall dettaglio_riga'>";
+      htmlcontant += "<div class='riga' onclick='sendPartecipante("+fase_id+",\""+volontario.email+"\");'><div class='textsmall'>";
       if (volontario.nome.length+volontario.cognome.length<5) {
         htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
-        htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.email+"</div>";
+        htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
       } else {
         htmlcontant+=volontario.nome + "</div>";
         htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
@@ -205,7 +205,7 @@ initModel(function(){
   <div class="message" id="message"></div>
     <input type="date" style="display:none;margin-top:50px" id="evento_picker" class='login' onchange="creaEvento();">
     <div class="header_content" id="header_content">
-    <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header"></div>
+    <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="content"></div>
     <div id="volontari_content"  class="detail" style="display: none;"></div>
   </div>
