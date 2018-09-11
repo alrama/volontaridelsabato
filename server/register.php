@@ -22,7 +22,7 @@ else if (!isset($_GET["email"]) or !isset($_GET["pwd"]) or !isset($_GET["nome"])
     $result->response_code = 300;
     $result->error_description = "Assenti informazioni obbligatorie";
 }
-else if (strpos($_GET["email"],'@') !== false) {
+else if (strpos($_GET["email"],'@') === false) {
     $result->response_code = 310;
     $result->error_description = "Formato e-mail non corretto. Utente non registrabile";
 }
