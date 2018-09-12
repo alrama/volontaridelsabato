@@ -49,6 +49,9 @@ h2 {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+h2 span {
+  color:blue;
+}
 .main {
   text-align: center;
   width: 350px;
@@ -87,6 +90,9 @@ h2 {
   font-size:18px;
 }
 .textsmall span{
+  color: grey;
+}
+.textsmall div{
   color: grey;
   margin-left: 50px;
 }
@@ -128,6 +134,10 @@ h2 {
 }
 .compat_button {
   width:100px;
+}
+.collegamento {
+  text-decoration: underline;
+  cursor: pointer;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media only screen and (max-width: 450px) {

@@ -64,41 +64,52 @@ function displayPartecipanti(i) {
   var count = 1;
   for (var j=0; j<evento.partecipazioni.length;j++) {
     if (evento.partecipazioni[j].fase_id==i) {
-      html+="<div class='textsmall'><span>" + count++ +") " ;
+      if (user.admin || user.email==evento.partecipazioni[j].email)
+        html+="<div class='textsmall' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div style='display:inline'>" + count++ +") </div><span class='collegamento'>" ;
+      else html+="<div class='textsmall'><div style='display:inline'>" + count++ +") </div><span>" ;
       vol = findVolontario(evento.partecipazioni[j].email);
       if (vol) {
         if (vol.nome) html+=vol.nome
         if (vol.cognome) html +=" "+vol.cognome;
       }
       else html+=evento.partecipazioni[j].email;
-      if (user.admin || user.email==evento.partecipazioni[j].email)
-        html+="</span><img class='img_title icon_header' style='width:30px;height:30px' src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'>";
+      // if (user.admin || user.email==evento.partecipazioni[j].email)
+      //   html+="</span><img class='img_title icon_header' style='width:30px;height:30px' src='img/account-remove-outline.png' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'>";
       html+="</div>";
     }
   }
   return html;
 }
 function rimuoviPartecipante(fase_id,email) {
-  showMessage("Attendere. Invio aggiornamento in corso");
-  var netreq = {};
-  netreq.onsuccess = function() {
-    for (var i = 0; i< evento.partecipazioni.length; i++) {
-      if (evento.partecipazioni[i].fase_id==fase_id && evento.partecipazioni[i].email==email) {
-          evento.partecipazioni.splice(i,1);
-          break;
+  var volname = email;
+  vol = findVolontario(email);
+  if (vol) volname = vol.nome+" "+vol.cognome;
+  var warning = "Rimuovere la partecipazione " ;
+  if(user.admin||user.email==email)
+    warning+="di "+volname+ " ";
+  warning+="?";
+  if (confirm(warning)) {
+    showMessage("Attendere. Invio aggiornamento in corso");
+    var netreq = {};
+    netreq.onsuccess = function() {
+      for (var i = 0; i< evento.partecipazioni.length; i++) {
+        if (evento.partecipazioni[i].fase_id==fase_id && evento.partecipazioni[i].email==email) {
+            evento.partecipazioni.splice(i,1);
+            break;
+        }
       }
-    }
-    var req = {};
-    req.onsuccess = loadEvento;
-    StorageHelper.saveEvento(req);
-  };
-  netreq.onerror = function(serviceResponse) {
-    if (serviceResponse===undefined || serviceResponse.response_code===undefined)
-      $('#message').html("Server non raggiungibile, partecipante non registrato. Riprovare in seguito");
-    else $('#message').html("Partecipazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
-    // da togliere
-  };
-  NetworkHelper.removePartecipante(fase_id,email,netreq);
+      var req = {};
+      req.onsuccess = loadEvento;
+      StorageHelper.saveEvento(req);
+    };
+    netreq.onerror = function(serviceResponse) {
+      if (serviceResponse===undefined || serviceResponse.response_code===undefined)
+        $('#message').html("Server non raggiungibile, partecipante non registrato. Riprovare in seguito");
+      else $('#message').html("Partecipazione rifiutata<br/><span class='collegamento' onclick='aggiornaEvento();'>Aggiorna dati locali</span>");
+      // da togliere
+    };
+    NetworkHelper.removePartecipante(fase_id,email,netreq);
+  }
 }
 function rimuoviEvento() {
   if (confirm("Cancellare la distribuzione del "+formatDataEvento()+"?\nTutte le partecipazioni inserite saranno cancellate.")) {
