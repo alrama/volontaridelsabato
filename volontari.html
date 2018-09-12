@@ -14,7 +14,7 @@ initModel(function(){
     location.replace("./login.html");
   else {
     loadVolontari(displayVolontari);
-    if (user.admin) $("#account_plus").css('visiblity','visible');
+    if (user.admin) $("#account_plus").css('visibility','visible');
   }
 });
 function dettaglio_riga(elem,email) {
@@ -109,7 +109,7 @@ function closeDetail() {
   <div class="message" id="message"></div>
   <div class="main">
     <div class="header_content">
-      <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:invisible" class="icon_header img_title">
+      <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:hidden" class="icon_header img_title">
     <img onclick="aggiornaVolontari();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="volontari_content"></div>
   </div>
