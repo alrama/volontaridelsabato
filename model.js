@@ -229,6 +229,11 @@ var StorageHelper = {
       if (funcret) funcret();
     }
   },
+  clearVolontari : function(callback) {
+    var trx = db.transaction("volontari","readwrite");
+    var objStr = trx.objectStore("volontari");
+    var reqClear = objStr.clear();
+  },
   saveVolontari : function(callback) {
     var trx = db.transaction("volontari","readwrite");
     var objStr = trx.objectStore("volontari");

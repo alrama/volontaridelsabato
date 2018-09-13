@@ -46,7 +46,7 @@ else {
           while($row = $resultSQL->fetch_assoc()) {
               $result->response[$i] = new Volontario();
               $result->response[$i]->email = $row["email"];
-              if ($nodo["admin"]) {
+              if ($nodo["admin"] || $row["password"]!=null) {
                	$result->response[$i]->nome = $row["nome"];
                 $result->response[$i]->cognome = $row["cognome"];
               } else {
@@ -55,7 +55,7 @@ else {
               }
               if (strlen($row["password"])>0) $result->response[$i]->registrato = 1;
               else $result->response[$i]->registrato = 0;
-              $result->response[$i]->admin = $row["admin"];
+              $result->response[$i]->admin = (int) $row["admin"];
               $result->response[$i++]->cellulare = $row["cellulare"];
           }
       } 
