@@ -132,7 +132,9 @@ function rimuoviEvento() {
   }
 }
 function displayEvento() {
-  $('#title').html('Distribuzione del <span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>');
+  var link = formatDataEvento();
+  if (user.admin) link = '<span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>';
+  $('#title').html('Distribuzione del '+ link);
   $('header_content').css('display','none');
   $('#message').html('');
   var html = "";

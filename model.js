@@ -246,8 +246,8 @@ var StorageHelper = {
       }
     };
     var reqClear = objStr.clear();
-    reqClear.onsuccess = insVolontari(event);
-    reqClear.onerror = insVolontari(event);
+    reqClear.onsuccess = insVolontari;
+    reqClear.onerror = insVolontari;
   },
   getEvento : function(funcret) {
     var req = db.transaction("evento").objectStore("evento").get(1);
@@ -282,8 +282,8 @@ var StorageHelper = {
       }
     };
     var reqClear = objStr.clear();
-    reqClear.onsuccess = insEvento(event);
-    reqClear.onerror = insEvento(event);
+    reqClear.onsuccess = insEvento;
+    reqClear.onerror = insEvento;
   },
   getUser : function(funcret) {
     var req = db.transaction("user").objectStore("user").get(1);
@@ -308,8 +308,8 @@ var StorageHelper = {
       }
     };
     var reqClear = objStr.clear();
-    reqClear.onsuccess = insUser(event);
-    reqClear.onerror = insUser(event);
+    reqClear.onsuccess = insUser;
+    reqClear.onerror = insUser;
   },
   clearUser : function(funcret) {
     var objStr = db.transaction("user","readwrite").objectStore("user");
