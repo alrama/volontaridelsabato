@@ -56,6 +56,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  aggiornaFase : function(fase_id,orario,callback) {
+    var urlserver = "server/update_fase.php?token="+user.hash+"&fase_id="+fase_id+"&orario="+orario;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   removeEvento : function(callback) {
     var urlserver = "server/clear_evento.php?token="+user.hash;
     $.ajax({

@@ -7,6 +7,21 @@ function openNav() {
 function closeNav() {
     $("#mySidenav").width("0px");
 }
+function logout() {
+  if (confirm("Uscire da "+user.email+"?")) {
+    StorageHelper.clearVolontari();
+    StorageHelper.clearEvento();
+    StorageHelper.clearUser();
+    location.href = "./login.html";
+  }
+}
+function aggiornaFase(fase_id,orario) {
+  showMessage("Invio aggiornamento");
+  var req = {};
+  req.onsuccess = function() {showMessage("");};
+  req.onsuccess = function() {showMessage("Errore. Dati non aggiornati");};
+  NetworkHelper.aggiornaFase(fase_id,orario,req);
+}
 function showMessage(message) {
   $("#message").html(message);
   window.scrollTo(0,0);

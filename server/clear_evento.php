@@ -34,8 +34,9 @@ else {
         $sql = "SELECT id from paniniweb_evento where gruppi_id = '" . $nodo["gruppi_id"] . "'";
         $resultSQL = $conn->query($sql);
         if ($nodo1 = $resultSQL->fetch_assoc()) {
-          $sql = "delete from paniniweb_partecipazioni where evento_id=".$nodo1["id"];
-          $rc = $conn->query($sql);
+          $sql = "delete from paniniweb_partecipazioni where evento_id=".$nodo1["id"]."; ";
+          $sql.= "update paniniweb_fasi set orario='00:00:00' where gruppi_id =" . $nodo["gruppi_id"] . "; ";
+          $rc = $conn->multi_query($sql);
           if (TRUE===$rc) {
               $sql = "delete from paniniweb_evento where id=".$nodo1["id"];
               $rc = $conn->query($sql);
