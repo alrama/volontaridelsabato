@@ -19,6 +19,7 @@ class Fase {
 	public $id;
 	public $fase;
     public $sequenza;
+    public $orario;
 }
 class Partecipazione {
 	public $email;
@@ -64,7 +65,7 @@ else {
           }
       } 
     }
-    $sql = "SELECT id,fase,sequenza from paniniweb_fasi where gruppi_id = '" . $gruppiID . "' ORDER BY sequenza ASC";
+    $sql = "SELECT id,fase,sequenza,orario from paniniweb_fasi where gruppi_id = '" . $gruppiID . "' ORDER BY sequenza ASC";
     $resultSQL = $conn->query($sql);
     $i = 0;
     if ($resultSQL->num_rows > 0) {
@@ -72,6 +73,7 @@ else {
             $evento->fasi[$i] = new Fase();
             $evento->fasi[$i]->id = $row["id"];
             $evento->fasi[$i]->fase = $row["fase"];
+            $evento->fasi[$i]->orario = $row["orario"];
             $evento->fasi[$i++]->sequenza = $row["sequenza"];
         }
     } 
