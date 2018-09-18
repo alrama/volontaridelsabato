@@ -139,6 +139,15 @@ h2 span {
   text-decoration: underline;
   cursor: pointer;
 }
+#avvisi_content {
+    height: 40px;
+    position: fixed;
+    bottom:0%;
+    width:100%;
+    background-color: #393838;
+    border-top: 2px solid black;
+    opacity: 1;
+}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media only screen and (max-width: 450px) {
     h2 { font-size: 22px;display: inline;  }

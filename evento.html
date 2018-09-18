@@ -9,6 +9,22 @@
 <script src="model.js"></script>
 <script src="paniniweb.js"></script>
 <script>
+function showAvvisi(num) {
+  if (num>0) {
+    $('#avvisi_content').css('display','block');
+    $('#avvisi_text').html('Ci sono '+num+'<a href="./avvisi.html>nuovi avvisi</a>"');
+  }
+}
+function loadAvvisi() {
+  var req = function() {
+    var data_ultima = 0;
+    if (avvisi && avvisi.length>0) data_ultima = avvisi[0].inserita;
+    var netreq = {};
+    netreq.onsuccess = showAvvisi;
+    NetworkHelper.getNumAvvisi(data_ultima,netreq);
+  }
+  StorageHelper.getAvvisi(req);
+}
 function listVolontari(fase_id,elem) {
   showMessage("");
   var htmlcontant = "";
@@ -196,7 +212,10 @@ function loadEvento() {
 initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
-  else loadVolontari(loadEvento);
+  else {
+    loadVolontari(loadEvento);
+    loadAvvisi();
+  }
 });
 </script>
 <title>Volontari del sabato</title>
@@ -221,6 +240,7 @@ initModel(function(){
     <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="content"></div>
     <div id="volontari_content"  class="detail" style="display: none;"></div>
+    <div id="avvisi_content" style="display:none"><img src="img/alert-decagram.png"><span id="avvisi_text"></span></div>
   </div>
 
 </body>

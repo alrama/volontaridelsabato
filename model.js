@@ -9,6 +9,7 @@ var partecipazione = {
   fase_id: null,
   evento_id: null
 }
+var avvisi;
 function formatDataEvento() {
   var giorno = evento.data_evento.substring(8,10);
   var mese = evento.data_evento.substring(5,7);
@@ -56,6 +57,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  getNumAvvisi : function(ultima_data,callback) {
+    var urlserver = "server/get_numavvisi.php?token="+user.hash+"&ultima_data="+ultima_data;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess(serviceResponse.response);
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   aggiornaFase : function(fase_id,orario,callback) {
     var urlserver = "server/update_fase.php?token="+user.hash+"&fase_id="+fase_id+"&orario="+orario;
     $.ajax({
@@ -234,6 +255,21 @@ var NetworkHelper = {
   }
 };
 var StorageHelper = {
+  getAvvisi : function(funcret) {
+    var req = db.transaction("avvisi").objectStore("avvisi").openCursor(null,'prev');
+    avvisi = [];
+    req.onsuccess = function(event) {
+      var cursor = event.target.result;
+      if (cursor) {
+        avvisi.push(cursor.value);
+        cursor.continue();
+      }
+      else if (funcret) funcret();
+    };
+    req.onerror = function(event) {
+      if (funcret) funcret();
+    }
+  },
   getVolontari : function(funcret) {
     var req = db.transaction("volontari").objectStore("volontari").openCursor();
     volontari = [];
@@ -339,7 +375,7 @@ var StorageHelper = {
   }
 }
 initModel = function(func) {
-  var requestDB = window.indexedDB.open("paniniDB", 2);
+  var requestDB = window.indexedDB.open("paniniDB", 4);
   requestDB.onerror = function(event) {
     alert("Attenzione, il database locale di paniniweb non può essere aperto.\nDatabase error: " + event.target.errorCode);
   };
@@ -359,6 +395,9 @@ initModel = function(func) {
       objectStore.transaction.oncomplete = function(event) {
         StorageHelper.getUser(func);
       };
+    }
+    if (event.oldVersion < 4) {
+      objectStore = db.createObjectStore("avvisi", { keyPath: "inserito" });
     }
   };
 }
