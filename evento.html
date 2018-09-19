@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css"/>
+<link rel="stylesheet" href="paniniweb.css?v=1"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js"></script>
-<script src="paniniweb.js"></script>
+<script src="model.js?v=1"></script>
+<script src="paniniweb.js?v=1"></script>
 <script>
 function showAvvisi(num) {
   if (num>0) {
     $('#avvisi_content').css('display','block');
-    $('#avvisi_text').html('Ci sono '+num+'<a href="./avvisi.html>nuovi avvisi</a>"');
+    var html ="";
+    if(num==1) html = "C'è un nuovo avviso.";
+    else html = 'Ci sono '+num+' nuovi avvisi' ;
+    $('#avvisi_text').html(html);
   }
 }
 function loadAvvisi() {
@@ -26,7 +29,6 @@ function loadAvvisi() {
   StorageHelper.getAvvisi(req);
 }
 function listVolontari(fase_id,elem) {
-  showMessage("");
   var htmlcontant = "";
   for (volontario of volontari) {
     if (!isPartecipante(fase_id,volontario.email)) {
@@ -240,9 +242,8 @@ initModel(function(){
     <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="content"></div>
     <div id="volontari_content"  class="detail" style="display: none;"></div>
-    <div id="avvisi_content" style="display:none"><img src="img/alert-decagram.png"><span id="avvisi_text"></span></div>
   </div>
-
+  <div id="avvisi_content" style="display:none" onclick="location.href='./avvisi.html'"><img src="img/alert-decagram.png"><span id="avvisi_text"></span></div>
 </body>
 
 </html>

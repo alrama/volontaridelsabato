@@ -56,6 +56,7 @@ h2 span {
   text-align: center;
   width: 350px;
   margin:0 auto;
+  padding-bottom: 40px;
 }
 .login {
   font-style: italic;
@@ -128,6 +129,7 @@ h2 span {
   margin: 0 auto;
   border: 2px solid;
   border-radius: 5px;
+  margin-bottom: 40px;
 }
 .smallfield {
   width: 200px;
@@ -143,10 +145,25 @@ h2 span {
     height: 40px;
     position: fixed;
     bottom:0%;
+    left: 0%;
     width:100%;
-    background-color: #393838;
-    border-top: 2px solid black;
+    background-color: #cbce02;
+    border-top: 2px solid #f9fd02;
     opacity: 1;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+#avvisi_content img {
+  width:30px;
+  margin: 5px;
+  vertical-align: middle;
+}
+#avvisi_content span {
+  vertical-align: middle;
+  font-size: 20px;
+  font-weight: bold;
+  color:white;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media only screen and (max-width: 450px) {

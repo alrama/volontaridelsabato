@@ -31,7 +31,7 @@ else {
   $resultSQL = $conn->query($sql) ;
   if ($nodo = $resultSQL->fetch_assoc()) {
   	$gruppiID = $nodo["gruppi_id"];
-  	$sql = "SELECT count(*) as total from paniniweb_avvisi where gruppi_id =" . $gruppiID . " AND inserita>".$_GET["ultima_data"];
+  	$sql = "SELECT count(*) as total from paniniweb_avvisi where gruppi_id =" . $gruppiID . " AND unix_timestamp(inserita)>unix_timestamp('".$_GET["ultima_data"]."')";
     $resultSQL = $conn->query($sql) or die($conn->error);
      if ($row = $resultSQL->fetch_assoc()) {
      	$result->response = $row["total"];
