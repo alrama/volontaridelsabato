@@ -9,6 +9,10 @@ class Result {
     public $error_description;
     public $response;
 }
+class Avviso {
+	public $inserita;
+    public $testo;
+}
 $result = new Result();
 // Create connection
 $conn = new mysqli($servername, $username, $password,$dbLink);
@@ -28,22 +32,20 @@ else {
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
   $sql = "SELECT gruppi_id,admin from paniniweb_users where hash = '" . $_GET["token"] . "'";
-  $resultSQL = $conn->query($sql);
+  $resultSQL = $conn->query($sql) ;
   if ($nodo = $resultSQL->fetch_assoc()) {
-  	if ($nodo["admin"]) {
-      $gruppiID = $nodo["gruppi_id"];
-      $sql = "update paniniweb_fasi set orario='".$_GET["orario"].". where id=".$_GET["fase_id"]." AND gruppi_id =" . $gruppiID ;
-      $rc = $conn->query($sql);
-      if (TRUE===$rc) {
-        $result->response_code = 200;
-      } else {
-        $result->response_code = 302;
-        $result->error_description = "Errore di creazione evento: " . $sql;
-      }
-    } else {
-        $result->response_code = 301;
-        $result->error_description = "Non abilitato alle modifiche";
-    }
+  	$gruppiID = $nodo["gruppi_id"];
+  	$sql = "SELECT inserita,testo from paniniweb_avvisi where gruppi_id =" . $gruppiID . " AND unix_timestamp(inserita)>unix_timestamp('".$_GET["ultima_data"]."')";
+    $resultSQL = $conn->query($sql) or die($conn->error);
+    if ($resultSQL->num_rows > 0) {
+    	$i = 0;
+        while($row = $resultSQL->fetch_assoc()) {
+     		$result->response[$i] = new Avviso();
+            $result->response[$i]->inserita = $row["inserita"];
+            $result->response[$i++]->testo = $row["testo"];
+        }
+    } else $result->response = array();
+    $result->response_code = 200;
   } else {
         $result->response_code = 300;
         $result->error_description = "Accesso non autorizzato";

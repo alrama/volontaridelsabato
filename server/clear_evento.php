@@ -36,6 +36,7 @@ else {
         if ($nodo1 = $resultSQL->fetch_assoc()) {
           $sql = "delete from paniniweb_partecipazioni where evento_id=".$nodo1["id"]."; ";
           $sql.= "update paniniweb_fasi set orario='00:00:00' where gruppi_id =" . $nodo["gruppi_id"] . "; ";
+          $sql.= "delete from paniniweb_avvisi where gruppi_id =" . $nodo["gruppi_id"] . " AND unix_timestamp(inserita)<(unix_timestamp()-60*60*24*30)";
           $rc = $conn->multi_query($sql);
           if (TRUE===$rc) {
               $sql = "delete from paniniweb_evento where id=".$nodo1["id"];
