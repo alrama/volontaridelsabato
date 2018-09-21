@@ -57,6 +57,28 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  getAvvisi : function(ultima_data,callback) {
+    var urlserver = "server/get_avvisi.php?token="+user.hash+"&ultima_data="+ultima_data;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            for (var i=0;i<avvisi.length;i++)
+              StorageHelper.saveAvviso(avvisi[i]);
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   getNumAvvisi : function(ultima_data,callback) {
     var urlserver = "server/get_numavvisi.php?token="+user.hash+"&ultima_data="+ultima_data;
     $.ajax({
@@ -255,6 +277,11 @@ var NetworkHelper = {
   }
 };
 var StorageHelper = {
+  saveAvviso : function(avviso,callback) {
+    var trx = db.transaction("avvisi","readwrite");
+    var objStr = trx.objectStore("avvisi");
+    objStr.put(avviso);
+  },
   getAvvisi : function(funcret) {
     var req = db.transaction("avvisi").objectStore("avvisi").openCursor(null,'prev');
     avvisi = [];

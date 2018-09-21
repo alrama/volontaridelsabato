@@ -167,7 +167,7 @@ h2 span {
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media only screen and (max-width: 450px) {
-    h2 { font-size: 22px;display: inline;  }
+    h2 { font-size: 22px;margin-top: -40px }
     .subtitle {font-size: 20px;}
     .textsmall {font-size: 18px;}
 }

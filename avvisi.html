@@ -4,16 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=1"/>
+<link rel="stylesheet" href="paniniweb.css?v=2"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=1"></script>
+<script src="model.js?v=2"></script>
+<script src="paniniweb.js?v=1"></script>
 <script>
+function setCounter() {
+  $('#counter').text($('#testo_avviso').val().length+'/250');
+}
+function findNewAvvisi() {
+  var req = {};
+  req.onsuccess = function() {
+    showMessage("");
+    var prehtml = $('#avvisi').html();
+    var html= "";
+    for (var i = 0;i<avvisi.length;i++) {
+      html+="<div class='subtitle'><span>"+avvisi[i].inserita+"</span>";
+      html+="<div class='textsmall'><div style='display:inline'>" + avvisi[i].testo +") </div><span>" ;
+      html+= "</div>";
+    }
+    $('#avvisi').html(html+prehtml);
+  }
+  var olddata = 0;
+  if (avvisi && avvisi.length>0) olddata=avvisi[0].inserita;
+  showMessage("Recupero ultimi avvisi in corso...");
+  NetworkHelper.getAvvisi(olddata,req);
+}
+function displayAvvisi() {
+  var html= "";
+  for (var i = 0;i<avvisi.length;i++) {
+    html+="<div class='subtitle'><span>"+avvisi[i].inserita+"</span>";
+    html+="<div class='textsmall'><div style='display:inline'>" + avvisi[i].testo +") </div><span>" ;
+    html+= "</div>";
+  }
+  $('#avvisi').html(html);
+  findNewAvvisi();
+}
 initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
   else {
-    loadAvvisi(displayAvvisi);
-    refreshAvvisi();
+    StorageHelper.getAvvisi(displayAvvisi);
     if (user.admin) $("#post_plus").css('visibility','visible');
   }
 });
@@ -43,15 +74,16 @@ function closeScrivi() {
   <div class="message" id="message"></div>
   <div class="main">
     <div class="header_content">
-      <img id="post_plus" onclick="scriviPost();" src="img/account-plus.png" style="visibility:hidden" class="icon_header img_title">
+      <img id="post_plus" onclick="scriviPost();" src="img/post-plus.png" style="visibility:hidden" class="icon_header img_title">
     <img onclick="refreshAvvisi();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="avvisi"></div>
   </div>
   <div id="detail" class="detail" style="display: none;top:60px;">
     <label for="testo" class="textsmall">testo dell'avviso</label><br/>
-    <input type="text" class="smallfield" id="testo_avviso" style="heigth:400px"><br/>
+    <textarea class="smallfield" id="testo_avviso" onkeyup="setCounter();" onchange="setCounter();" style="height:200px" maxlength="250"></textarea>
+    <div style="text-align:right;width:200px"><span id="counter"/></div><br/>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeScrivi();'>
-    <input type="button" class="login compat_button" style="margin-top:5px" value="Aggiungi" id="aggiungi" onclick='sendAvviso();'>
+    <input type="button" class="login compat_button" style="margin-top:5px" value="Invia" id="aggiungi" onclick='sendAvviso();'>
   </div>
 
 </body>
