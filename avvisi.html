@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=2"/>
+<link rel="stylesheet" href="paniniweb.css?v=3"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=2"></script>
-<script src="paniniweb.js?v=1"></script>
+<script src="model.js?v=3"></script>
+<script src="paniniweb.js?v=2"></script>
 <script>
+var ultima_data = 0;
 function setCounter() {
   $('#counter').text($('#testo_avviso').val().length+'/250');
 }
@@ -16,26 +17,26 @@ function findNewAvvisi() {
   var req = {};
   req.onsuccess = function() {
     showMessage("");
+    if (avvisi && avvisi.length>0) ultima_data=avvisi[0].inserito;
     var prehtml = $('#avvisi').html();
     var html= "";
     for (var i = 0;i<avvisi.length;i++) {
-      html+="<div class='subtitle'>"+avvisi[i].inserito+"</div>";
-      html+="<div class='textsmall' style='font-weight:bold'>" + avvisi[i].testo +"</div>" ;
+      html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
+      html+="<div class='textsmall' style='font-weight:bold;text-align:left'>" + avvisi[i].testo +"</div>" ;
     }
     $('#avvisi').html(html+prehtml);
   }
-  var olddata = 0;
-  if (avvisi && avvisi.length>0) olddata=avvisi[0].inserito;
   showMessage("Recupero ultimi avvisi in corso...");
-  NetworkHelper.getAvvisi(olddata,req);
+  NetworkHelper.getAvvisi(ultima_data,req);
 }
 function displayAvvisi() {
   var html= "";
   for (var i = 0;i<avvisi.length;i++) {
-    html+="<div class='subtitle'>"+avvisi[i].inserito+"</div>";
-    html+="<div class='textsmall'>" + avvisi[i].testo +"</div>" ;
+    html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
+    html+="<div class='textsmall' style='text-align:left'>" + avvisi[i].testo +"</div>" ;
   }
   $('#avvisi').html(html);
+  if (avvisi && avvisi.length>0) ultima_data=avvisi[0].inserito;
   findNewAvvisi();
 }
 initModel(function(){
@@ -84,7 +85,7 @@ function sendAvviso() {
   <div class="main">
     <div class="header_content">
       <img id="post_plus" onclick="scriviPost();" src="img/post-plus.png" style="visibility:hidden" class="icon_header img_title">
-    <img onclick="refreshAvvisi();" src="img/sync.png" class="icon_header img_title"></div>
+    <img onclick="findNewAvvisi();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="avvisi"></div>
   </div>
   <div id="detail" class="detail" style="display: none;">

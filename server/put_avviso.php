@@ -32,7 +32,7 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
   	if ($nodo["admin"]) {
       $gruppiID = $nodo["gruppi_id"];
-      $sql = "insert into paniniweb_avvisi (gruppi_id,testo) VALUES (".$gruppiID.",'".$_POST["testo"]."')";
+      $sql = "insert into paniniweb_avvisi (gruppi_id,testo) VALUES (".$gruppiID.",'".mysql_real_escape_string($_POST["testo"])."')";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
 	      $result->response_code = 200;
