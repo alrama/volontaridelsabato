@@ -10,7 +10,7 @@ class Result {
     public $response;
 }
 class Avviso {
-	public $inserita;
+	public $inserito;
     public $testo;
 }
 $result = new Result();
@@ -41,7 +41,7 @@ else {
     	$i = 0;
         while($row = $resultSQL->fetch_assoc()) {
      		$result->response[$i] = new Avviso();
-            $result->response[$i]->inserita = $row["inserita"];
+            $result->response[$i]->inserito = $row["inserita"];
             $result->response[$i++]->testo = $row["testo"];
         }
     } else $result->response = array();

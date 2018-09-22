@@ -32,8 +32,6 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
   	if ($nodo["admin"]) {
       $gruppiID = $nodo["gruppi_id"];
-      if ($_GET["email"]==="") $mail = "nomail_" . time();
-      else $mail = $_GET["email"];
       $sql = "insert into paniniweb_avvisi (gruppi_id,testo) VALUES (".$gruppiID.",'".$_POST["testo"]."')";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
