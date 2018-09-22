@@ -132,10 +132,12 @@ h2 span {
   margin-bottom: 40px;
 }
 .smallfield {
-  width: 200px;
+  width: 240px;
 }
 .compat_button {
-  width:100px;
+  width:110px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .collegamento {
   text-decoration: underline;

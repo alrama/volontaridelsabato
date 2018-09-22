@@ -57,6 +57,29 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  sendAvviso : function(avviso,callback) {
+    var urlserver = "server/put_avviso.php?token="+user.hash;
+    $.ajax({
+      url : urlserver,
+      type : 'POST',
+      data : {'testo':avviso},
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            for (var i=0;i<avvisi.length;i++)
+              StorageHelper.saveAvviso(avvisi[i]);
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
+    });
+  },
   getAvvisi : function(ultima_data,callback) {
     var urlserver = "server/get_avvisi.php?token="+user.hash+"&ultima_data="+ultima_data;
     $.ajax({
@@ -66,6 +89,7 @@ var NetworkHelper = {
         serviceResponse = data;
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
+            avvisi = serviceResponse.response;
             for (var i=0;i<avvisi.length;i++)
               StorageHelper.saveAvviso(avvisi[i]);
             if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();

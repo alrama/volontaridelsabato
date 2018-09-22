@@ -19,23 +19,21 @@ function findNewAvvisi() {
     var prehtml = $('#avvisi').html();
     var html= "";
     for (var i = 0;i<avvisi.length;i++) {
-      html+="<div class='subtitle'><span>"+avvisi[i].inserita+"</span>";
-      html+="<div class='textsmall'><div style='display:inline'>" + avvisi[i].testo +") </div><span>" ;
-      html+= "</div>";
+      html+="<div class='subtitle'>"+avvisi[i].inserito+"</div>";
+      html+="<div class='textsmall' style='font-weight:bold'>" + avvisi[i].testo +"</div>" ;
     }
     $('#avvisi').html(html+prehtml);
   }
   var olddata = 0;
-  if (avvisi && avvisi.length>0) olddata=avvisi[0].inserita;
+  if (avvisi && avvisi.length>0) olddata=avvisi[0].inserito;
   showMessage("Recupero ultimi avvisi in corso...");
   NetworkHelper.getAvvisi(olddata,req);
 }
 function displayAvvisi() {
   var html= "";
   for (var i = 0;i<avvisi.length;i++) {
-    html+="<div class='subtitle'><span>"+avvisi[i].inserita+"</span>";
-    html+="<div class='textsmall'><div style='display:inline'>" + avvisi[i].testo +") </div><span>" ;
-    html+= "</div>";
+    html+="<div class='subtitle'>"+avvisi[i].inserito+"</div>";
+    html+="<div class='textsmall'>" + avvisi[i].testo +"</div>" ;
   }
   $('#avvisi').html(html);
   findNewAvvisi();
@@ -50,9 +48,20 @@ initModel(function(){
 });
 function scriviPost() {
   $("#detail").css("display","block");
+  $("#detail").css('top',$('#avvisi').offset().top);
+  $("#detail").css('left',$('#avvisi').offset().left);
 }
 function closeScrivi() {
   $("#detail").css("display","none");
+}
+function sendAvviso() {
+  if ($('#testo_avviso').val().length>0) {
+    $("#detail").css("display","none");
+    var req = {};
+    req.onsuccess = findNewAvvisi;
+    req.onerror = function() {showMessage("Errore. Avviso non registrato");};
+    NetworkHelper.sendAvviso($('#testo_avviso').val(),req);
+  } else showMessage('Il testo dell\'avviso è assente');
 }
 </script>
 <title>Volontari del sabato</title>
@@ -78,10 +87,10 @@ function closeScrivi() {
     <img onclick="refreshAvvisi();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="avvisi"></div>
   </div>
-  <div id="detail" class="detail" style="display: none;top:60px;">
+  <div id="detail" class="detail" style="display: none;">
     <label for="testo" class="textsmall">testo dell'avviso</label><br/>
     <textarea class="smallfield" id="testo_avviso" onkeyup="setCounter();" onchange="setCounter();" style="height:200px" maxlength="250"></textarea>
-    <div style="text-align:right;width:200px"><span id="counter"/></div><br/>
+    <div style="text-align:right;width:200px"><span id="counter"/>0/250</div><br/>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeScrivi();'>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Invia" id="aggiungi" onclick='sendAvviso();'>
   </div>
