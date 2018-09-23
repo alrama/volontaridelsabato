@@ -21,7 +21,7 @@ function showAvvisi(num) {
 function loadAvvisi() {
   var req = function() {
     var data_ultima = 0;
-    if (avvisi && avvisi.length>0) data_ultima = avvisi[0].inserita;
+    if (avvisi && avvisi.length>0) data_ultima = avvisi[0].inserito;
     var netreq = {};
     netreq.onsuccess = showAvvisi;
     NetworkHelper.getNumAvvisi(data_ultima,netreq);

@@ -110,6 +110,16 @@ h2 span {
   margin-right: 10px;
   vertical-align: middle;
 }
+.img_subtitle {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.aligned_label {
+  margin-left: 60px;
+}
 .icon_header {
   cursor: pointer;
 }

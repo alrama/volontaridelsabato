@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="paniniweb.css?v=3"/>
+<script src="jquery-3.3.1.min.js"></script>
+<script src="model.js?v=3"></script>
+<script src="paniniweb.js?v=2"></script>
+<script>
+function displayEvento() {
+  $('header_content').css('display','none');
+  $('#message').html('');
+  var html = "";
+  for (var i = 0; i < evento.fasi.length ; i++) {
+    html+="<div class='subtitle'><img src='img/arrow-down-bold-outline.png' class='img_subtitle icon_header' ";
+    if (i==evento.fasi.length-1) html+="style='visibility:hidden'";
+    html+= ">";
+    html+= (i+1)+". <input type='text' value='"+evento.fasi[i].fase+"'' style='width:180px'>";
+    html+= "<img src='img/arrow-up-bold-outline.png' class='img_subtitle icon_header' ";
+    if (i==0) html+="style='visibility:hidden'";
+    html+= "></div>";
+    html+= "<div class='subtitle'><label for='orario' class='aligned_label' style='margin-right:60px'>orario</label><input type='time' value='"+evento.fasi[i].orario+"'' style='width:70px'></div>";
+    html+= "<div class='subtitle'><label for='max_partecipanti' class='aligned_label' style='margin-right:10px'>max. partecipanti</label><input type='number' value='"+evento.fasi[i].max_partecipanti+"'' style='width:30px' ma='99'></div>";
+    html+= "<br/>";
+  }
+  $("#content").html(html);
+}
+function aggiornaEvento() {
+  $("#message").text('Attendere. Richiesta dati remoti');
+  NetworkHelper.loadEvento(function() {
+    if (evento.fasi) {
+      if (evento.data_evento) {
+        StorageHelper.saveEvento();
+        displayEvento();
+      } else {
+        var text = "Nessun evento programmato. scegiere una nuova data dal menu \"prossima distribuzione\"";
+        $("#message").html(text);
+      }
+    } else $("#message").text('Errore. Nessun template disponibile');
+  });
+}
+function loadEvento() {
+  $("#message").text('Attendere. Caricamento dati in corso');
+  StorageHelper.getEvento(function() {
+    if (evento==undefined || evento.data_evento==null) {
+      aggiornaEvento();
+    } else {
+      $("#message").html("");
+      displayEvento();
+    }
+  });
+}
+initModel(function(){
+  if (user==undefined)
+    location.replace("./login.html");
+  else {
+    loadEvento();
+  }
+});
+</script>
+<title>Volontari del sabato</title>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="evento.html">Prossima distribuzione</a>
+    <a href="volontari.html">Volontari</a>
+    <a href="avvisi.html">Avvisi</a>
+    <a href="javascript:void(0)"  onclick="logout()">Logout</a>
+    <a href="register.html">Registrazione</a>
+  </div>
+
+  <!-- Use any element to open the sidenav -->
+  <img onclick="openNav()" src="img/menu.png">
+  <h2 id ="title">Fasi</h2>
+  <div class="main">
+  <div class="message" id="message"></div>
+  <div class="header_content">
+    <img onclick="aggiornaEvento();" src="img/sync.png" class="icon_header img_title">
+  </div>
+    <div id="content"></div>
+  </div>
+</body>
+
+</html>
