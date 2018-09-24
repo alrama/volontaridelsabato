@@ -30,6 +30,12 @@ function Volontario() {
   this.password="";
   this.admin;false;
 }
+function Fase(sequenza) {
+  this.orario = "00:00";
+  this.max_partecipanti=0;
+  this.fase="";
+  this.sequenza = sequenza;
+}
 var volontari;
 function findVolontario(email) {
   for (var i=0;i<volontari.length;i++) {
