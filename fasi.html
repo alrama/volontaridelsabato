@@ -9,6 +9,17 @@
 <script src="model.js?v=3"></script>
 <script src="paniniweb.js?v=2"></script>
 <script>
+function saveFasi() {
+  if (confirm("Le modifiche saranno trasmesse e condivise. Continuare ?")) {
+    showMessage("Attendere, invio di dati in corso.");
+    var req = {};
+    req.onsuccess = aggiornaEvento;
+    req.onerror = function(responseError) {
+      showMessage(responseError);
+    }
+    NetworkHelper.sendFasi(req);
+  }
+}
 function displayFasi() {
   $('#message').html('');
   var html = "";
@@ -118,6 +129,8 @@ initModel(function(){
     <img onclick="aggiungiFase();" src="img/expand-all.png" class="icon_header img_title">
   </div>
     <div id="content"></div>
+    <div><input type="button" class="login compat_button" style="font-size:16px" value="Annulla" onclick="loadEvento()">
+      <input type="button" class="login compat_button" style="font-size:16px" value="Salva" onclick="saveFasi();">
   </div>
 </body>
 

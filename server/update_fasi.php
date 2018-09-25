@@ -33,7 +33,7 @@ else {
   	if ($nodo["admin"]) {
       $gruppiID = $nodo["gruppi_id"];
       for($i = 0, $size = count($_POST["fasi"]); $i < $size; ++$i) {
-      	if (!empty($_POST["fasi"]->id)) {
+      	if (!empty($_POST["fasi"][$i]->id)) {
 	      if ($i>1) $ids.=",";
           $ids.=$_POST["fasi"][$i]->id;
         } 
@@ -42,7 +42,7 @@ else {
       $sql .= "delete from paniniweb_partecipazioni where gruppi_id =" . $gruppiID . "AND fase_id NOT IN (".$ids.");";
       $rc = $conn->multi_query($sql);
       foreach ($_POST["fasi"] as $fase) {
-      	if ($fase->id is_null) {
+      	if (is_null($fase->id)) {
 	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,max_partecipanti) values (".$gruppiID.",'".$fase->fase."','".$fase->orario."',".$fase->max_partecipanti.");" ;
         } else {
 	      $sql = "update paniniweb_fasi set fase='".$fase->fase."' orario='".$_GET["orario"]." max_partecipanti=".$fase->max_partecipanti." where id=".$fase->id." AND gruppi_id =" . $gruppiID ;
