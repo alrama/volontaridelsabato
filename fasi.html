@@ -16,12 +16,12 @@ function displayFasi() {
     html+="<div class='subtitle'><img onclick='spostaGiu("+i+")' src='img/arrow-down-bold-outline.png' class='img_subtitle icon_header' ";
     if (i==evento.fasi.length-1) html+="style='visibility:hidden'";
     html+= ">";
-    html+= (i+1)+". <input onchange='changeDescr("+i+")' type='text' value='"+evento.fasi[i].fase+"'' style='width:180px'>";
+    html+= (i+1)+". <input onchange='changeDescr("+i+",this.value)' type='text' value='"+evento.fasi[i].fase+"'' style='width:180px'>";
     html+= "<img onclick='spostaSu("+i+")' src='img/arrow-up-bold-outline.png' class='img_subtitle icon_header' ";
     if (i==0) html+="style='visibility:hidden'";
     html+= "><img onclick='togliFase("+i+")' src='img/close-box-outline.png' class='img_subtitle icon_header'></div>";
-    html+= "<div class='subtitle'><label for='orario' class='aligned_label' style='margin-right:60px'>orario</label><input onchange='changeOrario("+i+")' type='time' value='"+evento.fasi[i].orario+"'' style='width:70px'></div>";
-    html+= "<div class='subtitle'><label for='max_partecipanti' class='aligned_label' style='margin-right:10px'>max. partecipanti</label><input onchange='changeMaxP("+i+")' type='number' value='"+evento.fasi[i].max_partecipanti+"'' style='width:30px' ma='99'></div>";
+    html+= "<div class='subtitle'><label for='orario' class='aligned_label' style='margin-right:60px'>orario</label><input onchange='changeOrario("+i+",this.value)' type='time' value='"+evento.fasi[i].orario+"'' style='width:70px'></div>";
+    html+= "<div class='subtitle'><label for='max_partecipanti' class='aligned_label' style='margin-right:10px'>max. partecipanti</label><input onchange='changeMaxP("+i+",this.value)' type='number' value='"+evento.fasi[i].max_partecipanti+"'' style='width:30px' ma='99'></div>";
     html+= "<br/>";
   }
   $("#content").html(html);
@@ -32,7 +32,31 @@ function spostaSu(index) {
   fasi[0].sequenza--;
   evento.fasi.splice(index-1,0,fasi[0]);
   displayFasi();
-  window.scrollTo(0,document.body.scrollHeight);
+  window.scrollTo(0,0);
+}
+function spostaGiu(index) {
+  var fasi = evento.fasi.splice(index,1);
+  evento.fasi[index].sequenza--;
+  fasi[0].sequenza++;
+  evento.fasi.splice(index+1,0,fasi[0]);
+  displayFasi();
+  window.scrollTo(0,0);
+}
+function togliFase(index) {
+  var fasi = evento.fasi.splice(index,1);
+  for (var i=index;i<evento.fasi.length;i++)
+    evento.fasi[i].sequenza--;
+  displayFasi();
+  window.scrollTo(0,0);
+}
+function changeMaxP(index,value) {
+  evento.fasi[index].max_partecipanti = parseInt(value);
+}
+function changeDescr(index,value) {
+  evento.fasi[index].fase = value;
+}
+function changeOrario(index,value) {
+  evento.fasi[index].orario = value;
 }
 function aggiornaEvento() {
   $("#message").text('Attendere. Richiesta dati remoti');

@@ -35,7 +35,7 @@ else {
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT nome,cognome,admin,hash FROM paniniweb_users where email = '" . $_GET["user"] . "' AND password='" . $_GET["pw"] . "'" ;
+  $sql = "SELECT nome,cognome,admin,hash FROM paniniweb_users where email = '" . $_GET["user"] . "' AND password='" . hash("sha256",$_GET["pw"]) . "'" ;
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
   	if (NULL===$nodo["hash"]) {
@@ -44,7 +44,6 @@ else {
     } else {
       $userRet = new User();
       $userRet->email = $_GET["user"];
-      $userRet->password = $_GET["pw"];
       $userRet->nome = $nodo["nome"];
       $userRet->cognome = $nodo["cognome"];
       $userRet->admin = (int) $nodo["admin"];

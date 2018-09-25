@@ -36,7 +36,7 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
       $flagid = 0;
       $hash_value = hash("sha256", $_GET["email"] . $_GET["pwd"]);
-      $sql = "insert into paniniweb_temprec (email,hash,password,nome,cognome,telefono) VALUES ('".$_GET["email"]."','".$hash_value."','".$_GET["pwd"]."','".$_GET["nome"]."','".$_GET["cognome"]."','".$_GET["telefono"]."')";
+      $sql = "insert into paniniweb_temprec (email,hash,password,nome,cognome,telefono) VALUES ('".$_GET["email"]."','".$hash_value."','".hash("sha256",$_GET["pwd"])."','".$_GET["nome"]."','".$_GET["cognome"]."','".$_GET["telefono"]."')";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
           mail(

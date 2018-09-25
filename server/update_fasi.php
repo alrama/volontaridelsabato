@@ -39,7 +39,8 @@ else {
         } 
       }
       $sql = "delete from paniniweb_fasi where gruppi_id =" . $gruppiID . "AND id NOT IN (".$ids.");";
-      $rc = $conn->query($sql);
+      $sql .= "delete from paniniweb_partecipazioni where gruppi_id =" . $gruppiID . "AND fase_id NOT IN (".$ids.");";
+      $rc = $conn->multi_query($sql);
       foreach ($_POST["fasi"] as $fase) {
       	if ($fase->id is_null) {
 	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,max_partecipanti) values (".$gruppiID.",'".$fase->fase."','".$fase->orario."',".$fase->max_partecipanti.");" ;
