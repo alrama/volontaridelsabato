@@ -68,7 +68,7 @@ var NetworkHelper = {
     $.ajax({
       url : urlserver,
       type : 'POST',
-      data : {'fasi':evento.fasi},
+      data : {'fasi':JSON.stringify(evento.fasi)},
       success : function(data) {
         serviceResponse = data;
         if (serviceResponse.response_code) {

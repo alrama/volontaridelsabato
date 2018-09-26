@@ -20,11 +20,11 @@ class Fase {
 	public $fase;
     public $sequenza;
     public $orario;
+    public $max_partecipanti;
 }
 class Partecipazione {
 	public $email;
     public $fase_id;
-    public $evento_id;
 }
 $result = new Result();
 // Create connection
@@ -54,7 +54,7 @@ else {
     if ($nodo = $resultSQL->fetch_assoc()) {
       $evento->data_evento = $nodo["data_evento"];
       $evento->evento_id = $nodo["id"];
-      $sql = "SELECT email,fase_id from paniniweb_partecipazioni where evento_id = '" . $evento->evento_id . "'";
+      $sql = "SELECT email,fase_id from paniniweb_partecipazioni where evento_id = '" . $evento->evento_id . "' ORDER BY inserita";
       $resultSQL = $conn->query($sql);
       $i = 0;
       if ($resultSQL->num_rows > 0) {
@@ -65,16 +65,17 @@ else {
           }
       } 
     }
-    $sql = "SELECT id,fase,sequenza,orario from paniniweb_fasi where gruppi_id = '" . $gruppiID . "' ORDER BY sequenza ASC";
-    $resultSQL = $conn->query($sql);
+    $sql = "SELECT id,fase,sequenza,DATE_FORMAT(orario, '%H:%i') as time,max_partecipanti from paniniweb_fasi where gruppi_id = '" . $gruppiID . "' ORDER BY sequenza ASC";
+    $resultSQL = $conn->query($sql); 
     $i = 0;
     if ($resultSQL->num_rows > 0) {
         while($row = $resultSQL->fetch_assoc()) {
             $evento->fasi[$i] = new Fase();
-            $evento->fasi[$i]->id = $row["id"];
+            $evento->fasi[$i]->id = (int) $row["id"];
             $evento->fasi[$i]->fase = $row["fase"];
-            $evento->fasi[$i]->orario = $row["orario"];
-            $evento->fasi[$i++]->sequenza = $row["sequenza"];
+            $evento->fasi[$i]->orario = $row["time"];
+            $evento->fasi[$i]->max_partecipanti = (int) $row["max_partecipanti"];
+            $evento->fasi[$i++]->sequenza = (int) $row["sequenza"];
         }
     } 
     $result->response_code = 200;

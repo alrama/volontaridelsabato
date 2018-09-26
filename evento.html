@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=3"/>
+<link rel="stylesheet" href="paniniweb.css?v=4"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=3"></script>
-<script src="paniniweb.js?v=2"></script>
+<script src="model.js?v=4"></script>
+<script src="paniniweb.js?v=3"></script>
 <script>
 function showAvvisi(num) {
   if (num>0) {
@@ -77,14 +77,21 @@ function addToFase(fase_id,elem) {
     else sendPartecipante(fase_id,user.email);
   }
 }
-function displayPartecipanti(i) {
+function displayPartecipanti(i,max) {
   var html = "";
   var count = 1;
   for (var j=0; j<evento.partecipazioni.length;j++) {
     if (evento.partecipazioni[j].fase_id==i) {
-      if (user.admin || user.email==evento.partecipazioni[j].email)
-        html+="<div class='textsmall' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div style='display:inline'>" + count++ +") </div><span class='collegamento'>" ;
-      else html+="<div class='textsmall'><div style='display:inline'>" + count++ +") </div><span>" ;
+      var classeDiv = "";
+      var classeSpan = "class='collegamento textgrigio'";
+      if (max>0 && count>max) {
+        classeDiv = "class='overnumber'";
+        classeSpan = "class='collegamento overnumber'";
+      }
+      if (user.admin || user.email==evento.partecipazioni[j].email) {
+        html+="<div class='textsmall' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div "+
+        classeDiv+" style='display:inline'>" + count++ +") </div><span "+classeSpan+">" ;
+      }  else html+="<div class='textsmall'><div "+classeDiv+" style='display:inline'>" + count++ +") </div><span "+classeSpan+">" ;
       vol = findVolontario(evento.partecipazioni[j].email);
       if (vol) {
         if (vol.nome) html+=vol.nome
@@ -151,7 +158,10 @@ function rimuoviEvento() {
 }
 function displayEvento() {
   var link = formatDataEvento();
-  if (user.admin) link = '<span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>';
+  if (user.admin) {
+    link = '<span class="collegamento" onclick="rimuoviEvento()">'+ formatDataEvento()+'</span>';
+    $("#fasi_link").css('display','inline');
+  }
   $('#title').html('Distribuzione del '+ link);
   $('header_content').css('display','none');
   $('#message').html('');
@@ -160,7 +170,9 @@ function displayEvento() {
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
     html+= "<span>"+evento.fasi[i].fase+"</span>";
     html+= "<img src='img/account-plus.png' class='img_title icon_header' onclick='addToFase("+evento.fasi[i].id+",this)'>";
-    if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id);
+    if (evento.fasi[i].orario!="00:00" && evento.fasi[i].orario!="00:00:00")
+      html+= "<br/><span class='subsubheader'>Inizio ore "+evento.fasi[i].orario+"</span>";
+    if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id,evento.fasi[i].max_partecipanti);
     html+= "</div>";
   }
   $("#content").html(html);
@@ -229,6 +241,7 @@ initModel(function(){
     <a href="evento.html">Prossima distribuzione</a>
     <a href="volontari.html">Volontari</a>
     <a href="avvisi.html">Avvisi</a>
+    <a href="fasi.html" id="fasi_link" style="display:none;">Gestione Fasi</a>
     <a href="javascript:void(0)"  onclick="logout()">Logout</a>
     <a href="register.html">Registrazione</a>
   </div>

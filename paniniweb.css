@@ -90,12 +90,21 @@ h2 span {
 .textsmall {
   font-size:18px;
 }
-.textsmall span{
-  color: grey;
-}
 .textsmall div{
   color: grey;
   margin-left: 50px;
+}
+.overnumber {
+  font-style: italic;
+  color: red;
+}
+.textgrigio {
+  color:grey;
+}
+.subsubheader {
+  margin-left:50px;
+  font-size: 14px;
+  color:grey;
 }
 .message {
   color: red;

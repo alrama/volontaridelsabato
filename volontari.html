@@ -14,7 +14,10 @@ initModel(function(){
     location.replace("./login.html");
   else {
     loadVolontari(displayVolontari);
-    if (user.admin) $("#account_plus").css('visibility','visible');
+    if (user.admin) {
+      $("#fasi_link").css('display','inline');
+      $("#account_plus").css('visibility','visible');
+    }
   }
 });
 function dettaglio_riga(elem,email) {
@@ -100,6 +103,7 @@ function closeDetail() {
     <a href="evento.html">Prossima distribuzione</a>
     <a href="volontari.html">Volontari</a>
     <a href="avvisi.html">Avvisi</a>
+    <a href="fasi.html" id="fasi_link" style="display:none;">Gestione Fasi</a>
     <a href="javascript:void(0)"  onclick="logout()">Logout</a>
     <a href="register.html">Registrazione</a>
   </div>

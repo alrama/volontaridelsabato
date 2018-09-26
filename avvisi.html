@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=3"/>
+<link rel="stylesheet" href="paniniweb.css?v=4"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=3"></script>
-<script src="paniniweb.js?v=2"></script>
+<script src="model.js?v=4"></script>
+<script src="paniniweb.js?v=3"></script>
 <script>
 var ultima_data = 0;
 function setCounter() {
@@ -44,7 +44,10 @@ initModel(function(){
     location.replace("./login.html");
   else {
     StorageHelper.getAvvisi(displayAvvisi);
-    if (user.admin) $("#post_plus").css('visibility','visible');
+    if (user.admin) {
+      $("#post_plus").css('visibility','visible');
+      $("#fasi_link").css('display','inline');
+    }
   }
 });
 function scriviPost() {
@@ -74,6 +77,7 @@ function sendAvviso() {
     <a href="evento.html">Prossima distribuzione</a>
     <a href="volontari.html">Volontari</a>
     <a href="avvisi.html">Avvisi</a>
+    <a href="fasi.html" id="fasi_link" style="display:none;">Gestione Fasi</a>
     <a href="javascript:void(0)"  onclick="logout()">Logout</a>
     <a href="register.html">Registrazione</a>
   </div>

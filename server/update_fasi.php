@@ -29,23 +29,24 @@ else {
   mysql_set_charset("UTF8", $conn);
   $sql = "SELECT gruppi_id,admin from paniniweb_users where hash = '" . $_GET["token"] . "'";
   $resultSQL = $conn->query($sql);
+  $fasi = json_decode($_POST["fasi"],true);
   if ($nodo = $resultSQL->fetch_assoc()) {
   	if ($nodo["admin"]) {
       $gruppiID = $nodo["gruppi_id"];
-      for($i = 0, $size = count($_POST["fasi"]); $i < $size; ++$i) {
-      	if (!empty($_POST["fasi"][$i]->id)) {
-	      if ($i>1) $ids.=",";
-          $ids.=$_POST["fasi"][$i]->id;
+      for($i = 0, $size = count($fasi); $i < $size; ++$i) {
+      	if (!empty($fasi[$i]["id"])) {
+	      if ($i>0) $ids.=",";
+          $ids.=$fasi[$i]["id"];
         } 
       }
       $sql = "delete from paniniweb_fasi where gruppi_id =" . $gruppiID . "AND id NOT IN (".$ids.");";
       $sql .= "delete from paniniweb_partecipazioni where gruppi_id =" . $gruppiID . "AND fase_id NOT IN (".$ids.");";
       $rc = $conn->multi_query($sql);
-      foreach ($_POST["fasi"] as $fase) {
-      	if (is_null($fase->id)) {
-	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,max_partecipanti) values (".$gruppiID.",'".$fase->fase."','".$fase->orario."',".$fase->max_partecipanti.");" ;
+      foreach ($fasi as $fase) {
+      	if (is_null($fase["id"])) {
+	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,max_partecipanti) values (".$gruppiID.",'".$fase["fase"]."','".$fase["orario"]."',".$fase["max_partecipanti"].");" ;
         } else {
-	      $sql = "update paniniweb_fasi set fase='".$fase->fase."' orario='".$_GET["orario"]." max_partecipanti=".$fase->max_partecipanti." where id=".$fase->id." AND gruppi_id =" . $gruppiID ;
+	      $sql = "update paniniweb_fasi set fase='".$fase["fase"]."', orario='".$fase["orario"]."', max_partecipanti=".$fase["max_partecipanti"]." where id=".$fase["id"]." AND gruppi_id=" . $gruppiID ;
         }
       	$rc = $conn->query($sql);
       }
@@ -53,7 +54,7 @@ else {
         $result->response_code = 200;
       } else {
         $result->response_code = 302;
-        $result->error_description = "Errore di aggiornamento fase: " . $sql;
+        $result->error_description = "Errore di aggiornamento fase: " .$sql."-". mysqli_error($conn) ;
       }
     } else {
         $result->response_code = 301;

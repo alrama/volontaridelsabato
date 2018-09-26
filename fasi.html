@@ -4,16 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=3"/>
+<link rel="stylesheet" href="paniniweb.css?v=4"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=3"></script>
-<script src="paniniweb.js?v=2"></script>
+<script src="model.js?v=4"></script>
+<script src="paniniweb.js?v=3"></script>
 <script>
 function saveFasi() {
   if (confirm("Le modifiche saranno trasmesse e condivise. Continuare ?")) {
     showMessage("Attendere, invio di dati in corso.");
     var req = {};
-    req.onsuccess = aggiornaEvento;
+    req.onsuccess = function() {
+      showMessage("Gli aggiornamenti sono stati registrati");
+      aggiornaEvento();
+    }
     req.onerror = function(responseError) {
       showMessage(responseError);
     }
@@ -75,7 +78,6 @@ function aggiornaEvento() {
     if (evento.fasi) {
       if (evento.data_evento) {
         StorageHelper.saveEvento();
-        displayEvento();
       } else {
         var text = "Nessun evento programmato. scegiere una nuova data dal menu \"prossima distribuzione\"";
         $("#message").html(text);
@@ -99,6 +101,10 @@ function aggiungiFase() {
   displayFasi();
   window.scrollTo(0,document.body.scrollHeight);
 }
+function annullaModifiche() {
+  loadEvento();
+  window.scrollTo(0,0);
+}
 initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
@@ -116,6 +122,7 @@ initModel(function(){
     <a href="evento.html">Prossima distribuzione</a>
     <a href="volontari.html">Volontari</a>
     <a href="avvisi.html">Avvisi</a>
+    <a href="fasi.html" id="fasi_link">Gestione Fasi</a>
     <a href="javascript:void(0)"  onclick="logout()">Logout</a>
     <a href="register.html">Registrazione</a>
   </div>
@@ -129,7 +136,7 @@ initModel(function(){
     <img onclick="aggiungiFase();" src="img/expand-all.png" class="icon_header img_title">
   </div>
     <div id="content"></div>
-    <div><input type="button" class="login compat_button" style="font-size:16px" value="Annulla" onclick="loadEvento()">
+    <div><input type="button" class="login compat_button" style="font-size:16px" value="Annulla" onclick="annullaModifiche();">
       <input type="button" class="login compat_button" style="font-size:16px" value="Salva" onclick="saveFasi();">
   </div>
 </body>
