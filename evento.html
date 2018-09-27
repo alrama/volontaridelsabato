@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=4"/>
+<link rel="stylesheet" href="paniniweb.css?v=5"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=4"></script>
+<script src="model.js?v=5"></script>
 <script src="paniniweb.js?v=3"></script>
 <script>
 function showAvvisi(num) {
@@ -82,16 +82,13 @@ function displayPartecipanti(i,max) {
   var count = 1;
   for (var j=0; j<evento.partecipazioni.length;j++) {
     if (evento.partecipazioni[j].fase_id==i) {
-      var classeDiv = "";
-      var classeSpan = "class='collegamento textgrigio'";
-      if (max>0 && count>max) {
+      var classeDiv = "class='textsmall'";
+      if (max>0 && count>max)
         classeDiv = "class='overnumber'";
-        classeSpan = "class='collegamento overnumber'";
-      }
       if (user.admin || user.email==evento.partecipazioni[j].email) {
-        html+="<div class='textsmall' onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div "+
-        classeDiv+" style='display:inline'>" + count++ +") </div><span "+classeSpan+">" ;
-      }  else html+="<div class='textsmall'><div "+classeDiv+" style='display:inline'>" + count++ +") </div><span "+classeSpan+">" ;
+        html+="<div "+classeDiv+" onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div "+
+        " style='display:inline'>" + count++ +") </div><span class='collegamento'>" ;
+      }  else html+="<div "+classeDiv+"><div style='display:inline'>" + count++ +") </div><span>" ;
       vol = findVolontario(evento.partecipazioni[j].email);
       if (vol) {
         if (vol.nome) html+=vol.nome
@@ -195,10 +192,14 @@ function creaEvento() {
 }
 function aggiornaEvento() {
   $("#message").text('Attendere. Richiesta dati remoti');
-  NetworkHelper.loadEvento(function() {
+  var req = {};
+  req.onerror = function() {
+    showMessage("Aggiornamento non riuscito. I dati potrebbero non essere corrispondenti");
+    loadEvento();
+  };
+  req.onsuccess = function() {
     if (evento.fasi) {
       if (evento.data_evento) {
-        StorageHelper.saveEvento();
         displayEvento();
       } else {
         var text = "Nessun evento programmato.";
@@ -210,13 +211,13 @@ function aggiornaEvento() {
         $("#message").html(text);
       }
     } else $("#message").text('Errore. Nessun template disponibile');
-  });
+  }
+  NetworkHelper.loadEvento(req);
 }
 function loadEvento() {
-  $("#message").text('Attendere. Caricamento dati in corso');
   StorageHelper.getEvento(function() {
     if (evento==undefined || evento.data_evento==null) {
-      aggiornaEvento();
+      showMessage("Dati attualmente indisponibili. Ripetere l'aggiornamento");
     } else {
       $("#message").html("");
       displayEvento();
@@ -227,7 +228,7 @@ initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
   else {
-    loadVolontari(loadEvento);
+    loadVolontari(aggiornaEvento);
     loadAvvisi();
   }
 });

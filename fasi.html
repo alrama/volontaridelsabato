@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=4"/>
+<link rel="stylesheet" href="paniniweb.css?v=5"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=4"></script>
+<script src="model.js?v=5"></script>
 <script src="paniniweb.js?v=3"></script>
 <script>
 function saveFasi() {
@@ -73,17 +73,17 @@ function changeOrario(index,value) {
   evento.fasi[index].orario = value;
 }
 function aggiornaEvento() {
-  $("#message").text('Attendere. Richiesta dati remoti');
-  NetworkHelper.loadEvento(function() {
+  var req = {};
+  req.onsuccess = function() {
     if (evento.fasi) {
       if (evento.data_evento) {
-        StorageHelper.saveEvento();
       } else {
         var text = "Nessun evento programmato. scegiere una nuova data dal menu \"prossima distribuzione\"";
         $("#message").html(text);
       }
     } else $("#message").text('Errore. Nessun template disponibile');
-  });
+  }
+  NetworkHelper.loadEvento(req);
 }
 function loadEvento() {
   $("#message").text('Attendere. Caricamento dati in corso');

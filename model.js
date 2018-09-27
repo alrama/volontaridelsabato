@@ -289,7 +289,7 @@ var NetworkHelper = {
       }
     });
   },
-  loadEvento : function(funcret) {
+  loadEvento : function(callback) {
     $.ajax({
       url: "server/get_evento.php?token="+user.hash,
       type: 'GET',
@@ -298,12 +298,16 @@ var NetworkHelper = {
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
             evento = serviceResponse.response;
-            if (evento.data) StorageHelper.saveEvento();
-          }
-        } /* else network error */
-        if (funcret) funcret();
+            if (evento.data_evento) StorageHelper.saveEvento();
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+        }
       },
-      error: function(data) {if (funcret) funcret();}
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror();
+      }
     })
   },
   sendEvento : function(callback) {

@@ -38,7 +38,7 @@
 
 body {
   background-color: lightgreen;
-  color: grey;
+  color: #363636;
   font-family: : Verdana, "Times New Roman", sans-serif;
   font-size: 14px;
 }
@@ -89,22 +89,23 @@ h2 span {
 
 .textsmall {
   font-size:18px;
+  color: #363636;
 }
 .textsmall div{
-  color: grey;
   margin-left: 50px;
 }
 .overnumber {
   font-style: italic;
-  color: red;
+  font-size:18px;
+  color: grey;
 }
-.textgrigio {
-  color:grey;
+.overnumber div{
+  margin-left: 50px;
 }
 .subsubheader {
   margin-left:50px;
-  font-size: 14px;
-  color:grey;
+  font-size: 16px;
+  color:#363636;
 }
 .message {
   color: red;
