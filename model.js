@@ -337,6 +337,11 @@ var StorageHelper = {
     var objStr = trx.objectStore("avvisi");
     objStr.put(avviso);
   },
+  deleteAvviso : function(inserito) {
+    var trx = db.transaction("avvisi","readwrite");
+    var objStr = trx.objectStore("avvisi");
+    var reqClear = objStr.delete(inserito);
+  },
   getAvvisi : function(funcret) {
     var req = db.transaction("avvisi").objectStore("avvisi").openCursor(null,'prev');
     avvisi = [];

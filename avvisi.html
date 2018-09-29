@@ -6,10 +6,11 @@
 <link rel="icon" href="favicon.ico" />
 <link rel="stylesheet" href="paniniweb.css?v=5"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=4"></script>
+<script src="model.js?v=5"></script>
 <script src="paniniweb.js?v=3"></script>
 <script>
 var ultima_data = 0;
+var avvisiDaCancellare;
 function setCounter() {
   $('#counter').text($('#testo_avviso').val().length+'/250');
 }
@@ -31,9 +32,15 @@ function findNewAvvisi() {
 }
 function displayAvvisi() {
   var html= "";
+  avvisiDaCancellare = [];
+  var dataTrentaGiorniFa = Date.now() - (1000*60*60*24*30);
   for (var i = 0;i<avvisi.length;i++) {
-    html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
-    html+="<div class='textsmall' style='text-align:left'>" + avvisi[i].testo +"</div>" ;
+    if (i>0 && (new Date(avvisi[i].inserito)).getTime()<dataTrentaGiorniFa)
+      StorageHelper.deleteAvviso(avvisi[i].inserito);
+    else {
+      html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
+      html+="<div class='textsmall' style='text-align:left'>" + avvisi[i].testo +"</div>" ;
+    }
   }
   $('#avvisi').html(html);
   if (avvisi && avvisi.length>0) ultima_data=avvisi[0].inserito;

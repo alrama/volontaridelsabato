@@ -36,6 +36,7 @@ else {
   if ($nodo = $resultSQL->fetch_assoc()) {
   	$gruppiID = $nodo["gruppi_id"];
   	$sql = "SELECT inserita,testo from paniniweb_avvisi where gruppi_id =" . $gruppiID . " AND unix_timestamp(inserita)>unix_timestamp('".$_GET["ultima_data"]."')";
+    $sql .= " ORDER BY inserita DESC;";
     $resultSQL = $conn->query($sql) or die($conn->error);
     if ($resultSQL->num_rows > 0) {
     	$i = 0;
