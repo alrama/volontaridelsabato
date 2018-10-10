@@ -143,8 +143,6 @@ h2 span {
 }
 .detail {
   width:250px;
-  height:260px;
-  overflow: auto;
   position: absolute;
   background: sandybrown;
   padding: 5px;
@@ -152,6 +150,10 @@ h2 span {
   border: 2px solid;
   border-radius: 5px;
   margin-bottom: 40px;
+}
+.sublist {
+  height:230px;
+  overflow: auto;
 }
 .smallfield {
   width: 240px;
