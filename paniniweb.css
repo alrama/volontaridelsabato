@@ -143,6 +143,8 @@ h2 span {
 }
 .detail {
   width:250px;
+  height:230px;
+  overflow: auto;
   position: absolute;
   background: sandybrown;
   padding: 5px;

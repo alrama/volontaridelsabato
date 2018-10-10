@@ -51,6 +51,9 @@ else {
         $result->response_code = 301;
         $result->error_description = "Attenzione, processo di registrazione non disponibile.";
       }
+  } else {
+        $result->response_code = 302;
+        $result->error_description = "E-mail non appartenente all'organizzazione.";
   }
   $conn->close();
 }
