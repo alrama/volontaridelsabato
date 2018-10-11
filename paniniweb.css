@@ -54,7 +54,7 @@ h2 span {
 }
 .main {
   text-align: center;
-  width: 350px;
+  width: 450px;
   margin:0 auto;
   padding-bottom: 40px;
 }
@@ -82,7 +82,7 @@ h2 span {
   color: darkolivegreen;
 }
 .subtitle span {
-  width:230px;
+  width:320px;
   display: inline-block;
   vertical-align: text-top;
 }
@@ -191,9 +191,15 @@ h2 span {
   font-weight: bold;
   color:white;
 }
+input {
+  font-size: 16px;
+}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media only screen and (max-width: 450px) {
     h2 { font-size: 22px;margin-top: -40px }
+    #title { font-size: 22px;margin-top: -40px }
     .subtitle {font-size: 20px;}
+    .subtitle span {width:230px}
+    .main {width:350px;}
     .textsmall {font-size: 18px;}
 }

@@ -468,9 +468,7 @@ initModel = function(func) {
   };
   requestDB.onsuccess = function(event) {
     db = event.target.result;
-    if (db.objectStoreNames.contains("user")) {
-      StorageHelper.getUser(func);
-    } else if (func) func();
+    StorageHelper.getUser(func);
   };
   requestDB.onupgradeneeded = function(event) {
     var db = event.target.result;
