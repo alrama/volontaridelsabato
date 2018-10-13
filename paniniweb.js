@@ -30,14 +30,18 @@ function displayVolontari() {
   showMessage("");
   var htmlcontant = "";
   for (volontario of volontari) {
-    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div class='textsmall'>";
+    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div><div class='textsmall'>";
     if (volontario.nome.length+volontario.cognome.length<5) {
       htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
       htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
     } else {
       htmlcontant+=volontario.nome + "</div>";
-      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
+      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div></div>";
     }
+    if (navigator.userAgent.toLowerCase().indexOf('mobile')>-1) {
+      htmlcontant+="<a href='tel:+39"+volontario.cellulare+"'><img src='img/phone-forward.png' class='img_title icon_header'/></a>";
+      htmlcontant+="<a href='https://api.whatsapp.com/send?phone=39"+volontario.cellulare+"'><img src='img/chat-processing.png' class='img_title icon_header'/></a>"
+    } else htmlcontant+="<img  src='img/phone-forward.png' style='visibility:hidden;height:40px;vertical-align:middle'/>";
     htmlcontant+="</div>"
   }
   $("#volontari_content").html(htmlcontant);

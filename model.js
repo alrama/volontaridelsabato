@@ -29,6 +29,7 @@ function Volontario() {
   this.cellulare="";
   this.password="";
   this.admin;false;
+  this.deleghe="";
 }
 function Fase(sequenza) {
   this.orario = "00:00";

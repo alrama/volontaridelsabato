@@ -31,6 +31,7 @@ function dettaglio_riga(elem,email) {
   $('#nome').val(volont.nome);
   $('#cognome').val(volont.cognome);
   $('#telefono').val(volont.cellulare);
+  $('#deleghe').val(volont.deleghe);
   $('#admin').prop('checked',volont.admin);
 }
 function addaccount(elem) {
@@ -85,6 +86,7 @@ function closeDetail() {
   $('#nome').val('');
   $('#cognome').val('');
   $('#telefono').val('');
+  $('#deleghe').html('');
   $("#telefono_label").css("display","inline");
   $("#telefono").css("display","inline");
   $('#admin').prop('checked',false);
@@ -92,6 +94,27 @@ function closeDetail() {
   $("#nome").prop('disabled',true);
   $("#cognome").prop('disabled',true);
   $("#admin").prop('disabled',true);
+}
+function listVolontari(elem) {
+  var htmlcontant = "<div class='sublist'>";
+  for (volontario of volontari) {
+    if (volontario.email!=$('#user').val()) {
+      htmlcontant += "<div class='riga' onclick='addDelega(\""+volontario.email+"\");'><div class='textsmall'>";
+      if (volontario.nome.length+volontario.cognome.length<5) {
+        htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
+        htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
+      } else {
+        htmlcontant+=volontario.nome + "</div>";
+        htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
+      }
+      htmlcontant+="</div>"
+    }
+  }
+  htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#delegati_content').css('display','none')\">";
+  $("#delegati_content").html(htmlcontant);
+  $("#delegati_content").css("display","block");
+  $("#delegati_content").css("top",elem.offsetTop);
+  $("#delegati_content").css("left",elem.offsetLeft);
 }
 </script>
 <title>Volontari del sabato</title>
@@ -126,12 +149,18 @@ function closeDetail() {
     <input type="text" class="smallfield" id="cognome" disabled><br/>
     <label for="telefono" class="textsmall" id="telefono_label">telefono</label><br/>
     <input type="text" class="smallfield" id="telefono" disabled><br/>
+    <label class="textsmall">deleghe</label><br/>
+    <div>
+    <div id="deleghe" style="width:200px;display:inline-block"/>
+    <img onclick='listVolontari(this)' src='img/account-multiple-plus.png' class="img_title icon_header" style="vertical-align:text-top"/>
+    </div><br/>
     <input type="checkbox" id="admin" disabled><span class="textsmall"> Amministratore</span><br/>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Elimina" id="elimina" onclick='rimuoviVolontario();'>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Annulla" id="annulla" onclick='closeDetail();'>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Aggiungi" id="aggiungi" onclick='sendVolontario();'>
   </div>
+  <div id="delegati_content"  class="detail" style="display: none;"></div>
 
 </body>
 

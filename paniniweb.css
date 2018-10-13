@@ -141,6 +141,10 @@ h2 span {
   border-top: 1px solid grey;
   cursor: pointer;
 }
+.riga div {
+  width:250px;
+  float:left;
+}
 .detail {
   width:250px;
   position: absolute;
