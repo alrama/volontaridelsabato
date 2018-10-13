@@ -33,6 +33,13 @@ function dettaglio_riga(elem,email) {
   $('#telefono').val(volont.cellulare);
   $('#deleghe').val(volont.deleghe);
   $('#admin').prop('checked',volont.admin);
+  if (user.admin) $('#add_deleghe').css('visibility','visible');
+}
+function aggiornaDeleghe(email) {
+  var req = {};
+  req.onsuccess = function() {};
+  req.onerror = function() {showMessage('aggiornamento fallito')};
+  NetworkHelper.updateDeleghe(email,req);
 }
 function addaccount(elem) {
   $("#detail").css("display","block");
@@ -95,11 +102,20 @@ function closeDetail() {
   $("#cognome").prop('disabled',true);
   $("#admin").prop('disabled',true);
 }
+function addDelega(elem,email) {
+  var delegato = findVolontario(email);
+  var html = "<div>"+delegato.nome+" "+delegato.cognome+"</div>"
+  $('#deleghe').append(html);
+  elem.style.display = "none";
+  $('#chiudi').val('Annulla');
+  $('#elimina').val('Salva');
+  $('#elimina').attr('onclick','aggiornaDeleghe()');
+}
 function listVolontari(elem) {
   var htmlcontant = "<div class='sublist'>";
   for (volontario of volontari) {
     if (volontario.email!=$('#user').val()) {
-      htmlcontant += "<div class='riga' onclick='addDelega(\""+volontario.email+"\");'><div class='textsmall'>";
+      htmlcontant += "<div class='riga' onclick='addDelega(this,\""+volontario.email+"\");'><div class='textsmall'>";
       if (volontario.nome.length+volontario.cognome.length<5) {
         htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
         htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
@@ -150,10 +166,11 @@ function listVolontari(elem) {
     <label for="telefono" class="textsmall" id="telefono_label">telefono</label><br/>
     <input type="text" class="smallfield" id="telefono" disabled><br/>
     <label class="textsmall">deleghe</label><br/>
-    <div>
-    <div id="deleghe" style="width:200px;display:inline-block"/>
-    <img onclick='listVolontari(this)' src='img/account-multiple-plus.png' class="img_title icon_header" style="vertical-align:text-top"/>
-    </div><br/>
+    <div style='display:block'>
+    <div id="deleghe" style="width:200px;float:left"></div>
+    <img id="add_deleghe" onclick='listVolontari(this)' src='img/account-multiple-plus.png' class="img_title icon_header" style="vertical-align:text-top;visibility:hidden"/>
+    </div>
+    <br/>
     <input type="checkbox" id="admin" disabled><span class="textsmall"> Amministratore</span><br/>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Elimina" id="elimina" onclick='rimuoviVolontario();'>
