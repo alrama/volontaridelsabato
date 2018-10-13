@@ -16,6 +16,7 @@ class User {
     public $cognome;
     public $admin;
     public $hash;
+    public $deleghe;
 }
 $result = new Result();
 // Create connection
@@ -35,7 +36,7 @@ else {
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT nome,cognome,admin,hash FROM paniniweb_users where email = '" . $_GET["user"] . "' AND password='" . hash("sha256",$_GET["pw"]) . "'" ;
+  $sql = "SELECT nome,cognome,admin,hash,deleghe FROM paniniweb_users where email = '" . $_GET["user"] . "' AND password='" . hash("sha256",$_GET["pw"]) . "'" ;
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
   	if (NULL===$nodo["hash"]) {
@@ -46,6 +47,7 @@ else {
       $userRet->email = $_GET["user"];
       $userRet->nome = $nodo["nome"];
       $userRet->cognome = $nodo["cognome"];
+      $userRet->deleghe = $nodo["deleghe"];
       $userRet->admin = (int) $nodo["admin"];
       $userRet->hash = $nodo["hash"];
       $result->response_code = 200;

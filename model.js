@@ -64,6 +64,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  updateDeleghe : function(delegato,callback) {
+    var urlserver = "server/update_deleghe.php?token="+user.hash+"&email="+delegato.email+"&deleghe="+delegato.deleghe;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse.error_description);
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di risposta del servizio");
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di rete");
+      }
+    });
+  },
   sendFasi : function(callback) {
     var urlserver = "server/update_fasi.php?token="+user.hash;
     $.ajax({
@@ -75,7 +95,7 @@ var NetworkHelper = {
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
             if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
-          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(response.error_description);
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse.error_description);
         } else {
           if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di risposta del servizio");
         }

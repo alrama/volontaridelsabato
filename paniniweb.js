@@ -30,13 +30,13 @@ function displayVolontari() {
   showMessage("");
   var htmlcontant = "";
   for (volontario of volontari) {
-    htmlcontant += "<div class='riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'><div class='textsmall'>";
+    htmlcontant += "<div class='riga'><div class='textsmall' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>";
     if (volontario.nome.length+volontario.cognome.length<5) {
       htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
-      htmlcontant+="<div class='textsmall'>"+volontario.email+"</div>";
+      htmlcontant+="<div class='textsmall' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>"+volontario.email+"</div>";
     } else {
       htmlcontant+=volontario.nome + "</div>";
-      htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
+      htmlcontant+="<div class='textsmall dettaglio_riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>"+volontario.cognome+"</div>";
     }
     if (navigator.userAgent.toLowerCase().indexOf('mobile')>-1 && volontario.cellulare!=null && volontario.cellulare!="") {
       htmlcontant+="<a href='tel:+39"+volontario.cellulare+"'><img src='img/phone-forward.png' class='img_title icon_header' style='float:right;margin-top:-40px;margin-right:60px'/></a>";
