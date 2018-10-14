@@ -44,7 +44,7 @@ function dettaglio_riga(elem,email) {
       for (deleg of deleganti) {
         var delegante = findVolontario(deleg);
         var html = "<div ";
-        if (user.admin) html+="class='collegamento' onclick='rimuoviDelegante(\""+delegante.email+"\")'"
+        if (user.admin) html+="class='collegamento' onclick='rimuoviDelega(this,\""+delegante.email+"\")'"
         html+=">"+delegante.nome+" "+delegante.cognome+"</div>"
         $('#deleghe').append(html);
       }
@@ -66,19 +66,39 @@ function aggiornaDeleghe() {
   NetworkHelper.updateDeleghe(delegato,req);
   closeDetail();
 }
+function rimuoviDelega(elem,email) {
+  var delegato = findVolontario($('#user').val());
+  var newDeleghe = "";
+  var oldDeleghe = delegato.deleghe.split(';');
+  for (delega of oldDeleghe) {
+    if (delega!=email) {
+      if (newDeleghe==="") newDeleghe = delega;
+      else newDeleghe+=";"+delega;
+    }
+  }
+  delegato.deleghe = newDeleghe;
+  elem.parentNode.removeChild(elem);
+  $('#chiudi').val('Annulla');
+  $('#chiudi').attr('onclick','closeDetail();loadVolontari()');
+  $('#elimina').val('Salva');
+  $('#elimina').attr('onclick','aggiornaDeleghe()');
+}
 function addaccount(elem) {
-  $("#detail").css("display","block");
-  $("#annulla").css("display","inline");
-  $("#aggiungi").css("display","inline");
-  $("#detail").css("top",elem.offsetTop+elem.offsetHeight);
-  $("#detail").css("left",elem.offsetLeft-$("#detail").offsetWidth);
-  $("#telefono_label").css("display","none");
-  $("#telefono").css("display","none");
-  $("#user").prop('disabled',false);
-  $("#nome").prop('disabled',false);
-  $("#cognome").prop('disabled',false);
-  $("#admin").prop('disabled',false);
-  $('#add_deleghe').css('visibility','hidden');
+  if ($("#detail").css("display")==="none") {
+    $("#detail").css("display","block");
+    $("#annulla").css("display","inline");
+    $("#aggiungi").css("display","inline");
+    $("#detail").css("top",elem.offsetTop+elem.offsetHeight);
+    $("#detail").css("left",elem.offsetLeft-$("#detail").offsetWidth);
+    $("#telefono_label").css("display","none");
+    $("#telefono").css("display","none");
+    $("#deleghe_label").css("display","none");
+    $("#user").prop('disabled',false);
+    $("#nome").prop('disabled',false);
+    $("#cognome").prop('disabled',false);
+    $("#admin").prop('disabled',false);
+    $('#add_deleghe').css('visibility','hidden');
+  } else alert("Per aggiungere un nuovo volontario chiudere prima il corrente dettaglio aperto.")
 }
 function rimuoviVolontario() {
   if (confirm("Attenzione. Il volontario sarà cancellato dall'anagrafica. Continuare ?")) {
@@ -119,6 +139,7 @@ function closeDetail() {
   $('#nome').val('');
   $('#cognome').val('');
   $('#telefono').val('');
+  $("#deleghe_label").css("display","inline");
   $('#deleghe').html('');
   $("#telefono_label").css("display","inline");
   $("#telefono").css("display","inline");
@@ -143,8 +164,9 @@ function addDelega(elem,email) {
 }
 function listVolontari() {
   var htmlcontant = "<div class='sublist'>";
+  var delegato = findVolontario($('#user').val());
   for (volontario of volontari) {
-    if (volontario.email!=$('#user').val()) {
+    if (volontario.email!=delegato.email && !isDelegato(delegato,volontario.email)) {
       htmlcontant += "<div class='riga' onclick='addDelega(this,\""+volontario.email+"\");'><div class='textsmall'>";
       if (volontario.nome.length+volontario.cognome.length<5) {
         htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
@@ -193,7 +215,7 @@ function listVolontari() {
     <input type="text" class="smallfield" id="cognome" disabled><br/>
     <label for="telefono" class="textsmall" id="telefono_label">telefono</label><br/>
     <input type="text" class="smallfield" id="telefono" disabled><br/>
-    <label class="textsmall">deleghe</label><br/>
+    <label class="textsmall" id="deleghe_label">deleghe</label><br/>
     <div style='display:block'>
     <div id="deleghe" style="width:200px;float:left"></div>
     <img id="add_deleghe" onclick='listVolontari()' src='img/account-multiple-plus.png' class="img_title icon_header" style="vertical-align:text-top;visibility:hidden"/>

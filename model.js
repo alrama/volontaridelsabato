@@ -45,6 +45,10 @@ function findVolontario(email) {
   }
   return null;
 }
+function isDelegato(volontario,email) {
+  if (volontario.deleghe===undefined || volontario.deleghe===null || volontario.deleghe==="") return false;
+  return volontario.deleghe.indexOf(email)>-1;
+}
 function isPartecipante(fase_id,email) {
   if (!evento.partecipazioni) return false;
   var ret = false;
@@ -377,6 +381,11 @@ var StorageHelper = {
     req.onerror = function(event) {
       if (funcret) funcret();
     }
+  },
+  aggiornaVolontario : function(volontario) {
+    var trx = db.transaction("volontari","readwrite");
+    var objStr = trx.objectStore("volontari");
+    objStr.put(volontario);
   },
   getVolontari : function(funcret) {
     var req = db.transaction("volontari").objectStore("volontari").openCursor();
