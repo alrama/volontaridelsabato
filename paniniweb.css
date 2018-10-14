@@ -196,6 +196,8 @@ h2 span {
 }
 input {
   font-size: 16px;
+}
+.inputtext {
   width:300px;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -206,5 +208,5 @@ input {
     .subtitle span {width:230px}
     .main {width:350px;}
     .textsmall {font-size: 18px;}
-    input {width:180px;}
+    .inputtext {width:180px;}
 }

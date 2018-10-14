@@ -30,7 +30,7 @@ function displayFasi() {
     html+="<div class='subtitle'><img onclick='spostaGiu("+i+")' src='img/arrow-down-bold-outline.png' class='img_subtitle icon_header' ";
     if (i==evento.fasi.length-1) html+="style='visibility:hidden'";
     html+= ">";
-    html+= (i+1)+". <input onchange='changeDescr("+i+",this.value)' type='text' value='"+evento.fasi[i].fase+"''>";
+    html+= (i+1)+". <input class='inputtext' onchange='changeDescr("+i+",this.value)' type='text' value='"+evento.fasi[i].fase+"''>";
     html+= "<img onclick='spostaSu("+i+")' src='img/arrow-up-bold-outline.png' class='img_subtitle icon_header' ";
     if (i==0) html+="style='visibility:hidden'";
     html+= "><img onclick='togliFase("+i+")' src='img/close-box-outline.png' class='img_subtitle icon_header'></div>";
