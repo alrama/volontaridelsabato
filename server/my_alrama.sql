@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Set 29, 2018 alle 18:00
+-- Generation Time: Ott 14, 2018 alle 17:44
 -- Versione del server: 5.6.33-log
 -- PHP Version: 5.3.10
 
@@ -202,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `paniniweb_users` (
   `password` text CHARACTER SET utf8 COLLATE utf8_bin,
   `admin` tinyint(1) NOT NULL,
   `hash` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `deleghe` text CHARACTER SET utf8 COLLATE utf8_bin,
   PRIMARY KEY (`email`),
   KEY `gruppi_id` (`gruppi_id`),
   KEY `hash` (`hash`(256))
