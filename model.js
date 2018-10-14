@@ -1,4 +1,7 @@
 var user;
+function userHaDeleghe() {
+  return user.deleghe!=undefined && user.deleghe!=null && user.deleghe!="";
+}
 var evento = {
   data_evento: null,
   fasi: null,
@@ -68,6 +71,25 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  getDeleghe : function() {
+    var urlserver = "server/get_deleghe.php?token="+user.hash;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            user.deleghe = serviceResponse.response;
+            StorageHelper.saveUser();
+          }
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di rete");
+      }
+    });
+  },
   updateDeleghe : function(delegato,callback) {
     var urlserver = "server/update_deleghe.php?token="+user.hash+"&email="+delegato.email+"&deleghe="+delegato.deleghe;
     $.ajax({
@@ -480,9 +502,7 @@ var StorageHelper = {
         if (funcret) funcret();
       }
     };
-    var reqClear = objStr.clear();
-    reqClear.onsuccess = insUser;
-    reqClear.onerror = insUser;
+    insUser();
   },
   clearUser : function(funcret) {
     var objStr = db.transaction("user","readwrite").objectStore("user");

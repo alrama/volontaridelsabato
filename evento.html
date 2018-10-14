@@ -31,7 +31,7 @@ function loadAvvisi() {
 function listVolontari(fase_id,elem) {
   var htmlcontant = "<div class='sublist'>";
   for (volontario of volontari) {
-    if (!isPartecipante(fase_id,volontario.email)) {
+    if (!isPartecipante(fase_id,volontario.email) && (user.admin || isDelegato(user,volontario.email) || user.email==volontario.email)) {
       htmlcontant += "<div class='riga' onclick='sendPartecipante("+fase_id+",\""+volontario.email+"\");'><div class='textsmall'>";
       if (volontario.nome.length+volontario.cognome.length<5) {
         htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
@@ -40,7 +40,7 @@ function listVolontari(fase_id,elem) {
         htmlcontant+=volontario.nome + "</div>";
         htmlcontant+="<div class='textsmall dettaglio_riga'>"+volontario.cognome+"</div>";
       }
-      htmlcontant+="</div>"
+      htmlcontant+="</div>";
     }
   }
   htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#volontari_content').css('display','none')\">";
@@ -68,7 +68,7 @@ function sendPartecipante(fase_id , email) {
   NetworkHelper.sendPartecipante(fase_id,email,netreq);
 }
 function addToFase(fase_id,elem) {
-  if (user.admin) {
+  if (user.admin || userHaDeleghe()) {
       listVolontari(fase_id,elem);
   }
   else {
@@ -85,7 +85,7 @@ function displayPartecipanti(i,max) {
       var classeDiv = "class='textsmall'";
       if (max>0 && count>max)
         classeDiv = "class='overnumber'";
-      if (user.admin || user.email==evento.partecipazioni[j].email) {
+      if (user.admin || user.email==evento.partecipazioni[j].email || isDelegato(user,evento.partecipazioni[j].email)) {
         html+="<div "+classeDiv+" onclick='rimuoviPartecipante("+i+",\""+evento.partecipazioni[j].email+"\")'><div "+
         " style='display:inline'>" + count++ +") </div><span class='collegamento'>" ;
       }  else html+="<div "+classeDiv+"><div style='display:inline'>" + count++ +") </div><span>" ;
@@ -230,6 +230,7 @@ initModel(function(){
   else {
     loadVolontari(aggiornaEvento);
     loadAvvisi();
+    if (!user.admin) NetworkHelper.getDeleghe();
   }
 });
 </script>

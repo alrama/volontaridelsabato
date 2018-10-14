@@ -27,10 +27,10 @@ else {
   mb_language('uni'); 
   mb_internal_encoding('UTF-8');
   mysql_set_charset("UTF8", $conn);
-  $sql = "SELECT gruppi_id,admin,email from paniniweb_users where hash = '" . $_GET["token"] . "'";
+  $sql = "SELECT gruppi_id,admin,email,deleghe from paniniweb_users where hash = '" . $_GET["token"] . "'";
   $resultSQL = $conn->query($sql);
   if ($nodo = $resultSQL->fetch_assoc()) {
-  	if ($nodo["admin"] || $nodo["email"]===$_GET["email"]) {
+  	if ($nodo["admin"] || $nodo["email"]===$_GET["email"] || (strpos($nodo["deleghe"], $_GET["email"]) !== false)) {
         $sql = "SELECT id from paniniweb_evento where gruppi_id = '" . $nodo["gruppi_id"] . "'";
         $resultSQL = $conn->query($sql);
         if ($nodo1 = $resultSQL->fetch_assoc()) {
