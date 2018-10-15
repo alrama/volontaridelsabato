@@ -39,7 +39,11 @@ else {
           $sql.= "delete from paniniweb_avvisi where gruppi_id =" . $nodo["gruppi_id"] . " AND unix_timestamp(inserita)<(unix_timestamp()-60*60*24*30)";
           $rc = $conn->multi_query($sql);
           if (TRUE===$rc) {
-              $sql = "delete from paniniweb_evento where id=".$nodo1["id"];
+              while ($conn->next_result()) // flush multi_queries
+              {
+                if (!$conn->more_results()) break;
+              }
+			  $sql = "delete from paniniweb_evento where id=".$nodo1["id"].";";
               $rc = $conn->query($sql);
               if (TRUE===$rc) {
               	$result->response_code = 200;
