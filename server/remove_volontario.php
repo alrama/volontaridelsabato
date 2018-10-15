@@ -1,5 +1,16 @@
 <?php   header('Content-Type: application/json; charset=utf-8'); ?>
 <?php 
+function removeDelega($email,$deleghe) {
+	$ar_deleghe = explode(';',$deleghe);
+    $newAr_deleghe = "";
+    for ($i = 0, $j = count($ar_deleghe); $i < $j; $i++) {
+    	if ($ar_deleghe[$i]!==$email) {
+        	if (strlen($newAr_deleghe)==0) $newAr_deleghe=$ar_deleghe[$i];
+            else $newAr_deleghe.= ';' . $ar_deleghe[$i];
+        }
+    }
+    return $newAr_deleghe;
+}
 $servername = "localhost";
 $username = "alrama";
 $password = "";
@@ -38,6 +49,16 @@ else {
       $sql = "delete from paniniweb_users where email='".$_GET["email"]."'";
       $rc = $conn->query($sql);
       if (TRUE===$rc) {
+          $sql = "SELECT email,deleghe from paniniweb_users where gruppi_id = '" . $nodo["gruppi_id"] . "' AND deleghe LIKE '%".$_GET["email"]."%'";
+          $resultSQL = $conn->query($sql);
+          $result->response = "";
+          if ($resultSQL->num_rows > 0) {
+            while($row = $resultSQL->fetch_assoc()) {
+              $sql = "UPDATE paniniweb_users set deleghe='". removeDelega($_GET["email"],$row['deleghe']) ."' where gruppi_id =" . $nodo["gruppi_id"] . " AND email='".$row["email"]."';";
+              $result->response.=$sql;
+              $rc2 = $conn->query($sql);
+            }
+          }
 	      $result->response_code = 200;
       } else {
         $result->response_code = 302;
