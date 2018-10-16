@@ -217,7 +217,8 @@ function aggiornaEvento() {
 function loadEvento() {
   StorageHelper.getEvento(function() {
     if (evento==undefined || evento.data_evento==null) {
-      showMessage("Dati attualmente indisponibili. Ripetere l'aggiornamento");
+      showMessage("Attendere richiesta dati");
+      aggiornaEvento();
     } else {
       $("#message").html("");
       displayEvento();
