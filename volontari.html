@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="paniniweb.css?v=7"/>
 <script src="jquery-3.3.1.min.js"></script>
 <script src="model.js?v=7"></script>
-<script src="paniniweb.js?v=3"></script>
+<script src="paniniweb.js?v=5"></script>
 <script>
 initModel(function(){
   if (user==undefined)
@@ -201,7 +201,9 @@ function listVolontari() {
   <h2>Volontari del sabato</h2>
   <div class="message" id="message"></div>
   <div class="main">
-    <div class="header_content">
+    <div class="header_content" style="margin-top:10px">
+      <img src="img/account-search-outline.png" class="icon_header img_title" style="float:left;margin-right:3px;"/>
+      <input onchange="displayVolontari()" onkeyup="displayVolontari()" type="text" id="search" style="float:left;width:120px;margin-top:7px" placeholder="cerca nella lista"/>
       <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:hidden" class="icon_header img_title">
     <img onclick="aggiornaVolontari();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="volontari_content"></div>
