@@ -181,6 +181,7 @@ function creaEvento() {
   var netreq = {};
   netreq.onsuccess = function() {
     loadEvento();
+    $('#header_content').css('display','block');
   };
   netreq.onerror = function(serviceResponse) {
     if (serviceResponse===undefined || serviceResponse.response_code===undefined)
