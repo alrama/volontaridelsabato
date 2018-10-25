@@ -71,7 +71,7 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
-  getDeleghe : function() {
+  getDeleghe : function(funcret) {
     var urlserver = "server/get_deleghe.php?token="+user.hash;
     $.ajax({
       url : urlserver,
@@ -82,6 +82,7 @@ var NetworkHelper = {
           if (serviceResponse.response_code==200) {
             user.deleghe = serviceResponse.response;
             StorageHelper.saveUser();
+            if (typeof funcret==='function') funcret();
           }
         }
       },

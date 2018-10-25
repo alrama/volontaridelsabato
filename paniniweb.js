@@ -73,3 +73,17 @@ function loadVolontari(callback) {
     }
   });
 }
+function checkDeleghe() {
+  if (volontari) {
+    var deleghe = user.deleghe.split(';');
+    for (var i=0;i<deleghe.length;i++) {
+      var volontario = findVolontario(deleghe[i]);
+      if (volontario==null || volontario.nome.indexOf('.')==1) {
+        var req = {};
+        req.onsuccess = function(){};
+        aggiornaVolontari(req);
+        break;
+      }
+    }
+  }
+}
