@@ -46,7 +46,7 @@ else {
       	if (is_null($fase["id"])) {
 	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,sequenza,max_partecipanti) values (".$gruppiID.",'".$fase["fase"]."','".$fase["orario"]."','".$fase["sequenza"]."',".$fase["max_partecipanti"].");" ;
         } else {
-	      $sql = "update paniniweb_fasi set fase='".$fase["fase"]."', orario='".$fase["orario"]."', max_partecipanti=".$fase["max_partecipanti"]." where id=".$fase["id"]." AND gruppi_id=" . $gruppiID ;
+	      $sql = "update paniniweb_fasi set fase='".$fase["fase"]."', sequenza='".$fase["sequenza"]."', orario='".$fase["orario"]."', max_partecipanti=".$fase["max_partecipanti"]." where id=".$fase["id"]." AND gruppi_id=" . $gruppiID ;
         }
       	$rc = $conn->query($sql);
       }
