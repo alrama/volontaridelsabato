@@ -13,7 +13,7 @@
 var ultima_data = 0;
 var avvisiDaCancellare;
 function setCounter() {
-  $('#counter').text($('#testo_avviso').val().length+'/250');
+  $('#counter').text($('#testo_avviso').val().length+'/1000');
 }
 function findNewAvvisi() {
   var req = {};
@@ -24,7 +24,7 @@ function findNewAvvisi() {
     var html= "";
     for (var i = 0;i<avvisi.length;i++) {
       html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
-      html+="<div class='textsmall' style='font-weight:bold;text-align:left'>" + avvisi[i].testo +"</div>" ;
+      html+="<div class='textsmall' style='font-weight:bold;text-align:left'>" + avvisi[i].testo.replace(/\n/g,"<br/>") +"</div>" ;
     }
     $('#avvisi').html(html+prehtml);
   }
@@ -40,7 +40,7 @@ function displayAvvisi() {
       StorageHelper.deleteAvviso(avvisi[i].inserito);
     else {
       html+="<div class='subtitle' style='text-align:left'>"+avvisi[i].inserito.substring(0,16)+"</div>";
-      html+="<div class='textsmall' style='text-align:left'>" + avvisi[i].testo +"</div>" ;
+      html+="<div class='textsmall' style='text-align:left'>" + avvisi[i].testo.replace(/\n/g,"<br/>") +"</div>" ;
     }
   }
   $('#avvisi').html(html);
@@ -101,8 +101,8 @@ function sendAvviso() {
   </div>
   <div id="detail" class="detail" style="display: none;">
     <label for="testo" class="textsmall">testo dell'avviso</label><br/>
-    <textarea class="smallfield" id="testo_avviso" onkeyup="setCounter();" onchange="setCounter();" style="height:200px" maxlength="250"></textarea>
-    <div style="text-align:right;width:200px"><span id="counter"/>0/250</div><br/>
+    <textarea class="smallfield" id="testo_avviso" onkeyup="setCounter();" onchange="setCounter();" style="height:200px" maxlength="1000"></textarea>
+    <div style="text-align:right;width:200px"><span id="counter"/>0/1000</div><br/>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeScrivi();'>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Invia" id="aggiungi" onclick='sendAvviso();'>
   </div>
