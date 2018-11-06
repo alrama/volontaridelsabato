@@ -24,7 +24,7 @@
   <img onclick="openNav()" src="../img/menu.png">
   <h2>Archivio</h2>
   <div class="main">
-    <ul style='width:fit-content;margin:auto;text-align:left;margin-top:50px'>
+    <ul style='width:fit-content;margin:auto;text-align:left;margin-top:50px;font-size:20px'>
 <?php
 $directory = '../archivio/';
 $scanned_directory = array_diff(scandir($directory), array('..', '.'));
