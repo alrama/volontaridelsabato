@@ -39,8 +39,8 @@ else {
           $ids.=$fasi[$i]["id"];
         } 
       }
-      $sql = "delete from paniniweb_fasi where gruppi_id =" . $gruppiID . "AND id NOT IN (".$ids.");";
-      $sql .= "delete from paniniweb_partecipazioni where gruppi_id =" . $gruppiID . "AND fase_id NOT IN (".$ids.");";
+      $sql = "delete from paniniweb_fasi where gruppi_id =" . $gruppiID . " AND id NOT IN (".$ids.");";
+      $sql .= "delete from paniniweb_partecipazioni where fase_id NOT IN (".$ids.");";
       $rc = $conn->multi_query($sql);
       foreach ($fasi as $fase) {
       	if (is_null($fase["id"])) {
