@@ -40,17 +40,18 @@ else {
         } 
       }
       $sql = "delete from paniniweb_fasi where gruppi_id =" . $gruppiID . " AND id NOT IN (".$ids.");";
-      $sql .= "delete from paniniweb_partecipazioni where fase_id NOT IN (".$ids.");";
-      $rc = $conn->multi_query($sql);
+      $rc = $conn->query($sql);
+      $sql = "delete from paniniweb_partecipazioni where fase_id NOT IN (".$ids.");";
+      $rc = $conn->query($sql);
       foreach ($fasi as $fase) {
       	if (is_null($fase["id"])) {
 	      $sql = "insert into paniniweb_fasi (gruppi_id,fase,orario,sequenza,max_partecipanti) values (".$gruppiID.",'".$fase["fase"]."','".$fase["orario"]."','".$fase["sequenza"]."',".$fase["max_partecipanti"].");" ;
         } else {
-	      $sql = "update paniniweb_fasi set fase='".$fase["fase"]."', sequenza='".$fase["sequenza"]."', orario='".$fase["orario"]."', max_partecipanti=".$fase["max_partecipanti"]." where id=".$fase["id"]." AND gruppi_id=" . $gruppiID ;
+	      $sql = "update paniniweb_fasi set fase='".$fase["fase"]."', sequenza='".$fase["sequenza"]."', orario='".$fase["orario"]."', max_partecipanti=".$fase["max_partecipanti"]." where id=".$fase["id"]." AND gruppi_id=" . $gruppiID .";";
         }
-      	$rc = $conn->query($sql);
+      	$rc1 = $conn->query($sql);
       }
-      if (TRUE===$rc) {
+      if (TRUE===$rc1) {
         $result->response_code = 200;
       } else {
         $result->response_code = 302;
