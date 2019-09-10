@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="darkolivegreen">
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+<link rel="icon" href="favicon.ico" />
+<link rel="stylesheet" href="paniniweb.css?v=7"/>
+<script src="jquery-3.3.1.min.js"></script>
+<script src="model.js?v=8"></script>
+<script src="paniniweb.js?v=6"></script>
+<script>
+initModel(function(){
+  if (user==undefined)
+    location.replace("./login.html");
+  else {
+    loadVolontari(displayVolontari);
+    if (user.admin) {
+      $("#fasi_link").css('display','inline');
+      $("#account_plus").css('visibility','visible');
+    }
+  }
+});
+</script>
+<title>Volontari del sabato</title>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="evento.html">Prossima distribuzione</a>
+    <a href="volontari.html">Volontari</a>
+    <a href="avvisi.html">Avvisi</a>
+    <a href="fasi.html" id="fasi_link" style="display:none;">Gestione Fasi</a>
+    <a href="javascript:void(0)"  onclick="logout()">Logout</a>
+  </div>
+
+  <!-- Use any element to open the sidenav -->
+  <img onclick="openNav()" src="img/menu.png">
+  <h2>Volontari del sabato</h2>
+  <div class="message" id="message"></div>
+  <div class="main">
+    <div class="header_content" style="margin-top:10px">
+      <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:hidden" class="icon_header img_title">
+    <img onclick="aggiornaAlimenti();" src="img/sync.png" class="icon_header img_title"></div>
+    <div id="alimenti_content"></div>
+  </div>
+  <div id="detail" class="detail" style="display: none;">
+    <label for="alimento" class="textsmall"></label><br/>
+    <input type="text" class="smallfield" id="alimento"><br/>
+    <label for="unita" class="textsmall"></label><br/>
+    <input type="text" class="smallfield" id="unita"><br/>
+    <label for="quantita" class="textsmall"></label><br/>
+    <input type="text" class="smallfield" id="quantita" disabled><br/>
+    </div>
+    <br/>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
+    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Aggiungi" id="aggiungi" onclick='sendAlimento();'>
+  </div>
+
+</body>
+
+</html>
