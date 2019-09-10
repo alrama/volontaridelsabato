@@ -163,8 +163,9 @@ function displayEvento() {
   $('#title').html('Distribuzione del '+ link);
   $('header_content').css('display','none');
   $('#message').html('');
-  var html = "";
+  $("#content").html('');
   for (var i = 0; i < evento.fasi.length ; i++) {
+    var html = "";
     html+="<div class='subtitle'><img src='img/burger-2-32-263966.png' class='img_title'>";
     html+= "<span>"+evento.fasi[i].fase+"</span>";
     html+= "<img src='img/account-plus.png' class='img_title icon_header' onclick='addToFase("+evento.fasi[i].id+",this)'>";
@@ -172,8 +173,8 @@ function displayEvento() {
       html+= "<br/><span class='subsubheader'>Inizio ore "+evento.fasi[i].orario+"</span>";
     if (evento.partecipazioni) html += displayPartecipanti(evento.fasi[i].id,evento.fasi[i].max_partecipanti);
     html+= "</div>";
+    $("#content").append(html);
   }
-  $("#content").html(html);
 }
 function creaEvento() {
   $('#message').text('Attendere, invio in corso.')

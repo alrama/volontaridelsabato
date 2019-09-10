@@ -47,13 +47,13 @@ else {
           while($row = $resultSQL->fetch_assoc()) {
               $result->response[$i] = new Volontario();
               $result->response[$i]->email = $row["email"];
-              if ($nodo["admin"] || $row["password"]!=null || (strpos($nodo["deleghe"], $row["email"]) !== false)) {
+//              if ($nodo["admin"] || $row["password"]!=null || (strpos($nodo["deleghe"], $row["email"]) !== false)) {
                	$result->response[$i]->nome = $row["nome"];
                 $result->response[$i]->cognome = $row["cognome"];
-              } else {
-            	$result->response[$i]->nome = substr($row["nome"],0,1) . ".";
-                $result->response[$i]->cognome = substr($row["cognome"],0,1) . ".";
-              }
+//              } else {
+//            	$result->response[$i]->nome = substr($row["nome"],0,1) . ".";
+//                $result->response[$i]->cognome = substr($row["cognome"],0,1) . ".";
+//              }
               if (strlen($row["password"])>0) $result->response[$i]->registrato = 1;
               else $result->response[$i]->registrato = 0;
               $result->response[$i]->admin = (int) $row["admin"];
