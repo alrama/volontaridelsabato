@@ -13,6 +13,10 @@ var partecipazione = {
   evento_id: null
 }
 var avvisi;
+var alimenti = {
+  anagrafica: null,
+  alimenti_qta: null
+};
 function formatDataEvento() {
   var giorno = evento.data_evento.substring(8,10);
   var mese = evento.data_evento.substring(5,7);
@@ -71,6 +75,25 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  getAlimenti : function(funcret) {
+    var urlserver = "server/get_alimenti.php?token="+user.hash;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            alimenti = serviceResponse.response;
+            if (typeof funcret==='function') funcret();
+          }
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di rete");
+      }
+    });
+  },
   getDeleghe : function(funcret) {
     var urlserver = "server/get_deleghe.php?token="+user.hash;
     $.ajax({

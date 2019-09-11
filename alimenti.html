@@ -14,10 +14,9 @@ initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
   else {
-    loadVolontari(displayVolontari);
+    loadAlimenti(displayAlimenti);
     if (user.admin) {
-      $("#fasi_link").css('display','inline');
-      $("#account_plus").css('visibility','visible');
+      $("#pensil_plus").css('visibility','visible');
     }
   }
 });
@@ -41,7 +40,7 @@ initModel(function(){
   <div class="message" id="message"></div>
   <div class="main">
     <div class="header_content" style="margin-top:10px">
-      <img id="account_plus" onclick="addaccount(this);" src="img/account-plus.png" style="visibility:hidden" class="icon_header img_title">
+      <img id="pensil_plus" onclick="addAlimenti(this);" src="img/pensil-plus.png" style="visibility:hidden" class="icon_header img_title">
     <img onclick="aggiornaAlimenti();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="alimenti_content"></div>
   </div>
@@ -51,7 +50,9 @@ initModel(function(){
     <label for="unita" class="textsmall"></label><br/>
     <input type="text" class="smallfield" id="unita"><br/>
     <label for="quantita" class="textsmall"></label><br/>
-    <input type="text" class="smallfield" id="quantita" disabled><br/>
+    <input type="text" class="smallfield" id="quantita"><br/>
+    <label for="scadenza" class="textsmall"></label><br/>
+    <input type="date" class="smallfield" id="scadenza"><br/>
     </div>
     <br/>
     <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
