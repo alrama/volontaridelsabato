@@ -14,12 +14,23 @@ initModel(function(){
   if (user==undefined)
     location.replace("./login.html");
   else {
-    loadAlimenti(displayAlimenti);
+    loadAlimenti();
     if (user.admin) {
       $("#pensil_plus").css('visibility','visible');
     }
   }
 });
+function loadAlimenti() {
+  showMessage('Attendere. Caricamento dati in corso');
+  NetworkHelper.getAlimenti(function() {
+    if (alimenti==undefined || alimenti.alimenti_qta.length==0) {
+      showMessage("Nessun alimento presente");
+    } else {
+      showMessage("");
+      displayAlimenti();
+    }
+  });
+}
 </script>
 <title>Volontari del sabato</title>
 </head>
