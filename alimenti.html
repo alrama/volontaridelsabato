@@ -16,20 +16,26 @@ initModel(function(){
   else {
     loadAlimenti();
     if (user.admin) {
-      $("#pensil_plus").css('visibility','visible');
+      $("#pencil_plus").css('visibility','visible');
+      $("#fasi_link").css('display','inline');
     }
   }
 });
 function loadAlimenti() {
   showMessage('Attendere. Caricamento dati in corso');
   NetworkHelper.getAlimenti(function() {
-    if (alimenti==undefined || alimenti.alimenti_qta.length==0) {
+    if (alimenti==undefined || alimenti.alimenti_qta==undefined || alimenti.alimenti_qta.length==0) {
       showMessage("Nessun alimento presente");
     } else {
       showMessage("");
       displayAlimenti();
     }
+    $("#dataagg").html(new Date().toLocaleDateString("it-IT"));
   });
+}
+function addAlimenti() {
+  $("#detail").css('display','inline');
+  $("#detail").css('left',$('#alimenti_content').offsetLeft);
 }
 </script>
 <title>Volontari del sabato</title>
@@ -47,27 +53,27 @@ function loadAlimenti() {
 
   <!-- Use any element to open the sidenav -->
   <img onclick="openNav()" src="img/menu.png">
-  <h2>Volontari del sabato</h2>
+  <h2>Alimenti disponibili al: <span id='dataagg'>-<span></h2>
   <div class="message" id="message"></div>
   <div class="main">
     <div class="header_content" style="margin-top:10px">
-      <img id="pensil_plus" onclick="addAlimenti(this);" src="img/pensil-plus.png" style="visibility:hidden" class="icon_header img_title">
-    <img onclick="aggiornaAlimenti();" src="img/sync.png" class="icon_header img_title"></div>
+      <img id="pencil_plus" onclick="addAlimenti();" src="img/pencil-plus.png" style="visibility:hidden" class="icon_header img_title">
+    <img onclick="loadAlimenti();" src="img/sync.png" class="icon_header img_title"></div>
     <div id="alimenti_content"></div>
   </div>
-  <div id="detail" class="detail" style="display: none;">
-    <label for="alimento" class="textsmall"></label><br/>
-    <input type="text" class="smallfield" id="alimento"><br/>
-    <label for="unita" class="textsmall"></label><br/>
-    <input type="text" class="smallfield" id="unita"><br/>
-    <label for="quantita" class="textsmall"></label><br/>
-    <input type="text" class="smallfield" id="quantita"><br/>
-    <label for="scadenza" class="textsmall"></label><br/>
-    <input type="date" class="smallfield" id="scadenza"><br/>
+  <div id="detail" class="detail" style="display: none;margin:auto;position:absolute;top:150px">
+    <label for="alimento" class="textsmall">Tipo alimento</label><br/>
+    <input type="text" class="spacedfield" id="alimento"><br/>
+    <label for="unita" class="textsmall">Unità di misura</label><br/>
+    <input type="text" class="spacedfield" id="unita"><br/>
+    <label for="quantita" class="textsmall">Quantità</label><br/>
+    <input type="text" class="spacedfield" id="quantita"><br/>
+    <label for="scadenza" class="textsmall">Scadenza</label><br/>
+    <input type="date" class="spacedfield" id="scadenza"><br/>
+    <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeDetail();'>
+    <input type="button" class="login compat_button" style="margin-top:5px" value="Aggiungi" id="aggiungi" onclick='sendAlimento();'>
     </div>
     <br/>
-    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Chiudi" id="chiudi" onclick='closeDetail();'>
-    <input type="button" class="login compat_button" style="margin-top:5px;display:none" value="Aggiungi" id="aggiungi" onclick='sendAlimento();'>
   </div>
 
 </body>

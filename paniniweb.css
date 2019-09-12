@@ -161,6 +161,10 @@ h2 span {
 .smallfield {
   width: 240px;
 }
+.spacedfield {
+  width: 240px;
+  margin-bottom: 20px;
+}
 .compat_button {
   width:110px;
   margin-left: 5px;
