@@ -24,7 +24,7 @@ initModel(function(){
 function loadAlimenti() {
   showMessage('Attendere. Caricamento dati in corso');
   NetworkHelper.getAlimenti(function() {
-    if (alimenti==undefined || alimenti.alimenti_qta==undefined || alimenti.alimenti_qta.length==0) {
+    if (alimentiObj==undefined || alimentiObj.alimenti_qta==undefined || alimentiObj.alimenti_qta.length==0) {
       showMessage("Nessun alimento presente");
     } else {
       showMessage("");
@@ -36,6 +36,29 @@ function loadAlimenti() {
 function addAlimenti() {
   $("#detail").css('display','inline');
   $("#detail").css('left',$('#alimenti_content').offsetLeft);
+}
+function suggestAlimenti() {
+  var htmlcontant = "<div class='sublist'>";
+  if (alimentiObj.alimenti!=null && alimentiObj.alimenti.length>0) {
+    for (alimento of alimentiObj.alimenti) {
+        htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'>"+alimento.nome+"</div>";
+    }
+    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#delegati_content').css('display','none')\">";
+    $("#suggest_content").html(htmlcontant);
+    $("#suggest_content").css("display","block");
+  }
+}
+function suggestMisure() {
+  var htmlcontant = "<div class='sublist'>";
+  if (alimentiObj.alimenti_misure!=null && alimentiObj.alimenti_misure.length>0) {
+    for (misura of alimentiObj.alimenti_misure) {
+        htmlcontant += "<div class='riga' onclick='selectAlimento(\""+misura.nome+"\");'>"+misura.nome+"</div>";
+    }
+    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#delegati_content').css('display','none')\">";
+    $("#suggest_content").html(htmlcontant);
+    $("#suggest_content").css("display","block");
+    $('#suggest_content').css('top',$('#quantita').offsetTop+40);
+  }
 }
 </script>
 <title>Volontari del sabato</title>
@@ -63,9 +86,9 @@ function addAlimenti() {
   </div>
   <div id="detail" class="detail" style="display: none;margin:auto;position:absolute;top:150px">
     <label for="alimento" class="textsmall">Tipo alimento</label><br/>
-    <input type="text" class="spacedfield" id="alimento"><br/>
+    <input type="text" class="spacedfield" id="alimento" onchange='suggestAlimenti()' onkeyup="suggestAlimenti()"><br/>
     <label for="unita" class="textsmall">Unità di misura</label><br/>
-    <input type="text" class="spacedfield" id="unita"><br/>
+    <input type="text" class="spacedfield" id="unita" onchange='suggestMisure()' onkeyup="suggestMisure()"><br/>
     <label for="quantita" class="textsmall">Quantità</label><br/>
     <input type="text" class="spacedfield" id="quantita"><br/>
     <label for="scadenza" class="textsmall">Scadenza</label><br/>
@@ -73,6 +96,7 @@ function addAlimenti() {
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeDetail();'>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Aggiungi" id="aggiungi" onclick='sendAlimento();'>
     </div>
+  <div id="suggest_content"  class="detail" style="display: none;background: white"></div>
     <br/>
   </div>
 

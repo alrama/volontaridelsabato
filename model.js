@@ -13,9 +13,10 @@ var partecipazione = {
   evento_id: null
 }
 var avvisi;
-var alimenti = {
-  anagrafica: null,
-  alimenti_qta: null
+var alimentiObj = {
+  alimenti: null,
+  alimenti_qta: null,
+  alimenti_misure: null
 };
 function formatDataEvento() {
   var giorno = evento.data_evento.substring(8,10);
@@ -84,7 +85,7 @@ var NetworkHelper = {
         serviceResponse = data;
         if (serviceResponse.response_code) {
           if (serviceResponse.response_code==200) {
-            alimenti = serviceResponse.response;
+            alimentiObj = serviceResponse.response;
             if (typeof funcret==='function') funcret();
           }
         }
