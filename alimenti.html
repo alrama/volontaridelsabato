@@ -36,6 +36,10 @@ function loadAlimenti() {
 function addAlimenti() {
   $("#detail").css('display','inline');
   $("#detail").css('left',$('#alimenti_content').offset().left);
+  $('#alimento').val('');
+  $('#unita').val('');
+  $('#quantita').val('');
+  $('#scadenza').val('');
 }
 function selectAlimento(alim) {
   $("#suggest_content").css("display","none");
@@ -89,8 +93,19 @@ function closeDetail() {
   $("#suggest_content").css("display","none");
 }
 function sendAlimento() {
-  if ($('#alimento').val()&& $('#quantita').val()) {
-
+  if ($('#alimento').val() && $('#quantita').val()) {
+    showMessage('Invio aggiornamenti in corso');
+    var alim = {};
+    alim.nome = $('#alimento').val();
+    alim.misura = $('#unita').val();
+    alim.quantita = $('#quantita').val();
+    alim.scadenza = $('#scadenza').val();
+    var req = {};
+    req.onsuccess = function() {
+      showMessage("Alimento registrato")
+    };
+    req.onerror = function() {showMessage("Impossibile registrare l'alimento. Riprovare più tardi");};
+    NetworkHelper.sendAlimento(alim,req);
   }
 }
 </script>

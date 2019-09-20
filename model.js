@@ -107,6 +107,26 @@ var serviceResponse = {
   response:null
 };
 var NetworkHelper = {
+  sendAlimento : function(alimento_qta,callback) {
+    var urlserver = "server/send_alimento.php?token="+user.hash+"&alimento="+alimento_qta.nome+"&misura="+alimento_qta.misura+"&quantita="+alimento_qta.quantita+"&scadenza="+alimento_qta.scadenza;
+    $.ajax({
+      url : urlserver,
+      type : 'GET',
+      success : function(data) {
+        serviceResponse = data;
+        if (serviceResponse.response_code) {
+          if (serviceResponse.response_code==200) {
+            if (typeof callback === 'object' && typeof callback.onsuccess === 'function') callback.onsuccess();
+          } else if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror(serviceResponse.error_description);
+        } else {
+          if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di risposta del servizio");
+        }
+      },
+      error : function(data) {
+        if (typeof callback === 'object' && typeof callback.onerror === 'function') callback.onerror("Errore di rete");
+      }
+    });
+  },
   getAlimenti : function(funcret) {
     var urlserver = "server/get_alimenti.php?token="+user.hash;
     $.ajax({
