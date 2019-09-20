@@ -35,29 +35,62 @@ function loadAlimenti() {
 }
 function addAlimenti() {
   $("#detail").css('display','inline');
-  $("#detail").css('left',$('#alimenti_content').offsetLeft);
+  $("#detail").css('left',$('#alimenti_content').offset().left);
+}
+function selectAlimento(alim) {
+  $("#suggest_content").css("display","none");
+  $('#alimento').val(alim);
+  var alimQta = findQuantitaAlimento(alim);
+  if (alimQta!=null) {
+    var misura = findMisuraById(alimQta.misura_id);
+    $('#unita').val(misura);
+    $('#quantita').val(alimQta.quantita);
+    $('#scadenza').val(alimQta.scadenza);
+  }
 }
 function suggestAlimenti() {
   var htmlcontant = "<div class='sublist'>";
   if (alimentiObj.alimenti!=null && alimentiObj.alimenti.length>0) {
+    var filtro = $('#alimento').val();
     for (alimento of alimentiObj.alimenti) {
+      if (filtro.length==0 || alimento.nome.indexOf(filtro)>-1
+     || alimento.nome.toLowerCase().indexOf(filtro)>-1  || alimento.nome.toUpperCase().indexOf(filtro)>-1)
         htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'>"+alimento.nome+"</div>";
     }
-    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#delegati_content').css('display','none')\">";
-    $("#suggest_content").html(htmlcontant);
-    $("#suggest_content").css("display","block");
+    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#suggest_content').css('display','none')\">";
+    setSuggestBox($('#alimento'),htmlcontant);
   }
+}
+function selectMisura(misura) {
+  $('#unita').val(misura);
+  $("#suggest_content").css("display","none");
 }
 function suggestMisure() {
   var htmlcontant = "<div class='sublist'>";
   if (alimentiObj.alimenti_misure!=null && alimentiObj.alimenti_misure.length>0) {
+    var filtro = $('#unita').val();
     for (misura of alimentiObj.alimenti_misure) {
-        htmlcontant += "<div class='riga' onclick='selectAlimento(\""+misura.nome+"\");'>"+misura.nome+"</div>";
+      if (filtro.length==0 || misura.nome.indexOf(filtro)>-1
+     || misura.nome.toLowerCase().indexOf(filtro)>-1  || misura.nome.toUpperCase().indexOf(filtro)>-1)
+        htmlcontant += "<div class='riga' onclick='selectMisura(\""+misura.nome+"\");'>"+misura.nome+"</div>";
     }
-    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#delegati_content').css('display','none')\">";
-    $("#suggest_content").html(htmlcontant);
-    $("#suggest_content").css("display","block");
-    $('#suggest_content').css('top',$('#quantita').offsetTop+40);
+    htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#suggest_content').css('display','none')\">";
+    setSuggestBox($('#unita'),htmlcontant);
+  }
+}
+function setSuggestBox(elem,htmlcontent) {
+  $("#suggest_content").html(htmlcontent);
+  $("#suggest_content").css("display","block");
+  $('#suggest_content').css('top',(elem.offset().top+40)+'px');
+  $('#suggest_content').css('left',$('#detail').offset().left+'px');
+}
+function closeDetail() {
+  $("#detail").css("display","none");
+  $("#suggest_content").css("display","none");
+}
+function sendAlimento() {
+  if ($('#alimento').val()&& $('#quantita').val()) {
+
   }
 }
 </script>
@@ -90,7 +123,7 @@ function suggestMisure() {
     <label for="unita" class="textsmall">Unità di misura</label><br/>
     <input type="text" class="spacedfield" id="unita" onchange='suggestMisure()' onkeyup="suggestMisure()"><br/>
     <label for="quantita" class="textsmall">Quantità</label><br/>
-    <input type="text" class="spacedfield" id="quantita"><br/>
+    <input type="number" class="spacedfield" id="quantita"><br/>
     <label for="scadenza" class="textsmall">Scadenza</label><br/>
     <input type="date" class="spacedfield" id="scadenza"><br/>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeDetail();'>

@@ -18,6 +18,37 @@ var alimentiObj = {
   alimenti_qta: null,
   alimenti_misure: null
 };
+function findAlimento(nome) {
+  for (var i=0;i<alimentiObj.alimenti.length;i++) {
+    if (alimentiObj.alimenti[i].nome==nome)
+      return alimentiObj.alimenti[i];
+  }
+  return null;
+}
+function findMisura(nome) {
+  for (var i=0;i<alimentiObj.alimenti_misure.length;i++) {
+    if (alimentiObj.alimenti_misure[i].nome==nome)
+      return alimentiObj.alimenti_misure[i];
+  }
+  return null;
+}
+function findMisuraById(id) {
+  for (var i=0;i<alimentiObj.alimenti_misure.length;i++) {
+    if (alimentiObj.alimenti_misure[i].id==id)
+      return alimentiObj.alimenti_misure[i].nome;
+  }
+  return null;
+}
+function findQuantitaAlimento(nome) {
+  var alim = findAlimento(nome);
+  if (alim!=null) {
+    for (var i=0;i<alimentiObj.alimenti_qta.length;i++) {
+      if (alimentiObj.alimenti_qta[i].alimento_id==alim.id)
+        return alimentiObj.alimenti_qta[i];
+    }
+  }
+  return null;
+}
 function formatDataEvento() {
   var giorno = evento.data_evento.substring(8,10);
   var mese = evento.data_evento.substring(5,7);
