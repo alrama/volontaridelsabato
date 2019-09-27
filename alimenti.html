@@ -21,6 +21,9 @@ initModel(function(){
     }
   }
 });
+function displayAlimenti() {
+
+}
 function loadAlimenti() {
   showMessage('Attendere. Caricamento dati in corso');
   NetworkHelper.getAlimenti(function() {
@@ -55,7 +58,7 @@ function selectAlimento(alim) {
 function suggestAlimenti() {
   var htmlcontant = "<div class='sublist'>";
   if (alimentiObj.alimenti!=null && alimentiObj.alimenti.length>0) {
-    var filtro = $('#alimento').val();
+    var filtro = $('#alimento').val().toLowerCase();
     for (alimento of alimentiObj.alimenti) {
       if (filtro.length==0 || alimento.nome.indexOf(filtro)>-1
      || alimento.nome.toLowerCase().indexOf(filtro)>-1  || alimento.nome.toUpperCase().indexOf(filtro)>-1)
@@ -72,10 +75,10 @@ function selectMisura(misura) {
 function suggestMisure() {
   var htmlcontant = "<div class='sublist'>";
   if (alimentiObj.alimenti_misure!=null && alimentiObj.alimenti_misure.length>0) {
-    var filtro = $('#unita').val();
+    var filtro = $('#unita').val().toLowerCase();
     for (misura of alimentiObj.alimenti_misure) {
-      if (filtro.length==0 || misura.nome.indexOf(filtro)>-1
-     || misura.nome.toLowerCase().indexOf(filtro)>-1  || misura.nome.toUpperCase().indexOf(filtro)>-1)
+      if (misura.nome.length>0 && (filtro.length==0 || misura.nome.indexOf(filtro)>-1
+     || misura.nome.toLowerCase().indexOf(filtro)>-1  || misura.nome.toUpperCase().indexOf(filtro)>-1))
         htmlcontant += "<div class='riga' onclick='selectMisura(\""+misura.nome+"\");'>"+misura.nome+"</div>";
     }
     htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#suggest_content').css('display','none')\">";
