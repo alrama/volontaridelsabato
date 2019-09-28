@@ -24,27 +24,40 @@ initModel(function(){
 function displayAlimenti() {
   var htmlcontant = "";
   for (alimento of alimentiObj.alimenti_qta) {
-      htmlcontant += "<div class='riga'><div class='textsmall' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>";
-      if (volontario.nome.length+volontario.cognome.length<5) {
-        htmlcontant+=volontario.nome + " " + volontario.cognome + "</div>";
-        htmlcontant+="<div class='textsmall' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>"+volontario.email+"</div>";
-      } else {
-        htmlcontant+=volontario.nome + "</div>";
-        htmlcontant+="<div class='textsmall dettaglio_riga' onclick='dettaglio_riga(this,\""+volontario.email+"\")'>"+volontario.cognome+"</div>";
-      }
-      if (navigator.userAgent.toLowerCase().indexOf('mobile')>-1 && volontario.cellulare!=null && volontario.cellulare!="") {
-        htmlcontant+="<a href='tel:+39"+volontario.cellulare+"'><img src='img/phone-forward.png' class='img_title icon_header' style='float:right;margin-top:-40px;margin-right:60px'/></a>";
-        htmlcontant+="<a href='https://api.whatsapp.com/send?phone=39"+volontario.cellulare+"'><img src='img/chat-processing.png' class='img_title icon_header' style='float:right;margin-top:-40px'/></a>"
+    var alimento_nome = findAlimentoById(alimento.alimento_id);
+    var misura_nome = findMisuraById(alimento.misura_id);
+      htmlcontant += "<div class='riga'  onclick='delete_alimento(\""+alimento_nome+"\",\""+misura_nome+"\")'><span class='textsmall' style='margin-left:10px'>";
+      htmlcontant+=alimento_nome;
+      htmlcontant+="</span><span class='textsmall dettaglio_riga' style='float:right;margin-right:10px'>"+misura_nome+" "+alimento.quantita+"</span>";
+      if (alimento.scadenza!=null) {
+        htmlcontant+="<div class='textsmall' style='font-size:14px;margin-left:10px'>scade il:"+alimento.scadenza+"</div>";
       }
       htmlcontant+="</div>"
     }
-    $("#volontari_content").html(htmlcontant);
+    $("#alimenti_content").html(htmlcontant);
+}
+function delete_alimento(nome,misura) {
+  var warning = "Rimuovere " + nome + " ?";
+  if (user.admin && confirm(warning)) {
+    showMessage('Invio aggiornamenti in corso');
+    var alim = {};
+    alim.nome = nome;
+    alim.misura = misura;
+    alim.quantita = 0;
+    var req = {};
+    req.onsuccess = function() {
+      loadAlimenti()
+    };
+    req.onerror = function() {showMessage("Impossibile eliminare l'alimento. Riprovare più tardi");};
+    NetworkHelper.sendAlimento(alim,req);
+  }
 }
 function loadAlimenti() {
   showMessage('Attendere. Caricamento dati in corso');
   NetworkHelper.getAlimenti(function() {
     if (alimentiObj==undefined || alimentiObj.alimenti_qta==undefined || alimentiObj.alimenti_qta.length==0) {
       showMessage("Nessun alimento presente");
+      $("#alimenti_content").html("");
     } else {
       showMessage("");
       displayAlimenti();
@@ -73,15 +86,19 @@ function selectAlimento(alim) {
 }
 function suggestAlimenti() {
   var htmlcontant = "<div class='sublist'>";
+  var suggestNonVuoto = false;
   if (alimentiObj.alimenti!=null && alimentiObj.alimenti.length>0) {
     var filtro = $('#alimento').val().toLowerCase();
     for (alimento of alimentiObj.alimenti) {
       if (filtro.length==0 || alimento.nome.indexOf(filtro)>-1
-     || alimento.nome.toLowerCase().indexOf(filtro)>-1  || alimento.nome.toUpperCase().indexOf(filtro)>-1)
-        htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'>"+alimento.nome+"</div>";
+     || alimento.nome.toLowerCase().indexOf(filtro)>-1  || alimento.nome.toUpperCase().indexOf(filtro)>-1) {
+       htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'>"+alimento.nome+"</div>";
+       suggestNonVuoto = true;
+     }
     }
     htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#suggest_content').css('display','none')\">";
-    setSuggestBox($('#alimento'),htmlcontant);
+    if (suggestNonVuoto) setSuggestBox($('#alimento'),htmlcontant);
+    else closeSuggest();
   }
 }
 function selectMisura(misura) {
@@ -90,15 +107,19 @@ function selectMisura(misura) {
 }
 function suggestMisure() {
   var htmlcontant = "<div class='sublist'>";
+  var suggestNonVuoto = false;
   if (alimentiObj.alimenti_misure!=null && alimentiObj.alimenti_misure.length>0) {
     var filtro = $('#unita').val().toLowerCase();
     for (misura of alimentiObj.alimenti_misure) {
       if (misura.nome.length>0 && (filtro.length==0 || misura.nome.indexOf(filtro)>-1
-     || misura.nome.toLowerCase().indexOf(filtro)>-1  || misura.nome.toUpperCase().indexOf(filtro)>-1))
-        htmlcontant += "<div class='riga' onclick='selectMisura(\""+misura.nome+"\");'>"+misura.nome+"</div>";
+     || misura.nome.toLowerCase().indexOf(filtro)>-1  || misura.nome.toUpperCase().indexOf(filtro)>-1)) {
+       htmlcontant += "<div class='riga' onclick='selectMisura(\""+misura.nome+"\");'>"+misura.nome+"</div>";
+       suggestNonVuoto = true;
+     }
     }
     htmlcontant+="</div><input type=\"button\" class=\"login compat_button\" style=\"margin-top:5px;\" value=\"Chiudi\" onclick=\"$('#suggest_content').css('display','none')\">";
-    setSuggestBox($('#unita'),htmlcontant);
+    if (suggestNonVuoto) setSuggestBox($('#unita'),htmlcontant);
+    else closeSuggest();
   }
 }
 function setSuggestBox(elem,htmlcontent) {
@@ -107,9 +128,13 @@ function setSuggestBox(elem,htmlcontent) {
   $('#suggest_content').css('top',(elem.offset().top+40)+'px');
   $('#suggest_content').css('left',$('#detail').offset().left+'px');
 }
+function closeSuggest() {
+  $("#suggest_content").css("display","none");
+}
 function closeDetail() {
   $("#detail").css("display","none");
-  $("#suggest_content").css("display","none");
+  closeSuggest();
+  loadAlimenti();
 }
 function sendAlimento() {
   if ($('#alimento').val() && $('#quantita').val()) {

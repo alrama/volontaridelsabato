@@ -39,6 +39,13 @@ function findMisuraById(id) {
   }
   return null;
 }
+function findAlimentoById(id) {
+  for (var i=0;i<alimentiObj.alimenti.length;i++) {
+    if (alimentiObj.alimenti[i].id==id)
+      return alimentiObj.alimenti[i].nome;
+  }
+  return null;
+}
 function findQuantitaAlimento(nome) {
   var alim = findAlimento(nome);
   if (alim!=null) {
