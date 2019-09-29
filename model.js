@@ -48,7 +48,7 @@ function findAlimentoById(id) {
 }
 function findQuantitaAlimento(nome) {
   var alim = findAlimento(nome);
-  if (alim!=null) {
+  if (alim!=null && alimentiObj.alimenti_qta!=null) {
     for (var i=0;i<alimentiObj.alimenti_qta.length;i++) {
       if (alimentiObj.alimenti_qta[i].alimento_id==alim.id)
         return alimentiObj.alimenti_qta[i];

@@ -5,9 +5,9 @@
 <meta name="theme-color" content="darkolivegreen">
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
 <link rel="icon" href="favicon.ico" />
-<link rel="stylesheet" href="paniniweb.css?v=7"/>
+<link rel="stylesheet" href="paniniweb.css?v=9"/>
 <script src="jquery-3.3.1.min.js"></script>
-<script src="model.js?v=8"></script>
+<script src="model.js?v=9"></script>
 <script src="paniniweb.js?v=6"></script>
 <script>
 initModel(function(){
@@ -74,7 +74,6 @@ function addAlimenti() {
   $('#scadenza').val('');
 }
 function selectAlimento(alim) {
-  $("#suggest_content").css("display","none");
   $('#alimento').val(alim);
   var alimQta = findQuantitaAlimento(alim);
   if (alimQta!=null) {
@@ -83,6 +82,7 @@ function selectAlimento(alim) {
     $('#quantita').val(alimQta.quantita);
     $('#scadenza').val(alimQta.scadenza);
   }
+  $("#suggest_content").css("display","none");
 }
 function suggestAlimenti() {
   var htmlcontant = "<div class='sublist'>";
@@ -92,7 +92,7 @@ function suggestAlimenti() {
     for (alimento of alimentiObj.alimenti) {
       if (filtro.length==0 || alimento.nome.indexOf(filtro)>-1
      || alimento.nome.toLowerCase().indexOf(filtro)>-1  || alimento.nome.toUpperCase().indexOf(filtro)>-1) {
-       htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'>"+alimento.nome+"</div>";
+       htmlcontant += "<div class='riga' onclick='selectAlimento(\""+alimento.nome+"\");'><div class='textsmall'>"+alimento.nome+"</div></div>";
        suggestNonVuoto = true;
      }
     }
@@ -146,7 +146,8 @@ function sendAlimento() {
     alim.scadenza = $('#scadenza').val();
     var req = {};
     req.onsuccess = function() {
-      showMessage("Alimento registrato")
+      showMessage("Alimento registrato");
+      addAlimenti();
     };
     req.onerror = function() {showMessage("Impossibile registrare l'alimento. Riprovare più tardi");};
     NetworkHelper.sendAlimento(alim,req);
