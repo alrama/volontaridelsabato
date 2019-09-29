@@ -180,10 +180,10 @@ function sendAlimento() {
   <div id="detail" class="detail" style="display: none;margin:auto;position:absolute;top:150px">
     <label for="alimento" class="textsmall">Tipo alimento</label><br/>
     <input type="text" class="spacedfield" id="alimento" onchange='suggestAlimenti()' onkeyup="suggestAlimenti()"><br/>
-    <label for="unita" class="textsmall">Unità di misura</label><br/>
-    <input type="text" class="spacedfield" id="unita" onchange='suggestMisure()' onkeyup="suggestMisure()"><br/>
     <label for="quantita" class="textsmall">Quantità</label><br/>
     <input type="number" class="spacedfield" id="quantita"><br/>
+    <label for="unita" class="textsmall">Unità di misura</label><br/>
+    <input type="text" class="spacedfield" id="unita" onchange='suggestMisure()' onkeyup="suggestMisure()"><br/>
     <label for="scadenza" class="textsmall">Scadenza</label><br/>
     <input type="date" class="spacedfield" id="scadenza"><br/>
     <input type="button" class="login compat_button" style="margin-top:5px" value="Chiudi" id="chiudi" onclick='closeDetail();'>
