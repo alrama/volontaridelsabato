@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Ott 14, 2018 alle 17:44
+-- Generation Time: Ott 07, 2019 alle 19:10
 -- Versione del server: 5.6.33-log
 -- PHP Version: 5.3.10
 
@@ -106,6 +106,43 @@ CREATE TABLE IF NOT EXISTS `nodi_segmenti` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `paniniweb_alimenti`
+--
+
+CREATE TABLE IF NOT EXISTS `paniniweb_alimenti` (
+  `id_alimento` int(11) NOT NULL AUTO_INCREMENT,
+  `nome_alimento` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id_alimento`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `paniniweb_alimenti_misure`
+--
+
+CREATE TABLE IF NOT EXISTS `paniniweb_alimenti_misure` (
+  `id_misura` int(11) NOT NULL AUTO_INCREMENT,
+  `misura_nome` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id_misura`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=36 ;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `paniniweb_alimenti_qta`
+--
+
+CREATE TABLE IF NOT EXISTS `paniniweb_alimenti_qta` (
+  `id_alimento` int(11) NOT NULL,
+  `id_unita_misura` int(11) NOT NULL,
+  `quantita` double NOT NULL,
+  `scadenza` date DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `paniniweb_avvisi`
 --
 
@@ -127,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `paniniweb_evento` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `data_evento` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -143,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `paniniweb_fasi` (
   `orario` time NOT NULL,
   `max_partecipanti` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 -- --------------------------------------------------------
 
